@@ -114,8 +114,26 @@ jobs:
           perf_text=perf.read_text()
           assert perf_text.splitlines().count('CONFIG_MIHW=y')==1, 'Unexpected mist_perf MIHW configuration'
           assert sum(line.strip().startswith('CONFIG_MIHW=') for line in perf_text.splitlines())==1, 'Multiple mist_perf MIHW overrides'
-          perf.write_text(perf_text.replace('CONFIG_MIHW=y','# CONFIG_MIHW is not set'))
-          print('DIAGNOSTIC-ONLY: changed mist_perf CONFIG_MIHW=y to disabled in temporary clone; NOT FLASHABLE',flush=True)
+          # Missing proprietary MIHW Kconfig also prevents these five requested
+          # Xiaomi symbols from surviving config merge (verified run 43208679440).
+          # Fail closed if upstream values drift instead of silently stripping
+          # arbitrary options. This is solely a non-flashable compiler probe.
+          diagnostic_disabled={
+            'CONFIG_MIHW':'y',
+            'CONFIG_MI_SCHED':'m',
+            'CONFIG_METIS':'m',
+            'CONFIG_MIGT':'m',
+            'CONFIG_MI_SCHED_2_CLUSTER':'y',
+            'CONFIG_MI_MID_DEVICE_OPT':'y',
+          }
+          lines=perf_text.splitlines(keepends=True)
+          for symbol,value in diagnostic_disabled.items():
+            exact=symbol+'='+value
+            assert sum(line.strip()==exact for line in lines)==1, 'Unexpected source config: '+symbol
+            assert sum(line.strip().startswith(symbol+'=') for line in lines)==1, 'Multiple source config assignments: '+symbol
+            lines=[('# '+symbol+' is not set'+ ('\\n' if line.endswith('\\n') else '')) if line.strip()==exact else line for line in lines]
+          perf.write_text(''.join(lines))
+          print('DIAGNOSTIC-ONLY: disabled exact MIHW-dependent config values '+','.join(diagnostic_disabled)+' in runner clone; NEVER FLASH',flush=True)
           assert pathlib.Path('msm-kernel/drivers/mihw').is_symlink(), 'Unexpected MIHW layout'
           assert not pathlib.Path('vendor/xiaomi/proprietary/mihw/Kconfig').exists(), 'MIHW source now available; remove diagnostic workaround'
           content=kconfig.read_text()
