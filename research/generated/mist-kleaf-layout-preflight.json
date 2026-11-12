@@ -1,0 +1,97 @@
+{
+  "assembled_source_layout_valid": true,
+  "external": {
+    "build/bazel_common_rules": {
+      "present": false,
+      "purpose": "Bazel shared rules"
+    },
+    "build/bazel_common_rules/dist/dist.bzl": {
+      "present": false,
+      "purpose": "Kernel Bazel common distribution rules"
+    },
+    "build/build-tools": {
+      "present": false,
+      "purpose": "Build tools (separate from build/kernel)"
+    },
+    "common/BUILD.bazel": {
+      "present": false,
+      "purpose": "Android Common Kernel target"
+    },
+    "external/dtc": {
+      "present": false,
+      "purpose": "Device tree compiler"
+    },
+    "prebuilts/build-tools": {
+      "present": false,
+      "purpose": "Bazel build utilities"
+    },
+    "prebuilts/clang/host/linux-x86": {
+      "present": false,
+      "purpose": "Pinned Clang toolchain"
+    },
+    "prebuilts/kernel-build-tools": {
+      "present": false,
+      "purpose": "Kernel image and dist tools"
+    },
+    "tools/mkbootimg": {
+      "present": false,
+      "purpose": "Boot image packaging tools"
+    }
+  },
+  "external_missing": [
+    "build/bazel_common_rules/dist/dist.bzl",
+    "common/BUILD.bazel",
+    "prebuilts/clang/host/linux-x86",
+    "prebuilts/kernel-build-tools",
+    "prebuilts/build-tools",
+    "tools/mkbootimg",
+    "external/dtc",
+    "build/build-tools",
+    "build/bazel_common_rules"
+  ],
+  "kernel_compiled": false,
+  "limitations": "Bazel evaluation, external dependencies, compilation, module ABI, DTBO match and boot all untested",
+  "required": {
+    "build/kernel/BUILD.bazel": {
+      "present": true,
+      "role": "Owned kernel_build/Kleaf implementation"
+    },
+    "build/kernel/kleaf/kernel.bzl": {
+      "present": true,
+      "role": "Kleaf build rules"
+    },
+    "msm-kernel/BUILD.bazel": {
+      "present": true,
+      "role": "Owned Mist kernel Bazel targets"
+    },
+    "msm-kernel/arch/arm64/boot/dts/vendor/BUILD.bazel": {
+      "present": true,
+      "role": "MiCode kernel_dtstree Bazel package"
+    },
+    "msm-kernel/arch/arm64/boot/dts/vendor/qcom/mist-common.dtsi": {
+      "present": true,
+      "role": "Mist hardware DTS"
+    },
+    "msm-kernel/arch/arm64/boot/dts/vendor/qcom/mist-qrd-overlay.dts": {
+      "present": true,
+      "role": "Mist hardware overlay"
+    },
+    "msm-kernel/arch/arm64/boot/dts/vendor/qcom/platform_map.bzl": {
+      "present": true,
+      "role": "MiCode Qualcomm DTB/DTBO selection"
+    },
+    "msm-kernel/build.config.msm.mist": {
+      "present": true,
+      "role": "Xiaomi mist build configuration"
+    },
+    "msm-kernel/mist.bzl": {
+      "present": true,
+      "role": "Mist Kleaf definitions"
+    },
+    "msm-kernel/msm_kernel_extensions.bzl": {
+      "present": true,
+      "role": "DTS wiring and platform map"
+    }
+  },
+  "required_missing": []
+}
