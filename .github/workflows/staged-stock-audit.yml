@@ -38,7 +38,7 @@ jobs:
           (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
           test -s input/boot/boot-images.sha256
           # Boot images are nested under boot-images/. Verify each with the original manifest.
-          (cd input/boot && sha256sum -c boot-images.sha256)
+          (cd input/boot/boot-images && sha256sum -c ../boot-images.sha256)
 
       - name: Inventory archived vendor and boot inputs
         shell: bash
