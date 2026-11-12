@@ -102,15 +102,20 @@ jobs:
             (root_build/'BUILD.bazel').write_text('package(default_visibility = ["//visibility:public"])\\n')
           # DIAGNOSTIC-ONLY: public Xiaomi source points drivers/mihw to
           # unreleased vendor/xiaomi/proprietary/mihw. Do not fabricate code.
-          # With both source config fragments verified to omit CONFIG_MIHW,
-          # guard only the unavailable Kconfig include in this temporary clone.
+          # Stock mist_perf explicitly enables CONFIG_MIHW=y. Only for compiler
+          # discovery, replace that setting in the DISPOSABLE runner clone.
+          # This alters the effective device configuration; never ship outputs.
           kconfig=pathlib.Path('msm-kernel/drivers/Kconfig')
           required='source "drivers/mihw/Kconfig"'
           base=pathlib.Path('msm-kernel/arch/arm64/configs/gki_defconfig')
           perf=pathlib.Path('msm-kernel/arch/arm64/configs/vendor/mist_perf.config')
-          for cfg in (base,perf):
-            assert cfg.is_file(), 'Required defconfig missing: '+str(cfg)
-            assert not any(line.strip().startswith('CONFIG_MIHW=') for line in cfg.read_text().splitlines()), 'Refusing to guard configured MIHW: '+str(cfg)
+          assert base.is_file() and perf.is_file(), 'Required kernel config missing'
+          assert not any(line.strip().startswith('CONFIG_MIHW=') for line in base.read_text().splitlines()), 'Unexpected GKI MIHW override'
+          perf_text=perf.read_text()
+          assert perf_text.splitlines().count('CONFIG_MIHW=y')==1, 'Unexpected mist_perf MIHW configuration'
+          assert sum(line.strip().startswith('CONFIG_MIHW=') for line in perf_text.splitlines())==1, 'Multiple mist_perf MIHW overrides'
+          perf.write_text(perf_text.replace('CONFIG_MIHW=y','# CONFIG_MIHW is not set'))
+          print('DIAGNOSTIC-ONLY: changed mist_perf CONFIG_MIHW=y to disabled in temporary clone; NOT FLASHABLE',flush=True)
           assert pathlib.Path('msm-kernel/drivers/mihw').is_symlink(), 'Unexpected MIHW layout'
           assert not pathlib.Path('vendor/xiaomi/proprietary/mihw/Kconfig').exists(), 'MIHW source now available; remove diagnostic workaround'
           content=kconfig.read_text()
