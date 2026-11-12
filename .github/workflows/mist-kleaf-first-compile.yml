@@ -115,35 +115,12 @@ jobs:
           if [[ -x tools/bazel ]]; then BAZEL=tools/bazel
           elif [[ -x build/kernel/kleaf/bazel.sh ]]; then BAZEL=build/kernel/kleaf/bazel.sh
           else echo 'No runnable Kleaf Bazel launcher found'; exit 20; fi
-          "$BAZEL" query '//msm-kernel:all' --output=label | grep -E '^//msm-kernel:mist_(perf|consolidate)
+          "$BAZEL" query '//msm-kernel:all' --output=label | grep -E '^//msm-kernel:mist_(perf|consolidate)$'
           query_rc=$?
           echo "BAZEL_QUERY_EXIT=$query_rc"
           if [[ "$query_rc" -ne 0 ]]; then exit "$query_rc"; fi
           echo "=== Actual Mist kernel build attempt ==="
           "$BAZEL" build //msm-kernel:mist_perf --verbose_failures
-          build_rc=$?
-          echo "BAZEL_BUILD_EXIT=$build_rc"
-          python3 - "$RESULT" "$query_rc" "$build_rc" <<'PY'
-          import json,sys
-          json.dump(dict(query_exit=int(sys.argv[2]),build_exit=int(sys.argv[3]),kernel_compiled=int(sys.argv[3])==0,validated_stock_abi=False,boot_tested=False),open(sys.argv[1],'w'),indent=2)
-          PY
-          exit "$build_rc"
-      - name: Upload build diagnostic log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mist-first-kleaf-compile-diagnostics
-          path: |
-            research/generated/mist-kleaf-first-compile.log
-            research/generated/mist-kleaf-first-compile-result.json
-          if-no-files-found: warn
-          retention-days: 14
-
-          query_rc=$?
-          echo "BAZEL_QUERY_EXIT=$query_rc"
-          if [[ "$query_rc" -ne 0 ]]; then exit "$query_rc"; fi
-          echo "=== Actual Mist kernel build attempt ==="
-          "$BAZEL" build //msm-kernel:mist --verbose_failures
           build_rc=$?
           echo "BAZEL_BUILD_EXIT=$build_rc"
           python3 - "$RESULT" "$query_rc" "$build_rc" <<'PY'
