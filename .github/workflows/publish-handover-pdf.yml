@@ -1,0 +1,49 @@
+name: Publish verified Mist PDF handover
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pdf:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Install PDF generator
+        run: |
+          set -euo pipefail
+          python3 -m pip install --break-system-packages reportlab
+      - name: Render updated PDF
+        run: |
+          set -euo pipefail
+          python3 scripts/render_handover_pdf.py \
+            research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.md \
+            research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf
+          file research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf
+          test -s research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf
+      - name: Upload PDF as Actions artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-lineageos-23-2-handover-v2
+          path: research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf
+          retention-days: 14
+      - name: Commit PDF to main
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "mist: publish verified November 12 technical PDF handover"
+          git push origin HEAD:main
