@@ -1,0 +1,2320 @@
+{
+  "approval": "NOT APPROVED: no ELF closure, module ABI or boot validation",
+  "audit_archive_members": 4373,
+  "module_checks": [
+    {
+      "available_archive_ko_basename_count": 96,
+      "entry_count": 78,
+      "load_file": "system_dlkm_a/flatten/lib/modules/modules.load",
+      "missing_basename_count": 0,
+      "missing_basenames": [],
+      "truncated_input": false
+    },
+    {
+      "available_archive_ko_basename_count": 96,
+      "entry_count": 78,
+      "load_file": "system_dlkm_a/lib/modules/6.6.118-android15-8-g666ad52b8230-ab15657065-4k/modules.load",
+      "missing_basename_count": 0,
+      "missing_basenames": [],
+      "truncated_input": false
+    },
+    {
+      "available_archive_ko_basename_count": 268,
+      "entry_count": 350,
+      "load_file": "vendor_dlkm_a/lib/modules/modules.load",
+      "missing_basename_count": 0,
+      "missing_basenames": [],
+      "truncated_input": false
+    }
+  ],
+  "raw_archive_members": 4373,
+  "rejected_archive_names": 21,
+  "safe_archive_members": 4352,
+  "service_executables": [
+    {
+      "archive_path": "odm_a/bin/hw/android.hardware.weaver",
+      "executable": "/odm/bin/hw/android.hardware.weaver",
+      "name": "miweaver_hal_service",
+      "present": true,
+      "rc": "odm_a/etc/init/android.hardware.weaver.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/mrmd",
+      "executable": "/odm/bin/mrmd",
+      "name": "vendor.mrmd",
+      "present": true,
+      "rc": "odm_a/etc/init/mrm.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/mtd",
+      "executable": "/odm/bin/mtd",
+      "name": "vendor.mtdservice",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hardware.aidl.mtdservice-service.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/tidad",
+      "executable": "/odm/bin/tidad",
+      "name": "vendor.tidaservice",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hardware.aidl.tidaservice-service.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/fidoca",
+      "executable": "/odm/bin/fidoca",
+      "name": "vendor.mfidoca",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hardware.mfidoca-service.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/miguardca",
+      "executable": "/odm/bin/miguardca",
+      "name": "vendor.miguardca",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hardware.miguardca.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/vendor.xiaomi.hardware.mikeybag-service",
+      "executable": "/odm/bin/vendor.xiaomi.hardware.mikeybag-service",
+      "name": "vendor.mikeybag",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hardware.mikeybag.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/mlipayd",
+      "executable": "/odm/bin/mlipayd",
+      "name": "vendor.mlipay",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hardware.mlipay-service.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/mpayjoyca",
+      "executable": "/odm/bin/mpayjoyca",
+      "name": "vendor.mpayjoyca",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hardware.mpayjoyca.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/vsimd",
+      "executable": "/odm/bin/vsimd",
+      "name": "vendor.vsimservice",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hardware.vsimapp-service.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/hw/vendor.xiaomi.hw.touchfeature-service",
+      "executable": "/odm/bin/hw/vendor.xiaomi.hw.touchfeature-service",
+      "name": "touchfeature-service",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.hw.touchfeature-service.rc"
+    },
+    {
+      "archive_path": "odm_a/bin/hw/vendor.xiaomi.sensor.citsensorservice.aidl",
+      "executable": "/odm/bin/hw/vendor.xiaomi.sensor.citsensorservice.aidl",
+      "name": "citsensorservice",
+      "present": true,
+      "rc": "odm_a/etc/init/vendor.xiaomi.sensor.citsensorservice.aidl.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+      "executable": "/vendor/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+      "name": "vendor.bluetooth-aidl-qti",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.bluetooth@aidl-service-qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.boot-service.qti",
+      "executable": "/vendor/bin/hw/android.hardware.boot-service.qti",
+      "name": "vendor.boot-qti",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.boot-service.qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.drm-service.clearkey",
+      "executable": "/vendor/bin/hw/android.hardware.drm-service.clearkey",
+      "name": "vendor.drm-clearkey-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.drm-service.clearkey.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/wfdhdcphalservice",
+      "executable": "/vendor/bin/wfdhdcphalservice",
+      "name": "wfdhdcphalservice",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.drm@1.1-service.wfdhdcp.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.gatekeeper-service-qti",
+      "executable": "/vendor/bin/hw/android.hardware.gatekeeper-service-qti",
+      "name": "vendor.gatekeeper_default",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.gatekeeper-service-qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+      "executable": "/vendor/bin/hw/android.hardware.gnss-aidl-service-qti",
+      "name": "gnss_service",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.gnss-aidl-service-qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.health-service.qti",
+      "executable": "/vendor/bin/hw/android.hardware.health-service.qti",
+      "name": "vendor.health-default",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.health-service.qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.ir-service.example",
+      "executable": "/vendor/bin/hw/android.hardware.ir-service.example",
+      "name": "vendor.ir-default",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.ir-service.example.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.power-service",
+      "executable": "/vendor/bin/hw/android.hardware.power-service",
+      "name": "vendor.power",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.power-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.sensors-service.multihal",
+      "executable": "/vendor/bin/hw/android.hardware.sensors-service.multihal",
+      "name": "vendor.sensors-hal-multihal",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.sensors-service-multihal.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+      "executable": "/vendor/bin/hw/android.hardware.thermal-service.qti",
+      "name": "vendor.thermal-hal",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.thermal-service.qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.usb-service.qti",
+      "executable": "/vendor/bin/hw/android.hardware.usb-service.qti",
+      "name": "vendor.usb-hal",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.usb-service.qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.usb.gadget-service.qti",
+      "executable": "/vendor/bin/hw/android.hardware.usb.gadget-service.qti",
+      "name": "vendor.usbgadget-hal",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.usb.gadget-service.qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.wifi-service",
+      "executable": "/vendor/bin/hw/android.hardware.wifi-service",
+      "name": "vendor.wifi_hal_legacy",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.wifi-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/wpa_supplicant",
+      "executable": "/vendor/bin/hw/wpa_supplicant",
+      "name": "wpa_supplicant",
+      "present": true,
+      "rc": "vendor_a/etc/init/android.hardware.wifi.supplicant-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/audiohalservice.qti",
+      "executable": "/vendor/bin/hw/audiohalservice.qti",
+      "name": "vendor.audio-hal-aidl",
+      "present": true,
+      "rc": "vendor_a/etc/init/audiohalservice_qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/boringssl_self_test32",
+      "executable": "/vendor/bin/boringssl_self_test32",
+      "name": "boringssl_self_test32_vendor",
+      "present": false,
+      "rc": "vendor_a/etc/init/boringssl_self_test.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/boringssl_self_test64",
+      "executable": "/vendor/bin/boringssl_self_test64",
+      "name": "boringssl_self_test64_vendor",
+      "present": true,
+      "rc": "vendor_a/etc/init/boringssl_self_test.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/wifidisplayhalservice",
+      "executable": "/vendor/bin/wifidisplayhalservice",
+      "name": "wifidisplayhalservice",
+      "present": true,
+      "rc": "vendor_a/etc/init/com.qualcomm.qti.wifidisplayhal@1.0-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/dd",
+      "executable": "/vendor/bin/dd",
+      "name": "do_ddr_training",
+      "present": true,
+      "rc": "vendor_a/etc/init/ddr_training.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.dumpstate-service.xiaomi",
+      "executable": "/vendor/bin/hw/android.hardware.dumpstate-service.xiaomi",
+      "name": "vendor.dumpstate-xiaomi",
+      "present": true,
+      "rc": "vendor_a/etc/init/dumpstate-xiaomi.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/check_keymaster",
+      "executable": "/vendor/bin/check_keymaster",
+      "name": "check_keymaster_factory",
+      "present": false,
+      "rc": "vendor_a/etc/init/factorybsp_service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/check_keybox",
+      "executable": "/vendor/bin/check_keybox",
+      "name": "check_keybox_factory",
+      "present": false,
+      "rc": "vendor_a/etc/init/factorybsp_service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/interfaces.factoryInterface-V1-service",
+      "executable": "/vendor/bin/hw/interfaces.factoryInterface-V1-service",
+      "name": "interfaces.factoryInterface-V1-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/factorybsp_service_qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ftmdaemon",
+      "executable": "/vendor/bin/ftmdaemon",
+      "name": "ffbm_bt",
+      "present": true,
+      "rc": "vendor_a/etc/init/factorybsp_service_qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ftmdaemon",
+      "executable": "/vendor/bin/ftmdaemon",
+      "name": "ffbm_wifi",
+      "present": true,
+      "rc": "vendor_a/etc/init/factorybsp_service_qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ffu",
+      "executable": "/vendor/bin/ffu",
+      "name": "ffu_w",
+      "present": true,
+      "rc": "vendor_a/etc/init/ffu.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ffu",
+      "executable": "/vendor/bin/ffu",
+      "name": "ffu_r",
+      "present": true,
+      "rc": "vendor_a/etc/init/ffu.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.biometrics.fingerprint-service.odm",
+      "executable": "/vendor/bin/hw/android.hardware.biometrics.fingerprint-service.odm",
+      "name": "vendor.fps_hal",
+      "present": true,
+      "rc": "vendor_a/etc/init/fingerprint-odm.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/hostapd",
+      "executable": "/vendor/bin/hw/hostapd",
+      "name": "hostapd",
+      "present": true,
+      "rc": "vendor_a/etc/init/hostapd.android.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mmid",
+      "executable": "/vendor/bin/mmid",
+      "name": "vendor.mmid",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc53",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc1",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc2",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc3",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc4",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc51",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc56",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc222",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc334",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc228",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc229",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc230",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc337",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc338",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc225",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc246",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc247",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc250",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc251",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc252",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc253",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc11",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc101",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc102",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc103",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc104",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc20",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mm-audio-ftm",
+      "executable": "/vendor/bin/mm-audio-ftm",
+      "name": "vendor.audio_tc21",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.factory.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qcom.class_core.sh",
+      "executable": "/vendor/bin/init.qcom.class_core.sh",
+      "name": "qcom-c_core-sh",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.class_main.sh",
+      "executable": "/vendor/bin/init.class_main.sh",
+      "name": "qcom-c_main-sh",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/irsc_util",
+      "executable": "/vendor/bin/irsc_util",
+      "name": "irsc_util",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/wpa_supplicant",
+      "executable": "/vendor/bin/hw/wpa_supplicant",
+      "name": "vendor.wigig_supplicant",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/wigignpt",
+      "executable": "/vendor/bin/wigignpt",
+      "name": "wigignpt",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sensingdaemon",
+      "executable": "/vendor/bin/sensingdaemon",
+      "name": "vendor.sensingdaemon",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ssgqmigd",
+      "executable": "/vendor/bin/ssgqmigd",
+      "name": "ssgqmigd",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/mlid",
+      "executable": "/vendor/bin/mlid",
+      "name": "mlid",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qcom.sh",
+      "executable": "/vendor/bin/init.qcom.sh",
+      "name": "qcom-sh",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qcom.post_boot.sh",
+      "executable": "/vendor/bin/init.qcom.post_boot.sh",
+      "name": "qcom-post-boot",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qcom.sdio.sh",
+      "executable": "/vendor/bin/init.qcom.sdio.sh",
+      "name": "wifi-sdio-on",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.crda.sh",
+      "executable": "/vendor/bin/init.crda.sh",
+      "name": "wifi-crda",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qvop-daemon",
+      "executable": "/vendor/bin/qvop-daemon",
+      "name": "qvop-daemon",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ATFWD-daemon",
+      "executable": "/vendor/bin/ATFWD-daemon",
+      "name": "vendor.atfwd",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/hostapd",
+      "executable": "/vendor/bin/hw/hostapd",
+      "name": "hostapd_fst",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/rild",
+      "executable": "/vendor/bin/hw/rild",
+      "name": "vendor.ril-daemon2",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/rild",
+      "executable": "/vendor/bin/hw/rild",
+      "name": "vendor.ril-daemon3",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/vm_bms",
+      "executable": "/vendor/bin/vm_bms",
+      "name": "vm_bms",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/msm_irqbalance",
+      "executable": "/vendor/bin/msm_irqbalance",
+      "name": "vendor.msm_irqbalance",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/msm_irqbalance",
+      "executable": "/vendor/bin/msm_irqbalance",
+      "name": "vendor.msm_irqbal_lb",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/msm_irqbalance",
+      "executable": "/vendor/bin/msm_irqbalance",
+      "name": "vendor.msm_irqbl_sdm630",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/LKCore",
+      "executable": "/vendor/bin/LKCore",
+      "name": "vendor.LKCore-dbg",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/LKCore",
+      "executable": "/vendor/bin/LKCore",
+      "name": "vendor.LKCore-rel",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/time_daemon",
+      "executable": "/vendor/bin/time_daemon",
+      "name": "time_daemon",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/power_off_alarm",
+      "executable": "/vendor/bin/power_off_alarm",
+      "name": "vendor.power_off_alarm",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hbtp_daemon",
+      "executable": "/vendor/bin/hbtp_daemon",
+      "name": "vendor.hbtp",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/chre",
+      "executable": "/vendor/bin/chre",
+      "name": "chre",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.qcom.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sh",
+      "executable": "/vendor/bin/sh",
+      "name": "memory-init-boot",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qti.kernel.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sh",
+      "executable": "/vendor/bin/sh",
+      "name": "memory-post-boot",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qti.kernel.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sh",
+      "executable": "/vendor/bin/sh",
+      "name": "start-subsys",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qti.kernel.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sh",
+      "executable": "/vendor/bin/sh",
+      "name": "kernel-boot",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qti.kernel.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sh",
+      "executable": "/vendor/bin/sh",
+      "name": "kernel-post-boot",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qti.kernel.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/msm_irqbalance",
+      "executable": "/vendor/bin/msm_irqbalance",
+      "name": "vendor.msm_irqbalance",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qti.kernel.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/system_dlkm_modprobe.sh",
+      "executable": "/vendor/bin/system_dlkm_modprobe.sh",
+      "name": "gki.modprobe",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qti.kernel.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/vendor_modprobe.sh",
+      "executable": "/vendor/bin/vendor_modprobe.sh",
+      "name": "vendor.modprobe",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.qti.kernel.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/pd-mapper",
+      "executable": "/vendor/bin/pd-mapper",
+      "name": "vendor.pd_mapper",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.target.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/pm-service",
+      "executable": "/vendor/bin/pm-service",
+      "name": "vendor.per_mgr",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.target.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/check_fatal_err.sh",
+      "executable": "/vendor/bin/check_fatal_err.sh",
+      "name": "fatal_err_check",
+      "present": false,
+      "rc": "vendor_a/etc/init/hw/init.target.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/pm-proxy",
+      "executable": "/vendor/bin/pm-proxy",
+      "name": "vendor.per_proxy",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.target.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sh",
+      "executable": "/vendor/bin/sh",
+      "name": "vendor.mdm_launcher",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.target.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/tcpdump_vendor",
+      "executable": "/vendor/bin/tcpdump_vendor",
+      "name": "vendor.tcpdump",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.target.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/tcpdump_vendor",
+      "executable": "/vendor/bin/tcpdump_vendor",
+      "name": "sniffer",
+      "present": true,
+      "rc": "vendor_a/etc/init/hw/init.target.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hypsys_vendor",
+      "executable": "/vendor/bin/hypsys_vendor",
+      "name": "vendor.misys.common",
+      "present": true,
+      "rc": "vendor_a/etc/init/hypsys_vendor.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ims-dataservice-daemon",
+      "executable": "/vendor/bin/ims-dataservice-daemon",
+      "name": "vendor.ims-dataservice-daemon",
+      "present": true,
+      "rc": "vendor_a/etc/init/ims-dataservice-daemon.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ims_rtp_daemon",
+      "executable": "/vendor/bin/ims_rtp_daemon",
+      "name": "vendor.ims_rtp_daemon",
+      "present": true,
+      "rc": "vendor_a/etc/init/ims_rtp_daemon.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/imsdaemon",
+      "executable": "/vendor/bin/imsdaemon",
+      "name": "vendor.imsdaemon",
+      "present": true,
+      "rc": "vendor_a/etc/init/imsdaemon.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/batterysecret",
+      "executable": "/vendor/bin/batterysecret",
+      "name": "batterysecret",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.batterysecret.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/boot_mode",
+      "executable": "/vendor/bin/boot_mode",
+      "name": "boot_mode",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.boot_mode.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/charge_logger",
+      "executable": "/vendor/bin/charge_logger",
+      "name": "charge_logger",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.charge_logger.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/embmsslServer",
+      "executable": "/vendor/bin/embmsslServer",
+      "name": "vendor.embmsslServer",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.embmssl_server.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/eu_mode",
+      "executable": "/vendor/bin/eu_mode",
+      "name": "eu_mode",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.eu_mode.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qlm-service",
+      "executable": "/vendor/bin/qlm-service",
+      "name": "vendor.qlm-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.qlm-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qti.display_boot.sh",
+      "executable": "/vendor/bin/init.qti.display_boot.sh",
+      "name": "qti_display_boot",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.qti.display_boot.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qti.fm.sh",
+      "executable": "/vendor/bin/init.qti.fm.sh",
+      "name": "fm_dl",
+      "present": false,
+      "rc": "vendor_a/etc/init/init.qti.fm.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qti.media.sh",
+      "executable": "/vendor/bin/init.qti.media.sh",
+      "name": "qti-media",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.qti.media.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/time_daemon",
+      "executable": "/vendor/bin/time_daemon",
+      "name": "time_daemon",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.time_daemon.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/wifi_qos_daemon",
+      "executable": "/vendor/bin/wifi_qos_daemon",
+      "name": "wifi_qos_daemon",
+      "present": false,
+      "rc": "vendor_a/etc/init/init.vendor.wlan.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/wallpapercolor",
+      "executable": "/vendor/bin/wallpapercolor",
+      "name": "wallpapercolor",
+      "present": true,
+      "rc": "vendor_a/etc/init/init.wallpapercolor.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/loc_launcher",
+      "executable": "/vendor/bin/loc_launcher",
+      "name": "loc_launcher",
+      "present": true,
+      "rc": "vendor_a/etc/init/loc-launcher.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.memtrack-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.memtrack-service",
+      "name": "vendor.qti.hardware.memtrack",
+      "present": true,
+      "rc": "vendor_a/etc/init/memtrack_qti.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/MI_IC",
+      "executable": "/vendor/bin/MI_IC",
+      "name": "mi_ic",
+      "present": true,
+      "rc": "vendor_a/etc/init/mi_ic.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/MI_RIC",
+      "executable": "/vendor/bin/MI_RIC",
+      "name": "mi_ric_init",
+      "present": true,
+      "rc": "vendor_a/etc/init/mi_ric.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/MI_RIC",
+      "executable": "/vendor/bin/MI_RIC",
+      "name": "mi_ric_run",
+      "present": true,
+      "rc": "vendor_a/etc/init/mi_ric.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/MI_RIC",
+      "executable": "/vendor/bin/MI_RIC",
+      "name": "mi_ric_file",
+      "present": true,
+      "rc": "vendor_a/etc/init/mi_ric.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/MI_RIC",
+      "executable": "/vendor/bin/MI_RIC",
+      "name": "mi_ric_snapshot",
+      "present": true,
+      "rc": "vendor_a/etc/init/mi_ric.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/mifaced",
+      "executable": "/vendor/bin/hw/mifaced",
+      "name": "vendor.miface",
+      "present": true,
+      "rc": "vendor_a/etc/init/miface.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.nfc-service-tms",
+      "executable": "/vendor/bin/hw/android.hardware.nfc-service-tms",
+      "name": "nfc_hal_service.tms.aidl",
+      "present": true,
+      "rc": "vendor_a/etc/init/nfc-service-tms.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/poweropt-service",
+      "executable": "/vendor/bin/poweropt-service",
+      "name": "poweropt-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/poweropt-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/qcrilNrd",
+      "executable": "/vendor/bin/hw/qcrilNrd",
+      "name": "vendor.qcrild",
+      "present": true,
+      "rc": "vendor_a/etc/init/qcrilNrd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/qcrilNrd",
+      "executable": "/vendor/bin/hw/qcrilNrd",
+      "name": "vendor.qcrild2",
+      "present": true,
+      "rc": "vendor_a/etc/init/qcrilNrd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/qcrilNrd",
+      "executable": "/vendor/bin/hw/qcrilNrd",
+      "name": "vendor.qcrild3",
+      "present": true,
+      "rc": "vendor_a/etc/init/qcrilNrd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qcrild.sh",
+      "executable": "/vendor/bin/init.qcrild.sh",
+      "name": "vendor.qcrild_bootservice-sh",
+      "present": true,
+      "rc": "vendor_a/etc/init/qcrilNrd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/init.qcrild.sh",
+      "executable": "/vendor/bin/init.qcrild.sh",
+      "name": "vendor.qcrild_service-sh",
+      "present": true,
+      "rc": "vendor_a/etc/init/qcrilNrd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qdcmss",
+      "executable": "/vendor/bin/qdcmss",
+      "name": "qdcmss",
+      "present": true,
+      "rc": "vendor_a/etc/init/qdcmss.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qesdk-manager",
+      "executable": "/vendor/bin/qesdk-manager",
+      "name": "vendor.qesdk-mgr",
+      "present": true,
+      "rc": "vendor_a/etc/init/qesdk-manager.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qesdk-secmanager",
+      "executable": "/vendor/bin/qesdk-secmanager",
+      "name": "vendor.qesdk-securitymgr",
+      "present": true,
+      "rc": "vendor_a/etc/init/qesdk-secmanager.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qguard",
+      "executable": "/vendor/bin/qguard",
+      "name": "qguard",
+      "present": true,
+      "rc": "vendor_a/etc/init/qguard.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qms",
+      "executable": "/vendor/bin/qms",
+      "name": "vendor.qms",
+      "present": true,
+      "rc": "vendor_a/etc/init/qms.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qseecomd",
+      "executable": "/vendor/bin/qseecomd",
+      "name": "vendor.qseecomd",
+      "present": true,
+      "rc": "vendor_a/etc/init/qseecomd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qwesd",
+      "executable": "/vendor/bin/qwesd",
+      "name": "vendor.qwesd",
+      "present": true,
+      "rc": "vendor_a/etc/init/qwesd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/android.hardware.secure_element-service-tms",
+      "executable": "/vendor/bin/hw/android.hardware.secure_element-service-tms",
+      "name": "secure_element_hal_service.aidl",
+      "present": true,
+      "rc": "vendor_a/etc/init/secure_element-service-tms.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/snapdragon_services",
+      "executable": "/vendor/bin/snapdragon_services",
+      "name": "vendor.qti.snapdragonServices",
+      "present": true,
+      "rc": "vendor_a/etc/init/snapdragon_services.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ssgtzd",
+      "executable": "/vendor/bin/ssgtzd",
+      "name": "vendor.ssgtzd",
+      "present": true,
+      "rc": "vendor_a/etc/init/ssgtzd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/vendor.dpmd",
+      "executable": "/vendor/bin/vendor.dpmd",
+      "name": "vendor.dpmd",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.dpmd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/qsap_qapeservice",
+      "executable": "/vendor/bin/qsap_qapeservice",
+      "name": "vendor.qsap.qapeservice",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qsap.qapeservice.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.MemHal-service",
+      "executable": "/vendor/bin/hw/vendor.qti.MemHal-service",
+      "name": "MemHal-1-0",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.MemHal-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/adsprpcd",
+      "executable": "/vendor/bin/adsprpcd",
+      "name": "vendor.adsprpcd",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.adsprpc-guestos-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/audioadsprpcd",
+      "executable": "/vendor/bin/audioadsprpcd",
+      "name": "vendor.audioadsprpcd_audiopd",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.audio-adsprpc-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.camera.provider-service_64",
+      "executable": "/vendor/bin/hw/vendor.qti.camera.provider-service_64",
+      "name": "vendor.camera-provider",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.camera.provider-service_64.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/cdsprpcd",
+      "executable": "/vendor/bin/cdsprpcd",
+      "name": "vendor.cdsprpcd",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.cdsprpc-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/diag-router",
+      "executable": "/vendor/bin/diag-router",
+      "name": "vendor.diag-router",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.diag_userdebug.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.alarm-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.alarm-service",
+      "name": "vendor.qti.hardware.alarm-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.alarm-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.capabilityconfigstore-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.capabilityconfigstore-service",
+      "name": "vendor.capabilityconfigstore",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.capabilityconfigstore-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.display.allocator-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.display.allocator-service",
+      "name": "vendor.qti.hardware.display.allocator",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.display.allocator-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.display.color-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.display.color-service",
+      "name": "vendor.qti.hardware.display.color-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.display.color-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.display.composer-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.display.composer-service",
+      "name": "vendor.qti.hardware.display.composer",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.display.composer-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/dspservice",
+      "executable": "/vendor/bin/dspservice",
+      "name": "vendor.dspservice",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.dsp-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.lights.service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.lights.service",
+      "name": "vendor.qti.light",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.lights.service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.perf2-hal-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.perf2-hal-service",
+      "name": "perf2-hal-1-0",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.perf2-hal-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.qseecom@1.0-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.qseecom@1.0-service",
+      "name": "qseecom-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.qseecom@1.0-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.qteeconnector@1.0-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.qteeconnector@1.0-service",
+      "name": "qteeconnector-hal-1-0",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.qteeconnector@1.0-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.secureprocessor",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.secureprocessor",
+      "name": "vendor.secureprocessor",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.secureprocessor.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.sensorscalibrate-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.sensorscalibrate-service",
+      "name": "vendor.qti.hardware.sensorscalibrate-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.sensorscalibrate-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.servicetrackeraidl-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.servicetrackeraidl-service",
+      "name": "vendor.servicetrackeraidl",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.servicetrackeraidl-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.soter-service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.soter-service",
+      "name": "vendor.soter",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.soter-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.hardware.vibrator.service",
+      "executable": "/vendor/bin/hw/vendor.qti.hardware.vibrator.service",
+      "name": "vendor.qti.vibrator",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.hardware.vibrator.service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.media.c2@1.0-service",
+      "executable": "/vendor/bin/hw/vendor.qti.media.c2@1.0-service",
+      "name": "vendor-qti-media-c2-hal-1-0",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.media.c2@1.0-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.media.c2audio@1.0-service",
+      "executable": "/vendor/bin/hw/vendor.qti.media.c2audio@1.0-service",
+      "name": "vendor-qti-media-c2audio-hal-1-0",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.media.c2audio@1.0-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.qti.psiclient@1.0-service",
+      "executable": "/vendor/bin/hw/vendor.qti.psiclient@1.0-service",
+      "name": "psiclient",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.psiclient@1.0-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/vendor.qti.qspa-service",
+      "executable": "/vendor/bin/vendor.qti.qspa-service",
+      "name": "vendor.qspa-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.qspa-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/vendor.qti.qspmhal-service",
+      "executable": "/vendor/bin/vendor.qti.qspmhal-service",
+      "name": "qspmhal",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.qspmhal-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/rmt_storage",
+      "executable": "/vendor/bin/rmt_storage",
+      "name": "vendor.rmt_storage",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.rmt_storage.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/vendor.qti.syshealthmon-service",
+      "executable": "/vendor/bin/vendor.qti.syshealthmon-service",
+      "name": "syshealthmon-service",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.syshealthmon-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/tftp_server",
+      "executable": "/vendor/bin/tftp_server",
+      "name": "vendor.tftp_server",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.qti.tftp.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sensors-qesdk",
+      "executable": "/vendor/bin/sensors-qesdk",
+      "name": "vendor.sensors.qesdk",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.sensors.qesdk.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/sscrpcd",
+      "executable": "/vendor/bin/sscrpcd",
+      "name": "vendor.sensors",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.sensors.sscrpcd.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.xiaomi.hardware.batteryantiaging-service",
+      "executable": "/vendor/bin/hw/vendor.xiaomi.hardware.batteryantiaging-service",
+      "name": "batteryantiaging",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.xiaomi.hardware.batteryantiaging-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.xiaomi.hardware.cld_aidl-service",
+      "executable": "/vendor/bin/hw/vendor.xiaomi.hardware.cld_aidl-service",
+      "name": "vendor.cld-hal-aidl",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.xiaomi.hardware.cld_aidl-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.xiaomi.hardware.displayfeature_aidl-service",
+      "executable": "/vendor/bin/hw/vendor.xiaomi.hardware.displayfeature_aidl-service",
+      "name": "vendor.displayfeatureaidl-hal",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.xiaomi.hardware.displayfeature_aidl-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/displayfeature",
+      "executable": "/vendor/bin/displayfeature",
+      "name": "displayfeature",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.xiaomi.hardware.displayfeature_aidl-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/ppd",
+      "executable": "/vendor/bin/ppd",
+      "name": "svi_on",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.xiaomi.hardware.displayfeature_aidl-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.xiaomi.hardware.micharge-service",
+      "executable": "/vendor/bin/hw/vendor.xiaomi.hardware.micharge-service",
+      "name": "micharge-hal",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.xiaomi.hardware.micharge-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.xiaomi.hardware.mimd2",
+      "executable": "/vendor/bin/hw/vendor.xiaomi.hardware.mimd2",
+      "name": "mimd-service2_0",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.xiaomi.hardware.mimd2.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/hw/vendor.xiaomi.hardware.misys.core-service",
+      "executable": "/vendor/bin/hw/vendor.xiaomi.hardware.misys.core-service",
+      "name": "vendor.misys.core",
+      "present": true,
+      "rc": "vendor_a/etc/init/vendor.xiaomi.hardware.misys.core-service.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/vmmgr",
+      "executable": "/vendor/bin/vmmgr",
+      "name": "vendor.vm-mgr",
+      "present": true,
+      "rc": "vendor_a/etc/init/vmmgr.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/vndservicemanager",
+      "executable": "/vendor/bin/vndservicemanager",
+      "name": "vndservicemanager",
+      "present": true,
+      "rc": "vendor_a/etc/init/vndservicemanager.rc"
+    },
+    {
+      "archive_path": "vendor_a/bin/wfdvndservice",
+      "executable": "/vendor/bin/wfdvndservice",
+      "name": "wfdvndservice",
+      "present": true,
+      "rc": "vendor_a/etc/init/wfdvndservice.rc"
+    }
+  ],
+  "source_archive_sha256": "fe3cb8c3ab6a0e507fc3bcb9aa33222e5b3a218b370323ca1de6e805a36dedfe",
+  "vintf_configs": [
+    {
+      "hals": [
+        "android.hardware.weaver"
+      ],
+      "path": "odm_a/etc/vintf/manifest/android.hardware.weaver.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.aidl.mtdservice"
+      ],
+      "path": "odm_a/etc/vintf/manifest/manifest_vendor.xiaomi.hardware.aidl.mtdservice.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.aidl.tidaservice"
+      ],
+      "path": "odm_a/etc/vintf/manifest/manifest_vendor.xiaomi.hardware.aidl.tidaservice.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.mfidoca"
+      ],
+      "path": "odm_a/etc/vintf/manifest/manifest_vendor.xiaomi.hardware.mfidoca.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.mlipay"
+      ],
+      "path": "odm_a/etc/vintf/manifest/manifest_vendor.xiaomi.hardware.mlipay.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.vsimapp"
+      ],
+      "path": "odm_a/etc/vintf/manifest/manifest_vendor.xiaomi.hardware.vsimapp.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.misauth",
+        "vendor.xiaomi.hardware.mrm"
+      ],
+      "path": "odm_a/etc/vintf/manifest/mrm.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.miguardca"
+      ],
+      "path": "odm_a/etc/vintf/manifest/vendor.xiaomi.hardware.miguardca.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.mikeybag"
+      ],
+      "path": "odm_a/etc/vintf/manifest/vendor.xiaomi.hardware.mikeybag.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.mpayjoyca"
+      ],
+      "path": "odm_a/etc/vintf/manifest/vendor.xiaomi.hardware.mpayjoyca.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hw.touchfeature"
+      ],
+      "path": "odm_a/etc/vintf/manifest/vendor.xiaomi.hw.touchfeature-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.sensor.citsensorservice"
+      ],
+      "path": "odm_a/etc/vintf/manifest/vendor.xiaomi.sensor.citsensorservice.aidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.nfc",
+        "android.hardware.radio.data",
+        "android.hardware.radio.messaging",
+        "android.hardware.radio.modem",
+        "android.hardware.radio.network",
+        "android.hardware.radio.sap",
+        "android.hardware.radio.sim",
+        "android.hardware.radio.voice",
+        "android.hardware.secure_element",
+        "vendor.qti.hardware.data.connectionaidl",
+        "vendor.qti.hardware.data.connectionfactory",
+        "vendor.qti.hardware.data.iwlandata",
+        "vendor.qti.hardware.radio.am",
+        "vendor.qti.hardware.radio.ims",
+        "vendor.qti.hardware.radio.lpa",
+        "vendor.qti.hardware.radio.qcriNvOpt",
+        "vendor.qti.hardware.radio.qcrilhook",
+        "vendor.qti.hardware.radio.qtiradio",
+        "vendor.qti.hardware.radio.uim",
+        "vendor.qti.hardware.radio.uim_remote_client",
+        "vendor.qti.hardware.radio.uim_remote_server",
+        "vendor.tms.tmsnfc_aidl"
+      ],
+      "path": "odm_a/etc/vintf/manifest_hcesim_dsds.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.nfc",
+        "android.hardware.radio.data",
+        "android.hardware.radio.messaging",
+        "android.hardware.radio.modem",
+        "android.hardware.radio.network",
+        "android.hardware.radio.sap",
+        "android.hardware.radio.sim",
+        "android.hardware.radio.voice",
+        "android.hardware.secure_element",
+        "vendor.qti.hardware.data.connectionaidl",
+        "vendor.qti.hardware.data.connectionfactory",
+        "vendor.qti.hardware.data.iwlandata",
+        "vendor.qti.hardware.radio.am",
+        "vendor.qti.hardware.radio.ims",
+        "vendor.qti.hardware.radio.lpa",
+        "vendor.qti.hardware.radio.qcriNvOpt",
+        "vendor.qti.hardware.radio.qcrilhook",
+        "vendor.qti.hardware.radio.qtiradio",
+        "vendor.qti.hardware.radio.uim",
+        "vendor.qti.hardware.radio.uim_remote_client",
+        "vendor.qti.hardware.radio.uim_remote_server",
+        "vendor.tms.tmsnfc_aidl"
+      ],
+      "path": "odm_a/etc/vintf/manifest_hcesim_ssss.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.nfc",
+        "android.hardware.radio.data",
+        "android.hardware.radio.messaging",
+        "android.hardware.radio.modem",
+        "android.hardware.radio.network",
+        "android.hardware.radio.sap",
+        "android.hardware.radio.sim",
+        "android.hardware.radio.voice",
+        "android.hardware.secure_element",
+        "vendor.qti.hardware.data.connectionaidl",
+        "vendor.qti.hardware.data.connectionfactory",
+        "vendor.qti.hardware.data.iwlandata",
+        "vendor.qti.hardware.radio.am",
+        "vendor.qti.hardware.radio.ims",
+        "vendor.qti.hardware.radio.lpa",
+        "vendor.qti.hardware.radio.qcriNvOpt",
+        "vendor.qti.hardware.radio.qcrilhook",
+        "vendor.qti.hardware.radio.qtiradio",
+        "vendor.qti.hardware.radio.uim",
+        "vendor.qti.hardware.radio.uim_remote_client",
+        "vendor.qti.hardware.radio.uim_remote_server",
+        "vendor.tms.tmsese_aidl",
+        "vendor.tms.tmsnfc_aidl"
+      ],
+      "path": "odm_a/etc/vintf/manifest_hcesimese_dsds.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.nfc",
+        "android.hardware.radio.data",
+        "android.hardware.radio.messaging",
+        "android.hardware.radio.modem",
+        "android.hardware.radio.network",
+        "android.hardware.radio.sap",
+        "android.hardware.radio.sim",
+        "android.hardware.radio.voice",
+        "android.hardware.secure_element",
+        "vendor.qti.hardware.data.connectionaidl",
+        "vendor.qti.hardware.data.connectionfactory",
+        "vendor.qti.hardware.data.iwlandata",
+        "vendor.qti.hardware.radio.am",
+        "vendor.qti.hardware.radio.ims",
+        "vendor.qti.hardware.radio.lpa",
+        "vendor.qti.hardware.radio.qcriNvOpt",
+        "vendor.qti.hardware.radio.qcrilhook",
+        "vendor.qti.hardware.radio.qtiradio",
+        "vendor.qti.hardware.radio.uim",
+        "vendor.qti.hardware.radio.uim_remote_client",
+        "vendor.qti.hardware.radio.uim_remote_server",
+        "vendor.tms.tmsnfc_aidl"
+      ],
+      "path": "odm_a/etc/vintf/manifest_hcesimese_ssss.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.radio.data",
+        "android.hardware.radio.messaging",
+        "android.hardware.radio.modem",
+        "android.hardware.radio.network",
+        "android.hardware.radio.sap",
+        "android.hardware.radio.sim",
+        "android.hardware.radio.voice",
+        "android.hardware.secure_element",
+        "vendor.qti.hardware.data.connectionaidl",
+        "vendor.qti.hardware.data.connectionfactory",
+        "vendor.qti.hardware.data.iwlandata",
+        "vendor.qti.hardware.radio.am",
+        "vendor.qti.hardware.radio.ims",
+        "vendor.qti.hardware.radio.lpa",
+        "vendor.qti.hardware.radio.qcriNvOpt",
+        "vendor.qti.hardware.radio.qcrilhook",
+        "vendor.qti.hardware.radio.qtiradio",
+        "vendor.qti.hardware.radio.uim",
+        "vendor.qti.hardware.radio.uim_remote_client",
+        "vendor.qti.hardware.radio.uim_remote_server"
+      ],
+      "path": "odm_a/etc/vintf/manifest_nonfc_dsds.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.radio.data",
+        "android.hardware.radio.messaging",
+        "android.hardware.radio.modem",
+        "android.hardware.radio.network",
+        "android.hardware.radio.sap",
+        "android.hardware.radio.sim",
+        "android.hardware.radio.voice",
+        "android.hardware.secure_element",
+        "vendor.qti.hardware.data.connectionaidl",
+        "vendor.qti.hardware.data.connectionfactory",
+        "vendor.qti.hardware.data.iwlandata",
+        "vendor.qti.hardware.radio.am",
+        "vendor.qti.hardware.radio.ims",
+        "vendor.qti.hardware.radio.lpa",
+        "vendor.qti.hardware.radio.qcriNvOpt",
+        "vendor.qti.hardware.radio.qcrilhook",
+        "vendor.qti.hardware.radio.qtiradio",
+        "vendor.qti.hardware.radio.uim",
+        "vendor.qti.hardware.radio.uim_remote_client",
+        "vendor.qti.hardware.radio.uim_remote_server"
+      ],
+      "path": "odm_a/etc/vintf/manifest_nonfc_ssss.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.ImsRtpService"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/ImsRtpService-aidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.biometrics.face"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.biometrics.face-v4.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.drm"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.drm-service.clearkey.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.gnss"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.gnss-aidl-service-qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.health"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.health-service.qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.ir"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.ir-service.example.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.radio.config"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.radio.config.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.security.keymint",
+        "android.hardware.security.secureclock",
+        "android.hardware.security.sharedsecret"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml",
+      "present": false
+    },
+    {
+      "hals": [
+        "android.hardware.sensors"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.sensors-multihal.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.thermal"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.thermal-service.qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.usb"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.usb-service.qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.usb.gadget"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.usb.gadget-service.qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.wifi"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.wifi-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.wifi.hostapd"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.wifi.hostapd.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.wifi.supplicant",
+        "vendor.qti.hardware.wifi.supplicant"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.wifi.supplicant.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.radio.atfwd"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/atfwd-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.audio.effect"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/audioeffectservice_qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.bluetooth.audio"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/bluetooth_audio.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.bluetooth"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/bluetooth_hci.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.bluetooth_sar"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/bluetooth_sar.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.boot"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/boot-service.qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.bttpi"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/bttpi-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.media.c2"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/c2_manifest_vendor.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.media.c2"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/c2_manifest_vendor_audio.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.cacertaidlservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/cacert-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.data.factoryservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/datafactoryservice-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.radio.internal.deviceinfo"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/deviceinfo-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.dpmaidlservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/dpm-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.dumpstate"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/dumpstate-xiaomi.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.biometrics.fingerprint"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/fingerprint-odm.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.fm"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/fm_hci.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.fingerprintextension",
+        "vendor.xiaomi.hardware.fx.tunnel"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/fp-aidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.ims.datachannelservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/imsdcservice-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.ListenSoundModelAidl",
+        "vendor.qti.hardware.agm",
+        "vendor.qti.hardware.pal"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/manifest_audio_qti_services.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.audio.core"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/manifest_audiocorehal_default.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.audio.core"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/manifest_btaudiocoreservices_qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "interfaces.customNvService"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/manifest_customNvService.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "interfaces.factoryAta",
+        "interfaces.factoryInterface"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/manifest_factoryService.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.cld_aidl"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/manifest_vendor.xiaomi.hardware.cld_aidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "mapper"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/mapper.qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.memtrack"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/memtrack_qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.mwqemadapteraidlservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/mwqem-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.power"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/power.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.qesdhalaidl"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/qesdk-manager.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.data.dmapconsent",
+        "vendor.qti.data.ntn",
+        "vendor.qti.data.txpwrservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/qms-saidl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.radio.config",
+        "android.hardware.radio.data",
+        "android.hardware.radio.messaging",
+        "android.hardware.radio.modem",
+        "android.hardware.radio.network",
+        "android.hardware.radio.sap",
+        "android.hardware.radio.sim",
+        "android.hardware.radio.voice",
+        "vendor.qti.hardware.radio.am",
+        "vendor.qti.hardware.radio.atfwd",
+        "vendor.qti.hardware.radio.ims",
+        "vendor.qti.hardware.radio.internal.deviceinfo",
+        "vendor.qti.hardware.radio.lpa",
+        "vendor.qti.hardware.radio.qcrilhook",
+        "vendor.qti.hardware.radio.qtiradio",
+        "vendor.qti.hardware.radio.qtiradioconfig",
+        "vendor.qti.hardware.radio.uim",
+        "vendor.qti.hardware.radio.uim_remote_client",
+        "vendor.qti.hardware.radio.uim_remote_server",
+        "vendor.qti.ims.datachannelservice",
+        "vendor.qti.ims.factoryaidlservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/qspa/qspa-modem.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.gnss"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/qspa/qspa-nav.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.snapdragonServices"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/snapdragon_services.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.soundtrigger3"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/soundtrigger.qti.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.sensorscalibrate"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor-qti-hardware-sensorscalibrate.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.MemHal"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.MemHal.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.camera.postproc"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.camera.postproc-impl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.camera.provider"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.camera.provider.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.diaghal"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.diag.hal.service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.gnss"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.gnss-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.alarm"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.alarm.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.capabilityconfigstore"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.capabilityconfigstore-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.graphics.allocator"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.display.allocator-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.graphics.composer3",
+        "vendor.qti.hardware.display.color",
+        "vendor.qti.hardware.display.config",
+        "vendor.qti.hardware.display.postproc"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.display.composer-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.dsp"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.dsp-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.embmssl"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.embmssl.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.light"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.lights.service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.perf2"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.perf2.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.power.powermodule"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.power.powermodule.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.qseecom"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.qseecom@1.0-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.qteeconnector"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.qteeconnector@1.0-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.radio.qtiradioconfig"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.radio.qtiradioconfig.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.secureprocessor.device"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.secureprocessor.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.servicetrackeraidl"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.servicetrackeraidl-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.soter"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.soter-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.tetheroffload"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.tetheroffload.service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.vibrator"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.vibrator.service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.wifi.wifilearner"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.hardware.wifi.wifilearner-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.ims.factoryaidlservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.ims.factoryaidlservice.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.ims.imscmaidlservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.ims.imscmaidlservice.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.ims.uceaidlservice"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.ims.uceaidlservice.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.qccvndhal_aidl"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.qccvndhal_aidl-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.hardware.qspa"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.qspa-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.qspmhal"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.qspmhal-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.qti.syshealthmon"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.syshealthmon-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.batteryantiaging"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.xiaomi.hardware.batteryantiaging.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.displayfeature_aidl"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.xiaomi.hardware.displayfeature_aidl-service.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.micharge"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.xiaomi.hardware.micharge.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.blackbox",
+        "vendor.xiaomi.hardware.misys.common"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.xiaomi.hardware.misys.common.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "vendor.xiaomi.hardware.misys.core"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/vendor.xiaomi.hardware.misys.core.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.drm",
+        "android.hardware.gatekeeper",
+        "vendor.qti.hardware.wifidisplaysession_aidl"
+      ],
+      "path": "vendor_a/etc/vintf/manifest_parrot.xml",
+      "present": true
+    },
+    {
+      "hals": [
+        "android.hardware.drm",
+        "android.hardware.gatekeeper",
+        "vendor.qti.hardware.wifidisplaysession_aidl"
+      ],
+      "path": "vendor_a/etc/vintf/manifest_ravelin.xml",
+      "present": true
+    }
+  ]
+}
