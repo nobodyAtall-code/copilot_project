@@ -35,7 +35,7 @@ jobs:
           set -euo pipefail
           mkdir -p work reports
           python3 -m py_compile scripts/multicdn.py scripts/inventory_partitions.py scripts/stage_vendor_sources.py
-          bash -n scripts/extract_partitions.sh
+          bash -n scripts/extract_partitions.sh scripts/stage_boot_images.sh
           python3 -u scripts/multicdn.py
           sha256sum work/*.tgz > reports/firmware.sha256
 
@@ -49,6 +49,7 @@ jobs:
           find work/unpacked -type f -name '*.img' -printf '%P\t%s bytes\n' | sort > reports/images.tsv
           find work/unpacked -type f -name '*.img' -print0 | xargs -0 -r sha256sum > reports/images.sha256
           test -s reports/images.tsv
+          bash scripts/stage_boot_images.sh
           rm -f work/*.tgz
           df -h . | tee reports/disk-before-partitions.txt
 
@@ -103,6 +104,18 @@ jobs:
           path: |
             reports/stock-vendor-source.tar.zst
             reports/stock-vendor-source.sha256
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload stock boot-chain images
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-global-OS3.0.304.0-boot-images
+          path: |
+            reports/boot-images/
+            reports/boot-images.sha256
           compression-level: 0
           if-no-files-found: error
           retention-days: 14
