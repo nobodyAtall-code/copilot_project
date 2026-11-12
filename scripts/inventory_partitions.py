@@ -25,7 +25,7 @@ with (
     for mount in sorted(root.iterdir()):
         if not mount.is_dir() or not os.path.ismount(mount):
             continue
-        for base, dirs, files in os.walk(mount, followlinks=False):
+        for base, dirs, files in os.walk(mount, followlinks=False, onerror=lambda e: (_ for _ in ()).throw(e)):
             dirs[:] = sorted(d for d in dirs if not os.path.islink(os.path.join(base, d)))
             for filename in sorted(files):
                 full = pathlib.Path(base) / filename
