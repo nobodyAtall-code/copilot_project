@@ -91,7 +91,16 @@ jobs:
             if dst.is_symlink():dst.unlink()
             elif dst.exists():shutil.rmtree(dst)
             dst.symlink_to(pathlib.Path(os.path.relpath(pathlib.Path('_mist_extra')/name,dst.parent)))
-          # Xiaomi's msm_platforms.bzl resolves //build:msm_kernel_extensions.bzl.\n          # Do this only in the temporary runner, never in the owned kernel repository.\n          root_build=pathlib.Path('build')\n          root_build.mkdir(exist_ok=True)\n          src_ext=pathlib.Path('msm-kernel/msm_kernel_extensions.bzl')\n          assert src_ext.is_file(), 'Pinned Xiaomi extension missing'\n          shutil.copy2(src_ext,root_build/'msm_kernel_extensions.bzl')\n          if not (root_build/'BUILD.bazel').exists() and not (root_build/'BUILD').exists():\n            (root_build/'BUILD.bazel').write_text('package(default_visibility = ["//visibility:public"])\\n')\n          print('Pinned Xiaomi sources and //build extension assembled',flush=True)
+          # Xiaomi's msm_platforms.bzl resolves //build:msm_kernel_extensions.bzl.
+          # Keep this Bazel wiring in the disposable runner only.
+          root_build=pathlib.Path('build')
+          root_build.mkdir(exist_ok=True)
+          src_ext=pathlib.Path('msm-kernel/msm_kernel_extensions.bzl')
+          assert src_ext.is_file(), 'Pinned Xiaomi extension missing'
+          shutil.copy2(src_ext,root_build/'msm_kernel_extensions.bzl')
+          if not (root_build/'BUILD.bazel').exists() and not (root_build/'BUILD').exists():
+            (root_build/'BUILD.bazel').write_text('package(default_visibility = ["//visibility:public"])\\n')
+          print('Pinned Xiaomi sources and //build extension assembled',flush=True)
           PY
       - name: Query and attempt real Mist Bazel compilation
         shell: bash
