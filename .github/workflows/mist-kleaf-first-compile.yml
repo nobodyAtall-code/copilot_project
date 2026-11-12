@@ -36,7 +36,7 @@ jobs:
           repo init -u https://android.googlesource.com/kernel/manifest -b common-android15-6.6 --partial-clone --no-repo-verify
           git -C .repo/manifests checkout --detach 1863b57ae47bf254a3a08d21ba6c8c2ac13ff239
           echo "Using pinned Google kernel manifest $(git -C .repo/manifests rev-parse HEAD)"
-          repo sync -c -j 4 --no-tags --fail-fast --partial-clone
+          repo sync -c -j 4 --no-tags --fail-fast
           test -d build/kernel
           test -d common
           test -d prebuilts/clang/host/linux-x86
