@@ -26,7 +26,7 @@ Bring up Android 16 **LineageOS 23.2** for **Redmi Note 17 5G / mist**, platform
 | [android_device_xiaomi_mist-kernel](https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel) | stock-compatible kernel prebuilts/integration | still empty |
 | [android_kernel_xiaomi_mist](https://github.com/nobodyAtall-code/android_kernel_xiaomi_mist) | Linux 6.6.118 source | populated; includes `mist.bzl` and `build.config.msm.mist` |
 
-Device now has its original six-file skeleton **plus** an incremental `proprietary-files.txt` listing 13 observed stock lib64 files (commit e6f9e52). Preserve these; extend only with verified configuration.
+Device now has its original six-file skeleton **plus** `proprietary-files.txt` listing 27 reviewed stock files: 13 lib64 and 14 HAL executable/init/VINTF files (commits e6f9e52, 5dcbee7). Preserve these; extend only with verified configuration.
 
 ## 3. Completed and verified pipeline
 
@@ -111,7 +111,7 @@ From the published `mist-archive-membership.json`:
 
 - Follow-up research automation `scripts/sync_mist_manifest.py` added on `copilot_project/main` at [commit 213f2ef](https://github.com/nobodyAtall-code/copilot_project/commit/213f2ef5f39ee40d59ceace5879a37649a228056). It reads the 14-file stock HAL allowlist and verifies every source file exists in the published production vendor tree before adding corresponding `vendor/...` paths to the existing device `proprietary-files.txt`. It is append-only and idempotent.
 - New workflow `.github/workflows/sync-mist-device-manifest.yml`, [commit 445da59](https://github.com/nobodyAtall-code/copilot_project/commit/445da59f66419a1f6be69082094aa9c6fb13dd54), runs only in `copilot_project`; uses `GH_PAT` scoped to clone/push existing device `main`, with Git author/committer `nobodyAtall-code <hashyofficial@gmail.com>`. No experimental scripts or workflows copied to the production device tree.
-- Workflow run [43191251280](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43191251280) was **queued** at first check. **Verify the workflow result and device commit before claiming manifest synchronization completed.** If permissions fail, do not assume `GH_PAT` has device-tree access; inspect the exact error.
+- Workflow [43191251280](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43191251280), job 131090841080, **completed successfully**. Device tree `main` received [commit `5dcbee7`](https://github.com/nobodyAtall-code/android_device_xiaomi_mist/commit/5dcbee7a00aba0f6c5d5ceebf89c1959c0e874c3) adding **14 reviewed stock HAL entries** to `proprietary-files.txt` (total **27 entries**). Both Git author and committer verified as `nobodyAtall-code <hashyofficial@gmail.com>`. Device repository contains no GitHub Actions workflow or experimental script from this synchronization.
 - Even after manifest alignment, the actual outstanding bottleneck is **unvalidated vendor dependency linking and incomplete kernel/device bring-up**, not whether the 14 stock HAL paths exist. A true `lunch`/build has not yet been attempted.
 
 ## 4. Research/report files — read in this order
@@ -137,7 +137,7 @@ From the published `mist-archive-membership.json`:
 
 ## 6. What has NOT been completed (do not overclaim)
 
-- Incremental 13-library `proprietary-files.txt` committed; a final device-wide proprietary manifest remains incomplete.
+- Device `proprietary-files.txt` now covers the first 27 stock files (13 security libraries, 5 HAL binaries, 5 init RC, 4 VINTF manifests); the complete device-wide proprietary manifest remains incomplete.
 - Production proprietary vendor tree now contains the first 13 stock security libraries and build definitions (commit 129e2b1), but **the full vendor tree remains incomplete**; kernel-prebuilt repository is still empty.
 - Research-only metadata/DT_NEEDED inspector committed, but no verified completed report or complete library closure, symlink/mode validation, or actual module ABI assessment.
 - No validated dynamic partition group capacities or finished BoardConfig/AVB/SELinux configuration.
