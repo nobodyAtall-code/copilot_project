@@ -36,7 +36,7 @@ jobs:
           repo init -u https://android.googlesource.com/kernel/manifest -b common-android15-6.6 --partial-clone --no-repo-verify
           git -C .repo/manifests reset --hard 1863b57ae47bf254a3a08d21ba6c8c2ac13ff239
           echo "Using pinned Google kernel manifest $(git -C .repo/manifests rev-parse HEAD)"
-          repo sync -c -j 4 --no-tags --fail-fast
+          repo sync -c -j 12 --no-tags --fail-fast --optimized-fetch
           test -d build/kernel
           test -d common
           test -d prebuilts/clang/host/linux-x86
@@ -91,7 +91,7 @@ jobs:
             if dst.is_symlink():dst.unlink()
             elif dst.exists():shutil.rmtree(dst)
             dst.symlink_to(pathlib.Path(os.path.relpath(pathlib.Path('_mist_extra')/name,dst.parent)))
-          print('Pinned Xiaomi sources assembled; compile validation still pending',flush=True)
+          # Xiaomi's msm_platforms.bzl resolves //build:msm_kernel_extensions.bzl.\n          # Do this only in the temporary runner, never in the owned kernel repository.\n          root_build=pathlib.Path('build')\n          root_build.mkdir(exist_ok=True)\n          src_ext=pathlib.Path('msm-kernel/msm_kernel_extensions.bzl')\n          assert src_ext.is_file(), 'Pinned Xiaomi extension missing'\n          shutil.copy2(src_ext,root_build/'msm_kernel_extensions.bzl')\n          if not (root_build/'BUILD.bazel').exists() and not (root_build/'BUILD').exists():\n            (root_build/'BUILD.bazel').write_text('package(default_visibility = ["//visibility:public"])\\n')\n          print('Pinned Xiaomi sources and //build extension assembled',flush=True)
           PY
       - name: Query and attempt real Mist Bazel compilation
         shell: bash
@@ -106,7 +106,30 @@ jobs:
           if [[ -x tools/bazel ]]; then BAZEL=tools/bazel
           elif [[ -x build/kernel/kleaf/bazel.sh ]]; then BAZEL=build/kernel/kleaf/bazel.sh
           else echo 'No runnable Kleaf Bazel launcher found'; exit 20; fi
-          "$BAZEL" query '//msm-kernel:*mist*' --output=label
+          "$BAZEL" query '//msm-kernel:all' --output=label | grep -E '^//msm-kernel:mist_(perf|consolidate)
+          query_rc=$?
+          echo "BAZEL_QUERY_EXIT=$query_rc"
+          if [[ "$query_rc" -ne 0 ]]; then exit "$query_rc"; fi
+          echo "=== Actual Mist kernel build attempt ==="
+          "$BAZEL" build //msm-kernel:mist_perf --verbose_failures
+          build_rc=$?
+          echo "BAZEL_BUILD_EXIT=$build_rc"
+          python3 - "$RESULT" "$query_rc" "$build_rc" <<'PY'
+          import json,sys
+          json.dump(dict(query_exit=int(sys.argv[2]),build_exit=int(sys.argv[3]),kernel_compiled=int(sys.argv[3])==0,validated_stock_abi=False,boot_tested=False),open(sys.argv[1],'w'),indent=2)
+          PY
+          exit "$build_rc"
+      - name: Upload build diagnostic log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-first-kleaf-compile-diagnostics
+          path: |
+            research/generated/mist-kleaf-first-compile.log
+            research/generated/mist-kleaf-first-compile-result.json
+          if-no-files-found: warn
+          retention-days: 14
+
           query_rc=$?
           echo "BAZEL_QUERY_EXIT=$query_rc"
           if [[ "$query_rc" -ne 0 ]]; then exit "$query_rc"; fi
