@@ -30,7 +30,8 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends zstd
-          python3 -m pip install --user pyelftools==0.32
+          python3 -m venv .elf-venv
+          .elf-venv/bin/python -m pip install pyelftools==0.32
       - name: Download and verify staged stock source
         env:
           GH_TOKEN: ${{ github.token }}
@@ -43,8 +44,8 @@ jobs:
       - name: Validate script and inspect curated ELF seeds
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/inspect_stock_elf_metadata.py
-          python3 scripts/inspect_stock_elf_metadata.py --archive input/vendor/stock-vendor-source.tar.zst --output reports/mist-curated-elf-metadata.json
+          .elf-venv/bin/python -m py_compile scripts/inspect_stock_elf_metadata.py
+          .elf-venv/bin/python scripts/inspect_stock_elf_metadata.py --archive input/vendor/stock-vendor-source.tar.zst --output reports/mist-curated-elf-metadata.json
           test -s reports/mist-curated-elf-metadata.json
           python3 - <<'PY'
           import json
