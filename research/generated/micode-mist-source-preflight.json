@@ -1,0 +1,95 @@
+{
+  "result": "PASS",
+  "source_pins": [
+    {
+      "repo": "nobodyAtall-code/android_kernel_xiaomi_mist",
+      "ref": "main",
+      "sha": "fe8024a4c5eea6cf1135e615d44e7a3fb15fedac",
+      "tree": "a865f7abe59d68ec7c261eccfadb5466c2f86228"
+    },
+    {
+      "repo": "nobodyAtall-code/kernel_build",
+      "ref": "main",
+      "sha": "ee8c9d048bfda42314e5cdb2d4ab8bd56b73fa19",
+      "tree": "d8ef8cf1ec1c77dbbb3d6b89c330aed8701c1aa3"
+    },
+    {
+      "repo": "MiCode/kernel_build",
+      "ref": "mist-w-oss",
+      "sha": "9ab26a75077949242e32748dcb8ea46fa3a5bba8",
+      "tree": "d8ef8cf1ec1c77dbbb3d6b89c330aed8701c1aa3"
+    },
+    {
+      "repo": "MiCode/Xiaomi_Kernel_OpenSource",
+      "ref": "mist-w-oss",
+      "sha": "828fe3bef1d1f16dd280da29f17b56059c06134e",
+      "tree": "a7427258db78e88f897756a99a26d239986d5dcc"
+    },
+    {
+      "repo": "MiCode/kernel_devicetree",
+      "ref": "mist-w-oss",
+      "sha": "55966b16689be0d8619c9e7b8146c6e268851844",
+      "tree": "6e444bee98db47d5e7545374a312a1bac23160e0"
+    },
+    {
+      "repo": "MiCode/vendor_qcom_opensource_wlan",
+      "ref": "mist-w-oss",
+      "sha": "500816b7e9c458c65c465c3999e167214b084207",
+      "tree": "68d2ef1ee30f7982b4e87565bd72d42d1f1a97fc"
+    },
+    {
+      "repo": "MiCode/vendor_qcom_opensource_audio-kernel",
+      "ref": "mist-w-oss",
+      "sha": "5dd1fa6e664ad76685f1a1c02b079a4db3385555",
+      "tree": "c1dc37def2d46c916c7253864365e4171344d292"
+    },
+    {
+      "repo": "MiCode/vendor_qcom_opensource_data-kernel",
+      "ref": "mist-w-oss",
+      "sha": "4282d9652a4b7cfde38461c2938852423687ef8f",
+      "tree": "cf5da1b2362b53baff4738fe0ead4827caa1952b"
+    },
+    {
+      "repo": "MiCode/vendor_qcom_opensource_camera-kernel",
+      "ref": "mist-w-oss",
+      "sha": "74d0b79ca87dcfe269ea556537ce840e2dc0ff43",
+      "tree": "a8cfffcc2d296a5fc60496e19d4bd424d14dd8e6"
+    },
+    {
+      "repo": "MiCode/vendor_qcom_proprietary_display-devicetree",
+      "ref": "mist-w-oss",
+      "sha": "40f37b6254f54a7b5b2a718915851902e03598ae",
+      "tree": "d418eeb2853375a1089568bacb5297fdbbf95290"
+    },
+    {
+      "repo": "MiCode/vendor_qcom_proprietary_camera-devicetree",
+      "ref": "mist-w-oss",
+      "sha": "efd42dcc2817e98971cf832acb0bc10083fea4d7",
+      "tree": "519c805d8792df33f8b63c2a765b0e6ac7808b90"
+    }
+  ],
+  "identical_kernel_build_tree": true,
+  "required_paths": [
+    {
+      "repo": "MiCode/kernel_devicetree",
+      "path": "qcom/mist-common.dtsi",
+      "ref": "mist-w-oss"
+    },
+    {
+      "repo": "MiCode/kernel_devicetree",
+      "path": "qcom/mist-qrd-overlay.dts",
+      "ref": "mist-w-oss"
+    },
+    {
+      "repo": "nobodyAtall-code/android_kernel_xiaomi_mist",
+      "path": "build.config.msm.mist",
+      "ref": "main"
+    },
+    {
+      "repo": "nobodyAtall-code/android_kernel_xiaomi_mist",
+      "path": "mist.bzl",
+      "ref": "main"
+    }
+  ],
+  "limitations": "No compilation, ABI, DTBO equivalence or ROM boot was tested"
+}
