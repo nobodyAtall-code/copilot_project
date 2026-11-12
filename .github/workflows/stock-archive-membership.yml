@@ -8,7 +8,7 @@ on:
       - 'scripts/check_stock_archive_membership.py'
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 jobs:
@@ -55,3 +55,20 @@ jobs:
           path: reports/archive-membership/
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Publish small verified research report on main
+        if: success()
+        run: |
+          set -euo pipefail
+          mkdir -p research/generated
+          cp reports/archive-membership/archive-membership.md research/generated/mist-archive-membership.md
+          cp reports/archive-membership/archive-membership.json research/generated/mist-archive-membership.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- research/generated/mist-archive-membership.md research/generated/mist-archive-membership.json
+          if git diff --cached --quiet; then
+            echo "No research report changes"
+            exit 0
+          fi
+          git commit -m "mist: publish stock archive membership review"
+          git push origin HEAD:main
