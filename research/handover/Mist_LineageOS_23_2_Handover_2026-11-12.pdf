@@ -1,0 +1,339 @@
+%PDF-1.4
+% ASCII-compatible project handover
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R] /Count 6 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Length 4089 >>
+stream
+0.07 0.13 0.22 rg 0 787 595 55 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 43 809 Tm (MIST  /  LINEAGEOS 23.2  -  TECHNICAL HANDOVER) Tj ET
+0.80 0.88 0.96 rg BT /F1 8 Tf 1 0 0 1 43 793 Tm (REDMI NOTE 17 5G \(mist\)  |  12 NOV 2026) Tj ET
+0.13 0.18 0.26 rg BT /F2 17 Tf 1 0 0 1 43 748 Tm (PROJECT STATUS / EXECUTIVE SUMMARY) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 717 Tm (Objective: create original, device-accurate LineageOS 23.2 \(Android 16\) bring-up for Redmi Note 17) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 704 Tm (5G, codename mist, Qualcomm SM4450 / parrot. The sm4450-development organization is only an) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 691 Tm (architectural reference; do not copy another device's partitions, fstab, vendor blobs or boot) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 678 Tm (settings.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 650 Tm (Latest status - important change since prior handover) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 639 m 551 639 l S
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 620 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 620 Tm (LATEST ACTIONS RUN: #43179826520, job #131052829905, stock configuration review, FAILED on 12) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 607 Tm (Nov 2026 at 08:03 UTC \(16:03 Malaysia\).) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 590 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 590 Tm (Exact error: scripts/review_stock_configuration.py line 144 emitted SyntaxError: invalid) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 577 Tm (escape sequence '\\`' during python3 -W error::SyntaxWarning -m py_compile. Artifact download) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 564 Tm (succeeded; parse step failed; report publication skipped.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 547 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 547 Tm (FIX PUSHED to copilot_project/main: commit 00a7059e29c4f2ee33ed774d27f4481e109809dd,) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 534 Tm (replacing 19 invalid backtick escapes in review script.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 517 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 517 Tm (This correction has NOT been retested in a new workflow run. Start the next chat by checking) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 504 Tm (for a newer run; if none exists, dispatch stock-config-review.yml on main.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 479 Tm (Current acceptance state) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 468 m 551 468 l S
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 449 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 449 Tm (Stock ROM acquisition, sparse super unpack and EROFS inventory: verified successful.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 432 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 432 Tm (Vendor source archive and seven boot image SHA256 checks: verified successful.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 415 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 415 Tm (Detailed VINTF/fstab/init/module report: BLOCKED by the now-fixed, not-yet-rerun Python) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 402 Tm (compile error.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 385 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 385 Tm (Production proprietary vendor and kernel-prebuilt trees: still empty. Device tree: six) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 372 Tm (preliminary files, not build-ready.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 355 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 355 Tm (No LineageOS 23.2 ROM has been built, booted, or hardware tested. Do not claim any device) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 342 Tm (feature works.) Tj ET
+0.35 0.43 0.51 rg BT /F1 8 Tf 1 0 0 1 43 325 Tm (Primary latest run: https://github.com/nobodyAtall-code/copilot_project/actions/runs/43179826520) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 47 m 551 47 l S
+0.39 0.45 0.52 rg BT /F1 8 Tf 1 0 0 1 43 31 Tm (Project handover  |  12 November 2026  |  Page 1) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 4423 >>
+stream
+0.07 0.13 0.22 rg 0 787 595 55 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 43 809 Tm (MIST  /  LINEAGEOS 23.2  -  TECHNICAL HANDOVER) Tj ET
+0.80 0.88 0.96 rg BT /F1 8 Tf 1 0 0 1 43 793 Tm (REDMI NOTE 17 5G \(mist\)  |  12 NOV 2026) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 740 Tm (Repository map and strict repository rules) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 729 m 551 729 l S
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 710 Tm (Research, staging, workflow tooling and reports:) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 697 Tm (https://github.com/nobodyAtall-code/copilot_project) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 677 Tm (Device configuration \(six skeleton files\):) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 664 Tm (https://github.com/nobodyAtall-code/android_device_xiaomi_mist) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 644 Tm (Proprietary blobs and vendor makefiles \(empty\):) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 631 Tm (https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 611 Tm (Stock-compatible kernel boot inputs/prebuilts \(empty\):) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 598 Tm (https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 578 Tm (Existing kernel source \(Linux 6.6.118\):) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 565 Tm (https://github.com/nobodyAtall-code/android_kernel_xiaomi_mist) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 537 Tm (Non-negotiable constraints) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 526 m 551 526 l S
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 507 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 507 Tm (ALL work is committed directly to the existing main branches. No pull requests; no newly) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 494 Tm (created branches.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 477 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 477 Tm (Only copilot_project may contain GitHub Actions workflows, extraction, research scripts,) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 464 Tm (temporary archives, experiment logs or publication automation.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 447 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 447 Tm (Keep device/vendor/kernel production repositories restricted to required, reviewed build and) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 434 Tm (runtime files. Never bulk copy stock images or HyperOS APKs.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 417 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 417 Tm (GH_PAT exists as an Actions secret in copilot_project. Do not reveal or log it. No successful) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 404 Tm (blob-publishing permission test has been shown.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 387 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 387 Tm (Do not modify local LineageOS source checkout or remove old sky-related local customizations) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 374 Tm (until inspected and backed up.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 357 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 357 Tm (Use stock mist evidence, not unverified sky values from sm4450-development. Check AVB,) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 344 Tm (dynamic partition groups and mount configuration before building/flash.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 319 Tm (Latest repository branch identities) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 308 m 551 308 l S
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 289 Tm (copilot_project main after syntax fix: 00a7059e29c4f2ee33ed774d27f4481e109809dd) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 269 Tm (android_device_xiaomi_mist main: be0c8b740d8fed1200b4109f13d7c0d208714449) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 249 Tm (android_kernel_xiaomi_mist main: fe8024a4c5eea6cf1135e615d44e7a3fb15fedac) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 229 Tm (Vendor and kernel-prebuilt repositories are GitHub-empty and have no main commit yet;) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 216 Tm (contents/branch lookups return 404 for empty repositories.) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 47 m 551 47 l S
+0.39 0.45 0.52 rg BT /F1 8 Tf 1 0 0 1 43 31 Tm (Project handover  |  12 November 2026  |  Page 2) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
+<< /Length 4296 >>
+stream
+0.07 0.13 0.22 rg 0 787 595 55 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 43 809 Tm (MIST  /  LINEAGEOS 23.2  -  TECHNICAL HANDOVER) Tj ET
+0.80 0.88 0.96 rg BT /F1 8 Tf 1 0 0 1 43 793 Tm (REDMI NOTE 17 5G \(mist\)  |  12 NOV 2026) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 740 Tm (Device and source baseline) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 729 m 551 729 l S
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 710 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 710 Tm (Hardware: Redmi Note 17 5G, mist, Qualcomm SM4450 / parrot.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 693 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 693 Tm (Target: LineageOS 23.2, Android 16 generation.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 676 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 676 Tm (Global HyperOS firmware: OS3.0.304.0.WPUMIXM, Android 16; complete fastboot ROM MD5) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 663 Tm (c4450c4e168052ca9de1211306d3beff.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 646 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 646 Tm (Stock kernel: Linux 6.6.118, mist build config and mist.bzl in existing kernel source.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 629 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 629 Tm (Boot header v4; physical boot, init_boot, vendor_boot, dtbo, recovery; EROFS logical) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 616 Tm (partitions; Virtual A/B; F2FS userdata.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 591 Tm (Verified acquisition and archive runs) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 580 m 551 580 l S
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 561 Tm (Run #43172012149: SUCCESS. Downloaded and MD5-verified Global ROM, unpacked eight EROFS logical) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 548 Tm (partitions, indexed 11,313 files and 3,030 shared libraries/symlinks.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 528 Tm (Run #43174896778: SUCCESS. Staged research inventories, all shared libraries, stock vendor-source) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 515 Tm (archive and boot-chain images. All four outputs uploaded. Optional raw partition artifact) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 502 Tm (intentionally skipped.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 482 Tm (Run #43178657329: SUCCESS. Checked stock vendor archive checksum and hashes for seven boot chain) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 469 Tm (images; inspected 4,373 archive entries; audit artifact contained 360 files. Minor Python backtick) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 456 Tm (warnings in an earlier script fixed later.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 428 Tm (Critical source artifacts) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 417 m 551 417 l S
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 398 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 398 Tm (Run #43174896778 research: artifact 13923423842, 289,196-byte ZIP.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 381 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 381 Tm (Run #43174896778 all-so: artifact 13923129711, 443,962,342-byte ZIP.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 364 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 364 Tm (Run #43174896778 vendor-source: artifact 13923059799, 466,442,771-byte ZIP.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 347 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 347 Tm (Run #43174896778 boot-images: artifact 13924356647, 339,752,592-byte ZIP.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 330 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 330 Tm (Run #43178657329 staged-audit report: artifact 13924823795, 278,442-byte ZIP.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 313 Tm (All five artifacts were originally configured with 14-day retention and are expected to expire) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 300 Tm (about 26 Nov 2026. Download/promote essential inventories before expiration. Retention is not) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 287 Tm (proof they remain currently available.) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 47 m 551 47 l S
+0.39 0.45 0.52 rg BT /F1 8 Tf 1 0 0 1 43 31 Tm (Project handover  |  12 November 2026  |  Page 3) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 9 0 R >>
+endobj
+11 0 obj
+<< /Length 4279 >>
+stream
+0.07 0.13 0.22 rg 0 787 595 55 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 43 809 Tm (MIST  /  LINEAGEOS 23.2  -  TECHNICAL HANDOVER) Tj ET
+0.80 0.88 0.96 rg BT /F1 8 Tf 1 0 0 1 43 793 Tm (REDMI NOTE 17 5G \(mist\)  |  12 NOV 2026) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 740 Tm (Known stock inventory - what it does and does not prove) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 729 m 551 729 l S
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 710 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 710 Tm (Eight mounted logical images: system_a, system_ext_a, product_a, vendor_a, vendor_dlkm_a,) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 697 Tm (system_dlkm_a, odm_a, mi_ext_a, all EROFS.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 680 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 680 Tm (vendor_a indexed 3,129 entries, including HAL libraries, firmware, VINTF fragments, init) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 667 Tm (scripts, and fstab.default/fstab.emmc.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 650 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 650 Tm (odm_a indexed 452 entries, including VINTF, init, and permissions files.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 633 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 633 Tm (vendor_dlkm_a indexed 278 entries \(273 under lib/modules\); system_dlkm_a indexed 213 entries) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 620 Tm (\(110 under lib/modules\).) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 603 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 603 Tm (Research generated 3,539 vendor/ODM candidate paths and 42 exclusions. Candidates are not an) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 590 Tm (approved LineageOS proprietary-files.txt.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 573 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 573 Tm (Extracted logical image file sizes are NOT dynamic-group capacities. Need actual super /) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 560 Tm (lpdump group allocation limits and block-device metadata.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 535 Tm (Recently committed research and workflow history) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 524 m 551 524 l S
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 505 Tm (097928d: stock acquisition and partition extraction audit in) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 492 Tm (research/stock-audit-run-43174896778.md.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 472 Tm (230fcfe: archive inventory script scripts/audit_staged_artifacts.py.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 452 Tm (7bde4ca and 3df9275: staged-stock-audit.yml and corrected checksum path.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 432 Tm (0d73cca: corrected harmless escaped backticks in audit_staged_artifacts.py.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 412 Tm (974c1c4: research/staged-archive-audit-run-43178657329.md.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 392 Tm (2a48504: scripts/review_stock_configuration.py, structured VINTF/fstab/init/module parser.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 372 Tm (6501ac4: stock-config-review.yml, report upload and research-only commit to main.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 352 Tm (00a7059: fixed 19 invalid escaped backticks in the review script after run #43179826520 failed.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 324 Tm (Caution about the newly added review workflow) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 313 m 551 313 l S
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 294 Tm (It requests actions:read and contents:write, downloads the successful staged audit artifact,) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 281 Tm (validates input audit.json, compiles and runs the parser, uploads Markdown/JSON reports, then) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 268 Tm (commits research/generated/mist-stock-config.* to copilot_project/main. The last failure occurred) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 255 Tm (BEFORE parser execution; success of the repaired script is still unverified.) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 47 m 551 47 l S
+0.39 0.45 0.52 rg BT /F1 8 Tf 1 0 0 1 43 31 Tm (Project handover  |  12 November 2026  |  Page 4) Tj ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 11 0 R >>
+endobj
+13 0 obj
+<< /Length 4825 >>
+stream
+0.07 0.13 0.22 rg 0 787 595 55 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 43 809 Tm (MIST  /  LINEAGEOS 23.2  -  TECHNICAL HANDOVER) Tj ET
+0.80 0.88 0.96 rg BT /F1 8 Tf 1 0 0 1 43 793 Tm (REDMI NOTE 17 5G \(mist\)  |  12 NOV 2026) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 740 Tm (Required execution plan for the next chat) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 729 m 551 729 l S
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 710 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 710 Tm (01 - FIRST inspect latest copilot_project Actions runs, specifically #43179826520 failure and) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 697 Tm (any runs after the fix 00a7059. Do not assume a fresh run exists.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 680 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 680 Tm (02 - If not already successful, manually dispatch 'Mist stock configuration review' on main:) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 667 Tm (.github/workflows/stock-config-review.yml. Inspect steps, complete logs, artifacts and) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 654 Tm (eventual research/generated Markdown/JSON.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 637 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 637 Tm (03 - If the parser fails again, fix the exact failing source lines in copilot_project/main) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 624 Tm (and rerun. The previous failure was Python warning-as-error caused by invalid '\\`' escape.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 607 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 607 Tm (04 - Review generated VINTF HAL entries, actual fstab flags, init services, module) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 594 Tm (load/blocklist/dependencies and generated report for malformed or unsafe data.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 577 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 577 Tm (05 - Build a curated proprietary-files.txt with only essential mist HALs, libraries, firmware) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 564 Tm (and configuration; validate ABI and ELF dependencies. Never blindly copy all candidates or) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 551 Tm (unrelated HyperOS apps.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 534 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 534 Tm (06 - Decode and inspect stock boot/init_boot/vendor_boot/recovery/dtbo; extract kernel) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 521 Tm (release/DTB, ramdisk module order and AVB requirements. Populate only validated) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 508 Tm (kernel-prebuilt inputs.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 491 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 491 Tm (07 - Obtain verified dynamic partition sizes/groups and complete BoardConfig, device.mk,) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 478 Tm (init, fstab, overlays, VINTF, AVB, recovery and SELinux for Android 16.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 461 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 461 Tm (08 - Inventory and back up local LineageOS 23.2 source checkout before selectively removing) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 448 Tm (stale device integration. Then attempt compile, diagnose errors, and only later perform) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 435 Tm (cautious boot tests.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 410 Tm (Potential blockers) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 399 m 551 399 l S
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 380 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 380 Tm (Stock config report not published because latest run failed; fix is pushed but untested.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 363 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 363 Tm (No explicit verified production proprietary manifest or extracted full approved vendor set.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 346 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 346 Tm (No verified kernel boot packaging, DTB/modules dependency resolution or AVB chain.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 329 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 329 Tm (GitHub artifact expiration and size limitations; ensure future binary publisher obeys strict) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 316 Tm (allowlists and only targets main.) Tj ET
+0.13 0.18 0.26 rg BT /F2 10 Tf 1 0 0 1 44 299 Tm (-) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 58 299 Tm (No local source checkout inventory, successful compilation or device test logs.) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 47 m 551 47 l S
+0.39 0.45 0.52 rg BT /F1 8 Tf 1 0 0 1 43 31 Tm (Project handover  |  12 November 2026  |  Page 5) Tj ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 13 0 R >>
+endobj
+15 0 obj
+<< /Length 3970 >>
+stream
+0.07 0.13 0.22 rg 0 787 595 55 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 43 809 Tm (MIST  /  LINEAGEOS 23.2  -  TECHNICAL HANDOVER) Tj ET
+0.80 0.88 0.96 rg BT /F1 8 Tf 1 0 0 1 43 793 Tm (REDMI NOTE 17 5G \(mist\)  |  12 NOV 2026) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 740 Tm (Continuation prompt - paste into the next chat) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 729 m 551 729 l S
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 710 Tm (Continue my Redmi Note 17 5G \(mist\), Qualcomm SM4450/parrot, LineageOS 23.2 Android 16) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 696 Tm (bring-up using this handover PDF. Use GitHub connector and START by checking copilot_project) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 682 Tm (Actions run 43179826520 and any newer runs. Latest run failed compiling) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 668 Tm (scripts/review_stock_configuration.py due invalid escaped backticks; fix committed to) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 654 Tm (copilot_project/main at 00a7059e29c4f2ee33ed774d27f4481e109809dd. Verify whether) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 640 Tm (stock-config-review.yml succeeded after fix; if not, start the workflow from main, inspect) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 626 Tm (actual errors and fix them. Next inspect research/generated/mist-stock-config.md and .json;) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 612 Tm (use stock data for clean device, vendor and kernel-prebuilt bring-up. Respect main-only/no) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 598 Tm (PR/no new branch; all workflows/research in copilot_project only; no bulk copying HyperOS, sky) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 584 Tm (or private partitions; protect GH_PAT; preserve local Lineage checkout until) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 570 Tm (inventoried/backed up. Do not claim ROM build or boot success without proof.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 532 Tm (Future 'handover' instruction) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 521 m 551 521 l S
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 502 Tm (Whenever I say 'handover', produce a fresh, professionally formatted PDF dated for that handover.) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 489 Tm (Check live GitHub main branches, newest Actions runs, failures, artifacts and commits. Include) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 476 Tm (verified work, exact failing errors/fixes, pending items, repository restrictions, risks, links,) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 463 Tm (and a paste-ready next-chat continuation prompt. Provide a downloadable link to the PDF. Do not) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 450 Tm (provide chat-only summary as a substitute.) Tj ET
+0.06 0.19 0.37 rg BT /F2 12 Tf 1 0 0 1 43 422 Tm (Important links) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 411 m 551 411 l S
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 392 Tm (Research hub: https://github.com/nobodyAtall-code/copilot_project) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 372 Tm (Latest failed run: https://github.com/nobodyAtall-code/copilot_project/actions/runs/43179826520) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 352 Tm (New workflow:) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 339 Tm (https://github.com/nobodyAtall-code/copilot_project/actions/workflows/stock-config-review.yml) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 319 Tm (Successful staged audit:) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 306 Tm (https://github.com/nobodyAtall-code/copilot_project/actions/runs/43178657329) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 286 Tm (Successful firmware staging:) Tj ET
+0.13 0.18 0.26 rg BT /F1 9 Tf 1 0 0 1 43 273 Tm (https://github.com/nobodyAtall-code/copilot_project/actions/runs/43174896778) Tj ET
+0.83 0.87 0.91 RG 0.7 w 43 47 m 551 47 l S
+0.39 0.45 0.52 rg BT /F1 8 Tf 1 0 0 1 43 31 Tm (Project handover  |  12 November 2026  |  Page 6) Tj ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 15 0 R >>
+endobj
+xref
+0 17
+0000000000 65535 f 
+0000000045 00000 n 
+0000000094 00000 n 
+0000000185 00000 n 
+0000000255 00000 n 
+0000000330 00000 n 
+0000004470 00000 n 
+0000004606 00000 n 
+0000009080 00000 n 
+0000009216 00000 n 
+0000013563 00000 n 
+0000013700 00000 n 
+0000018031 00000 n 
+0000018169 00000 n 
+0000023046 00000 n 
+0000023184 00000 n 
+0000027206 00000 n 
+trailer
+<< /Size 17 /Root 1 0 R >>
+startxref
+27344
+%%EOF
