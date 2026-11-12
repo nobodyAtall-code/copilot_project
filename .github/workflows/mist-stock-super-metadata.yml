@@ -1,0 +1,75 @@
+name: Mist stock super metadata review
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-stock-super-metadata.yml'
+      - 'scripts/inspect_mist_super_metadata.py'
+permissions:
+  contents: read
+concurrency:
+  group: mist-stock-super-metadata
+  cancel-in-progress: false
+jobs:
+  analyze:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare stock metadata tooling
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk /opt/hostedtoolcache
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends pigz android-sdk-libsparse-utils
+          python3 -m py_compile scripts/multicdn.py scripts/inspect_mist_super_metadata.py
+          df -h .
+      - name: Download exact official fastboot archive and verify MD5
+        run: |
+          set -euo pipefail
+          mkdir -p work reports
+          python3 -u scripts/multicdn.py
+          grep -q '^c4450c4e168052ca9de1211306d3beff ' reports/firmware.md5
+      - name: Recover only stock super image pieces
+        run: |
+          set -euo pipefail
+          mkdir -p work/unpacked
+          pigz -dc work/*.tgz | tar -xf - -C work/unpacked --wildcards --no-anchored 'super.img*'
+          rm -f work/*.tgz
+          find work/unpacked -type f -name 'super.img*' -printf '%p %s bytes\n' | sort -V
+          mapfile -d '' pieces < <(find work/unpacked -type f \( -name 'super.img' -o -name 'super.img.[0-9]*' \) -print0 | sort -zV)
+          test "\${#pieces[@]}" -gt 0
+          magic="$(head -c 4 "\${pieces[0]}" | od -An -tx1 | tr -d ' \n')"
+          if [[ "$magic" == "3aff26ed" ]]; then
+            simg2img "\${pieces[@]}" work/super.raw.img
+          elif [[ "\${#pieces[@]}" -eq 1 ]]; then
+            cp "\${pieces[0]}" work/super.raw.img
+          else
+            cat "\${pieces[@]}" > work/super.raw.img
+          fi
+          test -s work/super.raw.img
+          df -h .
+      - name: Validate all liblp slot and group tables read-only
+        run: |
+          set -euo pipefail
+          python3 scripts/inspect_mist_super_metadata.py work/super.raw.img --output reports/mist-super-metadata.json
+          python3 - <<'PY'
+          import json
+          data=json.load(open('reports/mist-super-metadata.json'))
+          assert data['integrity_checks_passed']
+          assert data['slots']
+          print('Stock device-reported physical super size: 10200547328')
+          print('Metadata block devices:',[b for x in data['slots'] if x['primary']['valid'] for b in x['primary']['data']['block_devices']])
+          print('BoardConfig was not modified; engineering review required.')
+          PY
+      - name: Upload reports without raw proprietary images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-super-metadata
+          path: |
+            reports/firmware.md5
+            reports/mist-super-metadata.json
+          if-no-files-found: warn
+          retention-days: 14
