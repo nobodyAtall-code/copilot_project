@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/mist-unified-research.yml'
       - 'scripts/mist_unified_research_report.py'
+      - 'scripts/mist_verify_boot_metadata.py'
 permissions:
   contents: read
   actions: read
@@ -27,6 +28,24 @@ jobs:
             test -s "evidence/super/$f"
           done
           test -s evidence/boot/mist-boot-chain-structure.json
+      - name: Retrieve SHA-verified original stock boot images for deeper evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/original-boot
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-boot-images --dir evidence/original-boot
+          test -s evidence/original-boot/boot-images.sha256
+          (cd evidence/original-boot/boot-images && sha256sum -c ../boot-images.sha256)
+      - name: Decode stock AVB descriptors and individual FDT tables read-only
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/mist_verify_boot_metadata.py scripts/mist_unified_research_report.py
+          python3 scripts/mist_verify_boot_metadata.py \
+            --images-dir evidence/original-boot/boot-images \
+            --sha256-file evidence/original-boot/boot-images.sha256 \
+            --output reports/mist-deep-boot-metadata.json
       - name: Checkout current production trees read-only
         run: |
           set -euo pipefail
@@ -48,6 +67,7 @@ jobs:
             --groups evidence/super/mist-super-independent-group-comparison.json \
             --sizes evidence/super/mist-super-independent-comparison.json \
             --boot evidence/boot/mist-boot-chain-structure.json \
+            --boot-deep reports/mist-deep-boot-metadata.json \
             --preflight reports/mist-rom-preflight.json \
             --out reports/mist-unified-research.json \
             --markdown reports/mist-unified-research.md
@@ -59,6 +79,7 @@ jobs:
           name: mist-unified-stock-and-rom-research
           path: |
             reports/mist-rom-preflight.json
+            reports/mist-deep-boot-metadata.json
             reports/mist-unified-research.json
             reports/mist-unified-research.md
             evidence/super/*.json
