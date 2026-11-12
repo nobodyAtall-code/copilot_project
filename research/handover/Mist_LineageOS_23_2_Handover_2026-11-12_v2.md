@@ -90,4 +90,6 @@ Key current risk: temporary GitHub artifacts expire 26 November 2026; research r
 ## 9. CONTINUATION PROMPT — COPY INTO NEXT CHAT
 Continue my Redmi Note 17 5G (mist) LineageOS 23.2 bring-up from this handover PDF. Use the connected GitHub plugin. FIRST confirm the successful run 43181251762 and inspect the auto-generated copilot_project/main files research/generated/mist-stock-config.md and .json at commit 9d1d923. Start implementing the remaining evidence-based vendor and kernel-prebuilt bring-up, with focused review of actual VINTF, fstab, init and module metadata. Keep every repository on main only, never create PRs or branches, and keep workflows/research exclusively in copilot_project. The sm4450-development organization is an architectural reference, not a mist tree. Never copy all its files or stock HyperOS bloat; never expose GH_PAT. Do not disturb the existing local LineageOS checkout until it is inventoried. Report exactly what you commit, what's unverified and next tasks. When I say HANDOVER again, generate a current properly formatted PDF with verified GitHub state and a continuation prompt.
 
+Verified run status and commit references checked live via connected GitHub access before PDF generation.
+
 END OF HANDOVER — 12 NOVEMBER 2026
