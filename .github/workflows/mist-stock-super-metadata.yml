@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/mist-stock-super-metadata.yml'
       - 'scripts/inspect_mist_super_metadata.py'
+      - 'scripts/mist_independent_lp_sizes.go'
+      - 'scripts/compare_mist_super_sizes.py'
 permissions:
   contents: read
 concurrency:
@@ -63,6 +65,19 @@ jobs:
           print('Metadata block devices:',[b for x in data['slots'] if x['primary']['valid'] for b in x['primary']['data']['block_devices']])
           print('BoardConfig was not modified; engineering review required.')
           PY
+      - name: Independently compare logical partition size inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone -q https://github.com/soe1hom-arch/lpunpack-go.git work/lpunpack-independent
+          git -C work/lpunpack-independent checkout --detach -q 073a3302a3c3ffae01633989e6dd1e60b6de15b7
+          cp scripts/mist_independent_lp_sizes.go work/lpunpack-independent/mist_independent_lp_sizes.go
+          ROOT="$PWD"
+          (
+            cd work/lpunpack-independent
+            go run super.go mist_independent_lp_sizes.go "$ROOT/work/super.raw.img" > "$ROOT/reports/mist-go-independent-partitions.json"
+          )
+          python3 scripts/compare_mist_super_sizes.py             --python-report reports/mist-super-metadata.json             --go-report reports/mist-go-independent-partitions.json             --output reports/mist-super-independent-comparison.json
       - name: Upload reports without raw proprietary images
         if: always()
         uses: actions/upload-artifact@v4
@@ -71,5 +86,7 @@ jobs:
           path: |
             reports/firmware.md5
             reports/mist-super-metadata.json
+            reports/mist-go-independent-partitions.json
+            reports/mist-super-independent-comparison.json
           if-no-files-found: warn
           retention-days: 14
