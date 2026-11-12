@@ -1,0 +1,51 @@
+name: Mist synchronize approved vendor HAL manifest to device main
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-mist-device-manifest.yml'
+      - 'scripts/sync_mist_manifest.py'
+permissions:
+  contents: read
+jobs:
+  update-device-manifest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Clone existing device and vendor main using scoped PAT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN"
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist output/device -- --quiet
+          gh repo clone nobodyAtall-code/proprietary_vendor_xiaomi_mist output/vendor -- --quiet
+          test -s output/device/proprietary-files.txt
+      - name: Update only approved file entries
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/sync_mist_manifest.py
+          python3 scripts/sync_mist_manifest.py --device output/device --vendor output/vendor
+          test "$(grep -c '^vendor/' output/device/proprietary-files.txt)" -eq 27
+      - name: Commit and push on device main with requested Git identity
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          cd output/device
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          git add -- proprietary-files.txt
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "No changes to manifest"
+            exit 0
+          fi
+          git commit -m "mist: sync validated stock HAL services into proprietary manifest"
+          git push origin HEAD:main
