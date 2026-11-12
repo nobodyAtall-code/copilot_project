@@ -1,0 +1,67 @@
+name: Mist stock configuration review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: mist-stock-config-review-main
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Download audited stock configuration
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p input/staged-audit
+          gh run download 43178657329 --repo "${{ github.repository }}" \
+            --name mist-staged-archive-audit --dir input/staged-audit
+          test -s input/staged-audit/audit.json
+          test -d input/staged-audit/selected-stock-config
+          python3 -m json.tool input/staged-audit/audit.json >/dev/null
+
+      - name: Parse stock VINTF, fstab, init and module metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -W error::SyntaxWarning -m py_compile scripts/review_stock_configuration.py
+          python3 scripts/review_stock_configuration.py
+          test -s research/generated/mist-stock-config.md
+          test -s research/generated/mist-stock-config.json
+
+      - name: Upload review report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-config-review
+          path: research/generated/mist-stock-config.*
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish research-only report to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- research/generated/mist-stock-config.md research/generated/mist-stock-config.json
+          if git diff --cached --quiet; then
+            echo "No report changes"
+            exit 0
+          fi
+          git commit -m "mist: record extracted stock VINTF, fstab and init audit"
+          git push origin HEAD:main
