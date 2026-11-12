@@ -1,7 +1,13 @@
-name: Mist Global firmware acquisition
+name: Mist Global firmware acquisition and partition inventory
 
 on:
   workflow_dispatch:
+    inputs:
+      upload_raw_partitions:
+        description: "Also upload raw extracted logical partition images (very large)"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -14,41 +20,85 @@ jobs:
       - name: Checkout research tools
         uses: actions/checkout@v4
 
-      - name: Prepare extraction tools and disk
+      - name: Prepare tools and disk
         shell: bash
         run: |
           set -euo pipefail
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk /opt/hostedtoolcache
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends pigz
+          sudo apt-get install -y --no-install-recommends pigz zstd android-sdk-libsparse-utils erofs-utils golang-go
           df -h .
 
-      - name: Download firmware from six CDNs using sixteen parallel byte-range workers
+      - name: Download and verify Global ROM over parallel CDNs
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p work reports
-          python3 -m py_compile scripts/multicdn.py
+          python3 -m py_compile scripts/multicdn.py scripts/inventory_partitions.py
+          bash -n scripts/extract_partitions.sh
           python3 -u scripts/multicdn.py
           sha256sum work/*.tgz > reports/firmware.sha256
 
-      - name: Extract archive and inventory images
+      - name: Extract stock fastboot archive and index images
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p work/unpacked
           pigz -dc work/*.tgz | tar -xf - -C work/unpacked
-          find work/unpacked -type f -printf '%P\\t%s bytes\\n' | sort > reports/archive-files.tsv
-          find work/unpacked -type f -name '*.img' -printf '%P\\t%s bytes\\n' | sort > reports/images.tsv
+          find work/unpacked -type f -printf '%P\t%s bytes\n' | sort > reports/archive-files.tsv
+          find work/unpacked -type f -name '*.img' -printf '%P\t%s bytes\n' | sort > reports/images.tsv
           find work/unpacked -type f -name '*.img' -print0 | xargs -0 -r sha256sum > reports/images.sha256
-          df -h . > reports/disk-usage.txt
           test -s reports/images.tsv
+          rm -f work/*.tgz
+          df -h . | tee reports/disk-before-partitions.txt
 
-      - name: Upload acquisition reports
+      - name: Compile pinned super partition reader
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone -q https://github.com/soe1hom-arch/lpunpack-go.git work/lpunpack-src
+          git -C work/lpunpack-src checkout --detach -q 073a3302a3c3ffae01633989e6dd1e60b6de15b7
+          printf 'repo=https://github.com/soe1hom-arch/lpunpack-go\ncommit=%s\n' \
+            "$(git -C work/lpunpack-src rev-parse HEAD)" > reports/lpunpack-version.txt
+          (cd work/lpunpack-src && CGO_ENABLED=0 go build -o "$GITHUB_WORKSPACE/work/lpunpack" .)
+          chmod +x work/lpunpack
+
+      - name: Unpack super and inventory every shared library
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/extract_partitions.sh
+          df -h . > reports/disk-after-partitions.txt
+
+      - name: Upload partition and library inventories
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mist-global-OS3.0.304.0-acquisition
-          path: reports/
+          name: mist-global-OS3.0.304.0-research
+          path: |
+            reports/*.tsv
+            reports/*.txt
+            reports/*.sha256
+            reports/*.md5
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Upload extracted shared libraries
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-global-OS3.0.304.0-all-so
+          path: reports/all-shared-libraries.tar.zst
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload raw logical partitions (optional, storage-intensive)
+        if: success() && inputs.upload_raw_partitions
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-global-OS3.0.304.0-raw-logical-partitions
+          path: work/partitions/*.img
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 3
