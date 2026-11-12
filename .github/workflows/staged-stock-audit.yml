@@ -1,0 +1,56 @@
+name: Mist staged stock archive audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - name: Checkout research tools
+        uses: actions/checkout@v4
+
+      - name: Install archive tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+
+      - name: Download previously verified artifacts
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/vendor input/boot
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-boot-images --dir input/boot
+          test -s input/vendor/stock-vendor-source.tar.zst
+          test -s input/vendor/stock-vendor-source.sha256
+          (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+          test -s input/boot/boot-images.sha256
+          # Boot images are nested under boot-images/. Verify each with the original manifest.
+          (cd input/boot && sha256sum -c boot-images.sha256)
+
+      - name: Inventory archived vendor and boot inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/audit_staged_artifacts.py
+
+      - name: Publish review-only inspection reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-staged-archive-audit
+          path: reports/staging-audit/
+          if-no-files-found: warn
+          retention-days: 14
