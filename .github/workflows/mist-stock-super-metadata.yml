@@ -39,14 +39,14 @@ jobs:
           rm -f work/*.tgz
           find work/unpacked -type f -name 'super.img*' -printf '%p %s bytes\n' | sort -V
           mapfile -d '' pieces < <(find work/unpacked -type f \( -name 'super.img' -o -name 'super.img.[0-9]*' \) -print0 | sort -zV)
-          test "\${#pieces[@]}" -gt 0
-          magic="$(head -c 4 "\${pieces[0]}" | od -An -tx1 | tr -d ' \n')"
+          test "${#pieces[@]}" -gt 0
+          magic="$(head -c 4 "${pieces[0]}" | od -An -tx1 | tr -d ' \n')"
           if [[ "$magic" == "3aff26ed" ]]; then
-            simg2img "\${pieces[@]}" work/super.raw.img
-          elif [[ "\${#pieces[@]}" -eq 1 ]]; then
-            cp "\${pieces[0]}" work/super.raw.img
+            simg2img "${pieces[@]}" work/super.raw.img
+          elif [[ "${#pieces[@]}" -eq 1 ]]; then
+            cp "${pieces[0]}" work/super.raw.img
           else
-            cat "\${pieces[@]}" > work/super.raw.img
+            cat "${pieces[@]}" > work/super.raw.img
           fi
           test -s work/super.raw.img
           df -h .
