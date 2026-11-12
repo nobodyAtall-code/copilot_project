@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - '.github/workflows/stock-archive-membership.yml'
+      - 'scripts/check_stock_archive_membership.py'
 
 permissions:
   contents: read
