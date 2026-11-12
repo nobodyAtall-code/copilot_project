@@ -248,6 +248,13 @@ From the published `mist-archive-membership.json`:
 - [Commit c6e4cc7](https://github.com/nobodyAtall-code/copilot_project/commit/c6e4cc7c29db287bfef75adcb639152f815e961b) updates **only** `copilot_project` diagnostic workflow: asserts expected original `CONFIG_METIS_WALT=y` and omits it from the disposable runner-only defconfig fragment, alongside six previously omitted MIHW-related switches. All production source/config and stock prebuilt remain unchanged.
 - **Critical distinction:** this is NOT stock-compatible. Real MIHW source is required for a valid production compilation and eventual ABI/module validation. Do not flash or publish any output from these MIHW-disabled experiments. Verify the next run's exact error and do not declare success based on compilation progress alone.
 
+### 12 November 2026 — MIGT_WALT proprietary types block further diagnostic compilation
+
+- [Run 43220236226](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43220236226), job [131189597886](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43220236226/job/131189597886), **FAILED in actual C compilation**. Full pinned Android sync, nine source overlays, Bazel target and runner-only config stage completed; no Image generated or kernel ABI/boot validation. Bazel reported elapsed 1227 seconds. Its diagnostic zip artifact ID was 13947561482.
+- The previous `CONFIG_METIS_WALT` guard was effective for getting beyond the direct `mi_module.h` include, but `kernel/sched/walt/walt.c` then failed on four references to undefined `mi_update_fravg_hooks` and `walt_window_update_f` types (lines 45, 46, 57, 58). Direct source inspection shows these declarations/functions under `#ifdef CONFIG_MIGT_WALT`; original `mist_perf.config` explicitly sets `CONFIG_MIGT_WALT=y`. Other device-tree compiler warnings appeared, but were not the reported fatal failure.
+- [Commit 9764719](https://github.com/nobodyAtall-code/copilot_project/commit/9764719ac6380f59be7def7b4697ae587c148ea5) changes **only** the `copilot_project` research workflow so its temporary diagnostic fragment also omits exactly `CONFIG_MIGT_WALT=y` after strict original-value assertions. Production kernel, kernel-prebuilt, vendor and device repositories are NOT modified.
+- **Critical:** repeated MIHW/TurboSched config suppression is solely for non-flashable compiler reconnaissance; it does not produce a stock-compatible kernel. Genuine MIHW source recovery and proper module/ABI validation remain the production priority. Verify any newly triggered workflow result and do not claim build success in advance.
+
 ## 4. Research/report files — read in this order
 
 1. `research/device-facts.md`: on-device facts and boot/partition sizes.
