@@ -1,0 +1,368 @@
+{
+  "approval": "RESEARCH ONLY: path matches do not establish HAL registration, boot readiness, ELF closure, or device SKU selection",
+  "archive_members_in_scope": 4352,
+  "missing_unique_executable_paths": 16,
+  "original_missing_service_references": 18,
+  "original_missing_vintf_paths": 1,
+  "references": [
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/ccid_daemon_nr",
+        "vendor_a/bin/cnss-daemon",
+        "vendor_a/bin/edgnss-daemon",
+        "vendor_a/bin/ftmdaemon",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/bin/qcom-system-daemon",
+        "vendor_a/bin/slim_daemon",
+        "vendor_a/bin/time_daemon",
+        "vendor_a/bin/wdsdaemon",
+        "vendor_a/bin/xtra-daemon"
+      ],
+      "path": "vendor_a/bin/ATFWD-daemon",
+      "requested_path": "vendor_a/bin/ATFWD-daemon",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/more"
+      ],
+      "path": "vendor_a/bin/LKCore",
+      "requested_path": "vendor_a/bin/LKCore",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/boringssl_self_test.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/boringssl_self_test64",
+        "vendor_a/bin/color_sampling_test",
+        "vendor_a/bin/qsh_wifi_test",
+        "vendor_a/bin/xiaomi_cellinfo_test"
+      ],
+      "path": "vendor_a/bin/boringssl_self_test32",
+      "requested_path": "vendor_a/bin/boringssl_self_test32",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.target.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [],
+      "path": "vendor_a/bin/check_fatal_err.sh",
+      "requested_path": "vendor_a/bin/check_fatal_err.sh",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/factorybsp_service.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/StoreKeybox",
+        "vendor_a/bin/chcon",
+        "vendor_a/bin/checkpoint_gc",
+        "vendor_a/bin/spu_install_keybox"
+      ],
+      "path": "vendor_a/bin/check_keybox",
+      "requested_path": "vendor_a/bin/check_keybox",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/factorybsp_service.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/chattr",
+        "vendor_a/bin/sec_log_enabler"
+      ],
+      "path": "vendor_a/bin/check_keymaster",
+      "requested_path": "vendor_a/bin/check_keymaster",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/chattr",
+        "vendor_a/bin/chgrp",
+        "vendor_a/bin/chroot",
+        "vendor_a/bin/chrt",
+        "vendor_a/bin/echo",
+        "vendor_a/bin/free",
+        "vendor_a/bin/grep",
+        "vendor_a/bin/head",
+        "vendor_a/bin/more",
+        "vendor_a/bin/nice",
+        "vendor_a/bin/true",
+        "vendor_a/bin/unshare"
+      ],
+      "path": "vendor_a/bin/chre",
+      "requested_path": "vendor_a/bin/chre",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/boot_mode",
+        "vendor_a/bin/ccid_daemon_nr",
+        "vendor_a/bin/cnss-daemon",
+        "vendor_a/bin/edgnss-daemon",
+        "vendor_a/bin/ftmdaemon",
+        "vendor_a/bin/hal_proxy_daemon",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/bin/slim_daemon",
+        "vendor_a/bin/time_daemon",
+        "vendor_a/bin/wdsdaemon",
+        "vendor_a/bin/xtra-daemon"
+      ],
+      "path": "vendor_a/bin/hbtp_daemon",
+      "requested_path": "vendor_a/bin/hbtp_daemon",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/hw/qcrilNrd"
+      ],
+      "path": "vendor_a/bin/hw/rild",
+      "requested_path": "vendor_a/bin/hw/rild",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/init.qti.fm.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/init.mdm.sh",
+        "vendor_a/bin/init.qcom.coex.sh",
+        "vendor_a/bin/init.qcom.sdio.sh",
+        "vendor_a/bin/init.qcom.sh",
+        "vendor_a/bin/init.qcom.usb.sh",
+        "vendor_a/bin/init.qcrild.sh",
+        "vendor_a/bin/init.qti.cam.perfopt.sh",
+        "vendor_a/bin/init.qti.kernel.debug.sh",
+        "vendor_a/bin/init.qti.kernel.sh",
+        "vendor_a/bin/init.qti.media.sh",
+        "vendor_a/bin/init.qti.qcv.sh",
+        "vendor_a/bin/init.qti.write.sh"
+      ],
+      "path": "vendor_a/bin/init.qti.fm.sh",
+      "requested_path": "vendor_a/bin/init.qti.fm.sh",
+      "same_basename_elsewhere": [
+        "vendor_a/etc/init.qti.fm.sh"
+      ]
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.factory.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/comm",
+        "vendor_a/bin/find",
+        "vendor_a/bin/id",
+        "vendor_a/bin/mlid",
+        "vendor_a/bin/qmipriod",
+        "vendor_a/bin/rmmod",
+        "vendor_a/bin/ssgqmigd"
+      ],
+      "path": "vendor_a/bin/mmid",
+      "requested_path": "vendor_a/bin/mmid",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/cnss-daemon",
+        "vendor_a/bin/edgnss-daemon",
+        "vendor_a/bin/ftmdaemon",
+        "vendor_a/bin/hal_proxy_daemon",
+        "vendor_a/bin/ims-dataservice-daemon",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/bin/qcom-system-daemon",
+        "vendor_a/bin/slim_daemon",
+        "vendor_a/bin/time_daemon",
+        "vendor_a/bin/wdsdaemon",
+        "vendor_a/bin/xtra-daemon"
+      ],
+      "path": "vendor_a/bin/qvop-daemon",
+      "requested_path": "vendor_a/bin/qvop-daemon",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/ccid_daemon_nr",
+        "vendor_a/bin/cnss-daemon",
+        "vendor_a/bin/edgnss-daemon",
+        "vendor_a/bin/ftmdaemon",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/bin/qcom-system-daemon",
+        "vendor_a/bin/sendevent",
+        "vendor_a/bin/setsid",
+        "vendor_a/bin/slim_daemon",
+        "vendor_a/bin/time_daemon",
+        "vendor_a/bin/wdsdaemon"
+      ],
+      "path": "vendor_a/bin/sensingdaemon",
+      "requested_path": "vendor_a/bin/sensingdaemon",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/devmem",
+        "vendor_a/bin/vmmgr",
+        "vendor_a/bin/vmstat"
+      ],
+      "path": "vendor_a/bin/vm_bms",
+      "requested_path": "vendor_a/bin/vm_bms",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/init.vendor.wlan.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/ccid_daemon_nr",
+        "vendor_a/bin/cnss-daemon",
+        "vendor_a/bin/edgnss-daemon",
+        "vendor_a/bin/ftmdaemon",
+        "vendor_a/bin/hal_proxy_daemon",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/bin/qcom-system-daemon",
+        "vendor_a/bin/slim_daemon",
+        "vendor_a/bin/time_daemon",
+        "vendor_a/bin/wdsdaemon",
+        "vendor_a/bin/xtra-daemon"
+      ],
+      "path": "vendor_a/bin/wifi_qos_daemon",
+      "requested_path": "vendor_a/bin/wifi_qos_daemon",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declared_by": [
+        "vendor_a/etc/init/hw/init.qcom.rc"
+      ],
+      "exact_path_present": false,
+      "kind": "init_executable",
+      "nearby_names_same_directory": [
+        "vendor_a/bin/gzip",
+        "vendor_a/bin/xtwifi-client"
+      ],
+      "path": "vendor_a/bin/wigignpt",
+      "requested_path": "vendor_a/bin/wigignpt",
+      "same_basename_elsewhere": []
+    },
+    {
+      "candidates_prove_compatibility": false,
+      "declares_hals": [
+        "android.hardware.security.keymint",
+        "android.hardware.security.secureclock",
+        "android.hardware.security.sharedsecret"
+      ],
+      "exact_path_present": false,
+      "kind": "vintf_manifest",
+      "nearby_names_same_directory": [
+        "vendor_a/etc/vintf/manifest/android.hardware.drm-service.clearkey.xml",
+        "vendor_a/etc/vintf/manifest/android.hardware.gnss-aidl-service-qti.xml",
+        "vendor_a/etc/vintf/manifest/android.hardware.health-service.qti.xml",
+        "vendor_a/etc/vintf/manifest/android.hardware.ir-service.example.xml",
+        "vendor_a/etc/vintf/manifest/android.hardware.sensors-multihal.xml",
+        "vendor_a/etc/vintf/manifest/android.hardware.thermal-service.qti.xml",
+        "vendor_a/etc/vintf/manifest/android.hardware.usb-service.qti.xml",
+        "vendor_a/etc/vintf/manifest/android.hardware.usb.gadget-service.qti.xml",
+        "vendor_a/etc/vintf/manifest/android.hardware.wifi-service.xml",
+        "vendor_a/etc/vintf/manifest/vendor.qti.hardware.qseecom@1.0-service.xml",
+        "vendor_a/etc/vintf/manifest/vendor.qti.hardware.servicetrackeraidl-service.xml",
+        "vendor_a/etc/vintf/manifest/vendor.qti.hardware.soter-service.xml"
+      ],
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml",
+      "requested_path": "vendor_a/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml",
+      "same_basename_elsewhere": []
+    }
+  ],
+  "security_related_archive_paths": [
+    "vendor_a/lib64/android.hardware.security.secureclock-V1-ndk.so",
+    "vendor_a/lib64/android.hardware.security.sharedsecret-V1-ndk.so",
+    "vendor_a/lib64/android.hardware.security.sharedsecret-V2-ndk.so",
+    "vendor_a/lib64/libkeymaster_messages.so",
+    "vendor_a/lib64/libkeymasterdeviceutils.so",
+    "vendor_a/lib64/libkeymasterprovision.so",
+    "vendor_a/lib64/libkeymasterutils.so",
+    "vendor_a/lib64/libqtikeymaster4.so",
+    "vendor_a/lib64/libqtikeymint.so",
+    "vendor_a/lib64/libspukeymint.so",
+    "vendor_a/lib64/libspukeymintdeviceutils.so",
+    "vendor_a/lib64/libspukeymintprovision.so",
+    "vendor_a/lib64/libspukeymintutils.so"
+  ],
+  "security_related_rc_paths": []
+}
