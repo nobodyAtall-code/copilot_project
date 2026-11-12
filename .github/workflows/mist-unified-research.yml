@@ -7,13 +7,14 @@ on:
       - '.github/workflows/mist-unified-research.yml'
       - 'scripts/mist_unified_research_report.py'
       - 'scripts/mist_verify_boot_metadata.py'
+      - 'scripts/inspect_stock_elf_metadata.py'
 permissions:
   contents: read
   actions: read
 jobs:
   consolidate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - name: Retrieve validated stock reports without redownloading firmware
@@ -46,6 +47,33 @@ jobs:
             --images-dir evidence/original-boot/boot-images \
             --sha256-file evidence/original-boot/boot-images.sha256 \
             --output reports/mist-deep-boot-metadata.json
+      - name: Retrieve SHA-verified original stock vendor archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/stock-vendor
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir evidence/stock-vendor
+          test -s evidence/stock-vendor/stock-vendor-source.tar.zst
+          (cd evidence/stock-vendor && sha256sum -c stock-vendor-source.sha256)
+      - name: Read-only curated stock RIL IMS and KeyMint ELF dependency graph
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          python3 -m venv .elf-venv
+          .elf-venv/bin/python -m pip install pyelftools==0.32
+          .elf-venv/bin/python scripts/inspect_stock_elf_metadata.py \
+            --archive evidence/stock-vendor/stock-vendor-source.tar.zst \
+            --output reports/mist-curated-elf-metadata.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("reports/mist-curated-elf-metadata.json"))
+          assert d["archive_members_accepted"]>=4000
+          assert len(d["dependency_graph"])>=5
+          print("Curated stock ELF graph nodes:",len(d["dependency_graph"]))
+          PY
       - name: Checkout current production trees read-only
         run: |
           set -euo pipefail
@@ -68,6 +96,7 @@ jobs:
             --sizes evidence/super/mist-super-independent-comparison.json \
             --boot evidence/boot/mist-boot-chain-structure.json \
             --boot-deep reports/mist-deep-boot-metadata.json \
+            --stock-elf reports/mist-curated-elf-metadata.json \
             --preflight reports/mist-rom-preflight.json \
             --out reports/mist-unified-research.json \
             --markdown reports/mist-unified-research.md
@@ -79,6 +108,7 @@ jobs:
           name: mist-unified-stock-and-rom-research
           path: |
             reports/mist-rom-preflight.json
+            reports/mist-curated-elf-metadata.json
             reports/mist-deep-boot-metadata.json
             reports/mist-unified-research.json
             reports/mist-unified-research.md
