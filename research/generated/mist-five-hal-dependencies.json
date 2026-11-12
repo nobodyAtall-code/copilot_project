@@ -1,0 +1,3123 @@
+{
+  "limitations": [
+    "Stock-path matches do not confirm linker namespace or ABI",
+    "Unresolved libraries may come from LineageOS, Android or APEX",
+    "No automatic production blob approval; no build or boot validation"
+  ],
+  "not_in_current_proprietary_manifest": 178,
+  "parsed_graph_nodes": 196,
+  "seeds": [
+    "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+    "vendor_a/bin/hw/android.hardware.gatekeeper-service-qti",
+    "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+    "vendor_a/bin/hw/android.hardware.health-service.qti",
+    "vendor_a/bin/hw/android.hardware.thermal-service.qti"
+  ],
+  "stock_resolved_dependencies": 186,
+  "stock_resolved_paths": [
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.bluetooth-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.bluetooth-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.bluetooth@1.0.so",
+      "stock_path": "vendor_a/lib64/android.hardware.bluetooth@1.0.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.ImsRtpService-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.common-V2-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.common-V2-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/libqtigatekeeper.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.gatekeeper-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.gatekeeper-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.gnss-V4-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.gnss-V4-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.health-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.health-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.health-service.qti"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.health-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.health-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.health@1.0.so",
+      "stock_path": "vendor_a/lib64/android.hardware.health@1.0.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.health@2.0.so",
+      "stock_path": "vendor_a/lib64/android.hardware.health@2.0.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.health@2.1.so",
+      "stock_path": "vendor_a/lib64/android.hardware.health@2.1.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/android.hardware.radio.config-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.messaging-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.modem-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.network-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sim-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.voice-V3-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.radio-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.radio-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/android.hardware.radio.sim-V3-ndk.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.radio.config-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.radio.config-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.radio.messaging-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.radio.messaging-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.radio.modem-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.radio.modem-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.radio.network-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.radio.network-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.radio.sap-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.radio.sap-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.radio.sim-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.radio.sim-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.radio.voice-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.radio.voice-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.secure_element-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.secure_element-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspukeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.security.rkp-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.security.rkp-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": true,
+      "required_by": [
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspukeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.security.secureclock-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.security.secureclock-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": true,
+      "required_by": [
+        "vendor_a/lib64/libqtikeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.security.sharedsecret-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.security.sharedsecret-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": true,
+      "required_by": [
+        "vendor_a/lib64/libspukeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.security.sharedsecret-V2-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.security.sharedsecret-V2-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.thermal-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.thermal-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.thermal-V2-ndk.so",
+      "stock_path": "vendor_a/lib64/android.hardware.thermal-V2-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/android.hardware.thermal@2.0.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.thermal@1.0.so",
+      "stock_path": "vendor_a/lib64/android.hardware.thermal@1.0.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/android.hardware.thermal@2.0.so",
+      "stock_path": "vendor_a/lib64/android.hardware.thermal@2.0.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libhardware_legacy.so"
+      ],
+      "runtime_path": "vendor/lib64/android.system.suspend-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/android.system.suspend-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so"
+      ],
+      "runtime_path": "vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+      "stock_path": "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti"
+      ],
+      "runtime_path": "vendor/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+      "stock_path": "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti"
+      ],
+      "runtime_path": "vendor/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+      "stock_path": "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.gatekeeper-service-qti"
+      ],
+      "runtime_path": "vendor/lib64/hw/libqtigatekeeper.so",
+      "stock_path": "vendor_a/lib64/hw/libqtigatekeeper.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/hw/mbedtls_qti.so",
+      "stock_path": "vendor_a/lib64/hw/mbedtls_qti.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti"
+      ],
+      "runtime_path": "vendor/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+      "stock_path": "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti"
+      ],
+      "runtime_path": "vendor/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+      "stock_path": "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti"
+      ],
+      "runtime_path": "vendor/lib64/hw/vendor.qti.hardware.fm-impl.so",
+      "stock_path": "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/imsdaemon"
+      ],
+      "runtime_path": "vendor/lib64/lib-imscommon.so",
+      "stock_path": "vendor_a/lib64/lib-imscommon.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so"
+      ],
+      "runtime_path": "vendor/lib64/lib-imsdpl.so",
+      "stock_path": "vendor_a/lib64/lib-imsdpl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/lib-rtpcore.so"
+      ],
+      "runtime_path": "vendor/lib64/lib-imsvtcore.so",
+      "stock_path": "vendor_a/lib64/lib-imsvtcore.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so"
+      ],
+      "runtime_path": "vendor/lib64/lib-rtpcommon.so",
+      "stock_path": "vendor_a/lib64/lib-rtpcommon.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/lib-rtpsl.so"
+      ],
+      "runtime_path": "vendor/lib64/lib-rtpcore.so",
+      "stock_path": "vendor_a/lib64/lib-rtpcore.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon"
+      ],
+      "runtime_path": "vendor/lib64/lib-rtpsl.so",
+      "stock_path": "vendor_a/lib64/lib-rtpsl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/qcrilNrd"
+      ],
+      "runtime_path": "vendor/lib64/libATFWD.so",
+      "stock_path": "vendor_a/lib64/libATFWD.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libkeymasterutils.so",
+        "vendor_a/lib64/libspukeymintutils.so"
+      ],
+      "runtime_path": "vendor/lib64/libQSEEComAPI.so",
+      "stock_path": "vendor_a/lib64/libQSEEComAPI.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/libQtiRilLoadable.so",
+      "stock_path": "vendor_a/lib64/libQtiRilLoadable.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/libATFWD.so"
+      ],
+      "runtime_path": "vendor/lib64/libavservices_minijail.so",
+      "stock_path": "vendor_a/lib64/libavservices_minijail.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libavservices_minijail.so",
+        "vendor_a/lib64/libcutils.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libprocessgroup.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libsystem_health_mon2.so",
+        "vendor_a/lib64/libvmmem.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so"
+      ],
+      "runtime_path": "vendor/lib64/libbase.so",
+      "stock_path": "vendor_a/lib64/libbase.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so"
+      ],
+      "runtime_path": "vendor/lib64/libbinder.so",
+      "stock_path": "vendor_a/lib64/libbinder.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/libbtnv.so",
+      "stock_path": "vendor_a/lib64/libbtnv.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gatekeeper-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.bluetooth@1.0.so",
+        "vendor_a/lib64/android.hardware.common-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.gatekeeper-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.gnss-V4-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.health@1.0.so",
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/android.hardware.radio-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.config-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.messaging-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.modem-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.network-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sap-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sim-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.voice-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.secure_element-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.rkp-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.security.secureclock-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal@1.0.so",
+        "vendor_a/lib64/android.hardware.thermal@2.0.so",
+        "vendor_a/lib64/android.system.suspend-V1-ndk.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libQtiRilLoadable.so",
+        "vendor_a/lib64/libavservices_minijail.so",
+        "vendor_a/lib64/libbase.so",
+        "vendor_a/lib64/libbinder.so",
+        "vendor_a/lib64/libbtnv.so",
+        "vendor_a/lib64/libcap.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libconfigdb.so",
+        "vendor_a/lib64/libcutils.so",
+        "vendor_a/lib64/libdiag.so",
+        "vendor_a/lib64/libdisplayconfig.qti.so",
+        "vendor_a/lib64/libdmabufheap.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libdsutils.so",
+        "vendor_a/lib64/libgatekeeper.so",
+        "vendor_a/lib64/libgps.utils.so",
+        "vendor_a/lib64/libhardware.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libidl.so",
+        "vendor_a/lib64/libion.so",
+        "vendor_a/lib64/libjson.so",
+        "vendor_a/lib64/libkeymaster_messages.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libkeymasterutils.so",
+        "vendor_a/lib64/libloc_core.so",
+        "vendor_a/lib64/liblocation_api.so",
+        "vendor_a/lib64/libmdmdetect.so",
+        "vendor_a/lib64/libminijail.so",
+        "vendor_a/lib64/libminkdescriptor.so",
+        "vendor_a/lib64/libminksocket_vendor.so",
+        "vendor_a/lib64/libnetutils.so",
+        "vendor_a/lib64/libnicm.so",
+        "vendor_a/lib64/libnicm_dsi.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libnl.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libpng.so",
+        "vendor_a/lib64/libprocessgroup.so",
+        "vendor_a/lib64/libprotobuf-cpp-full-21.12.so",
+        "vendor_a/lib64/libqcbor.so",
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrFramework.so",
+        "vendor_a/lib64/libqcrilNrLogger.so",
+        "vendor_a/lib64/libqcrilNrQtiBus.so",
+        "vendor_a/lib64/libqcrilNrQtiMutex.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_cci.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_common_so.so",
+        "vendor_a/lib64/libqmi_csi.so",
+        "vendor_a/lib64/libqmi_encdec.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/libqmiservices.so",
+        "vendor_a/lib64/libqrtr.so",
+        "vendor_a/lib64/libqti_vndfwk_detect_vendor.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/librcc.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libril-legacy.so",
+        "vendor_a/lib64/librilqmimiscservices.so",
+        "vendor_a/lib64/libsoc_helper.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/libspukeymintutils.so",
+        "vendor_a/lib64/libsqlite.so",
+        "vendor_a/lib64/libsystem_health_mon2.so",
+        "vendor_a/lib64/libtime_genoff.so",
+        "vendor_a/lib64/libutils.so",
+        "vendor_a/lib64/libvmmem.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/libxml.so",
+        "vendor_a/lib64/qcrilInterfaces.so",
+        "vendor_a/lib64/qcrilIntermodulemsgs.so",
+        "vendor_a/lib64/qcrilMarshal.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrilNr_aidl_common.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/qcrild_libqcrilnrutils.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so",
+        "vendor_a/lib64/qtiril-utils.so",
+        "vendor_a/lib64/qtiwakelock.so",
+        "vendor_a/lib64/vendor.display.config@2.0.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.data.mwqemaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bluetooth_sar-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bttpi-V3-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.api-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.constants-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.dynamicddsaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.flowaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.lceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.qmiaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.am-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.atfwd-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.common-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.ims-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.lpa-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcriNvOpt-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcrilhook-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradio-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradioconfig-V6-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_client-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.callcapabilityaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.configaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.connectionaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcssipaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcsuceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.latencyaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.syshealthmon-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/libc++.so",
+      "stock_path": "vendor_a/lib64/libc++.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libminijail.so"
+      ],
+      "runtime_path": "vendor/lib64/libcap.so",
+      "stock_path": "vendor_a/lib64/libcap.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imscommon.so"
+      ],
+      "runtime_path": "vendor/lib64/libcneapiclient.so",
+      "stock_path": "vendor_a/lib64/libcneapiclient.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/libconfigdb.so",
+      "stock_path": "vendor_a/lib64/libconfigdb.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libkeymasterutils.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/libspukeymintutils.so",
+        "vendor_a/lib64/libssl.so",
+        "vendor_a/lib64/libxiaomi_qcril.so"
+      ],
+      "runtime_path": "vendor/lib64/libcrypto.so",
+      "stock_path": "vendor_a/lib64/libcrypto.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth@1.0.so",
+        "vendor_a/lib64/android.hardware.health@1.0.so",
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/android.hardware.thermal@1.0.so",
+        "vendor_a/lib64/android.hardware.thermal@2.0.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libbinder.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libdiag.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libdsutils.so",
+        "vendor_a/lib64/libgps.utils.so",
+        "vendor_a/lib64/libhardware.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libjson.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libkeymasterutils.so",
+        "vendor_a/lib64/libloc_core.so",
+        "vendor_a/lib64/liblocation_api.so",
+        "vendor_a/lib64/libmdmdetect.so",
+        "vendor_a/lib64/libminksocket_vendor.so",
+        "vendor_a/lib64/libnetutils.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libqcbor.so",
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrLogger.so",
+        "vendor_a/lib64/libqcrilNrQtiMutex.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_cci.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_common_so.so",
+        "vendor_a/lib64/libqmi_csi.so",
+        "vendor_a/lib64/libqmi_encdec.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/libqti_vndfwk_detect_vendor.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/librcc.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libril-legacy.so",
+        "vendor_a/lib64/libsoc_helper.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/libspukeymintutils.so",
+        "vendor_a/lib64/libtime_genoff.so",
+        "vendor_a/lib64/libutils.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/libxml.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/qtiwakelock.so",
+        "vendor_a/lib64/vendor.display.config@2.0.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so"
+      ],
+      "runtime_path": "vendor/lib64/libcutils.so",
+      "stock_path": "vendor_a/lib64/libcutils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libconfigdb.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libdsutils.so",
+        "vendor_a/lib64/libnicm_dsi.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrLogger.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/librcc.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/libxml.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so"
+      ],
+      "runtime_path": "vendor/lib64/libdiag.so",
+      "stock_path": "vendor_a/lib64/libdiag.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libxiaomi_qcril.so"
+      ],
+      "runtime_path": "vendor/lib64/libdisplayconfig.qti.so",
+      "stock_path": "vendor_a/lib64/libdisplayconfig.qti.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so"
+      ],
+      "runtime_path": "vendor/lib64/libdmabufheap.so",
+      "stock_path": "vendor_a/lib64/libdmabufheap.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imscommon.so"
+      ],
+      "runtime_path": "vendor/lib64/libdsi_netctrl.so",
+      "stock_path": "vendor_a/lib64/libdsi_netctrl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libconfigdb.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libnicm_dsi.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_legacy.so"
+      ],
+      "runtime_path": "vendor/lib64/libdsutils.so",
+      "stock_path": "vendor_a/lib64/libdsutils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/libqtigatekeeper.so"
+      ],
+      "runtime_path": "vendor/lib64/libgatekeeper.so",
+      "stock_path": "vendor_a/lib64/libgatekeeper.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/libloc_core.so",
+        "vendor_a/lib64/liblocation_api.so"
+      ],
+      "runtime_path": "vendor/lib64/libgps.utils.so",
+      "stock_path": "vendor_a/lib64/libgps.utils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so"
+      ],
+      "runtime_path": "vendor/lib64/libhardware.so",
+      "stock_path": "vendor_a/lib64/libhardware.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/qtiwakelock.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so"
+      ],
+      "runtime_path": "vendor/lib64/libhardware_legacy.so",
+      "stock_path": "vendor_a/lib64/libhardware_legacy.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth@1.0.so",
+        "vendor_a/lib64/android.hardware.health@1.0.so",
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/android.hardware.thermal@1.0.so",
+        "vendor_a/lib64/android.hardware.thermal@2.0.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libdisplayconfig.qti.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/vendor.display.config@2.0.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so"
+      ],
+      "runtime_path": "vendor/lib64/libhidlbase.so",
+      "stock_path": "vendor_a/lib64/libhidlbase.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/libqmiservices.so",
+        "vendor_a/lib64/libxiaomi_qcril.so"
+      ],
+      "runtime_path": "vendor/lib64/libidl.so",
+      "stock_path": "vendor_a/lib64/libidl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so"
+      ],
+      "runtime_path": "vendor/lib64/libion.so",
+      "stock_path": "vendor_a/lib64/libion.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libpdmapper.so"
+      ],
+      "runtime_path": "vendor/lib64/libjson.so",
+      "stock_path": "vendor_a/lib64/libjson.so"
+    },
+    {
+      "already_in_manifest": true,
+      "required_by": [
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspukeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/libkeymaster_messages.so",
+      "stock_path": "vendor_a/lib64/libkeymaster_messages.so"
+    },
+    {
+      "already_in_manifest": true,
+      "required_by": [
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/libqtikeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/libkeymasterdeviceutils.so",
+      "stock_path": "vendor_a/lib64/libkeymasterdeviceutils.so"
+    },
+    {
+      "already_in_manifest": true,
+      "required_by": [
+        "vendor_a/lib64/libqtikeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/libkeymasterutils.so",
+      "stock_path": "vendor_a/lib64/libkeymasterutils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/libloc_core.so",
+      "stock_path": "vendor_a/lib64/libloc_core.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/liblocation_api.so",
+      "stock_path": "vendor_a/lib64/liblocation_api.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libdsutils.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so"
+      ],
+      "runtime_path": "vendor/lib64/libmdmdetect.so",
+      "stock_path": "vendor_a/lib64/libmdmdetect.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libavservices_minijail.so"
+      ],
+      "runtime_path": "vendor/lib64/libminijail.so",
+      "stock_path": "vendor_a/lib64/libminijail.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libspukeymintdeviceutils.so"
+      ],
+      "runtime_path": "vendor/lib64/libminkdescriptor.so",
+      "stock_path": "vendor_a/lib64/libminkdescriptor.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libspukeymintdeviceutils.so"
+      ],
+      "runtime_path": "vendor/lib64/libminksocket_vendor.so",
+      "stock_path": "vendor_a/lib64/libminksocket_vendor.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libdsutils.so"
+      ],
+      "runtime_path": "vendor/lib64/libnetutils.so",
+      "stock_path": "vendor_a/lib64/libnetutils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libnicm_dsi.so"
+      ],
+      "runtime_path": "vendor/lib64/libnicm.so",
+      "stock_path": "vendor_a/lib64/libnicm.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libdsi_netctrl.so"
+      ],
+      "runtime_path": "vendor/lib64/libnicm_dsi.so",
+      "stock_path": "vendor_a/lib64/libnicm_dsi.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libnicm.so"
+      ],
+      "runtime_path": "vendor/lib64/libnicm_utils.so",
+      "stock_path": "vendor_a/lib64/libnicm_utils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti"
+      ],
+      "runtime_path": "vendor/lib64/libnl.so",
+      "stock_path": "vendor_a/lib64/libnl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libril-legacy.so"
+      ],
+      "runtime_path": "vendor/lib64/libpdmapper.so",
+      "stock_path": "vendor_a/lib64/libpdmapper.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libril-legacy.so"
+      ],
+      "runtime_path": "vendor/lib64/libpdnotifier.so",
+      "stock_path": "vendor_a/lib64/libpdnotifier.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so"
+      ],
+      "runtime_path": "vendor/lib64/libperipheral_client.so",
+      "stock_path": "vendor_a/lib64/libperipheral_client.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.health-service.qti"
+      ],
+      "runtime_path": "vendor/lib64/libpng.so",
+      "stock_path": "vendor_a/lib64/libpng.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libgps.utils.so"
+      ],
+      "runtime_path": "vendor/lib64/libprocessgroup.so",
+      "stock_path": "vendor_a/lib64/libprocessgroup.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/libprotobuf-cpp-full-21.12.so",
+      "stock_path": "vendor_a/lib64/libprotobuf-cpp-full-21.12.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/libminkdescriptor.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so"
+      ],
+      "runtime_path": "vendor/lib64/libqcbor.so",
+      "stock_path": "vendor_a/lib64/libqcbor.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libxiaomi_qcril.so"
+      ],
+      "runtime_path": "vendor/lib64/libqcci_legacy.so",
+      "stock_path": "vendor_a/lib64/libqcci_legacy.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/libqcrilNr.so",
+      "stock_path": "vendor_a/lib64/libqcrilNr.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrQtiBus.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/qcrilInterfaces.so",
+        "vendor_a/lib64/qcrilIntermodulemsgs.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrilNr_aidl_common.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/libqcrilNrFramework.so",
+      "stock_path": "vendor_a/lib64/libqcrilNrFramework.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libQtiRilLoadable.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrFramework.so",
+        "vendor_a/lib64/libqcrilNrQtiBus.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libril-legacy.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/qcrilInterfaces.so",
+        "vendor_a/lib64/qcrilIntermodulemsgs.so",
+        "vendor_a/lib64/qcrilMarshal.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so",
+        "vendor_a/lib64/qtiril-utils.so",
+        "vendor_a/lib64/qtiwakelock.so"
+      ],
+      "runtime_path": "vendor/lib64/libqcrilNrLogger.so",
+      "stock_path": "vendor_a/lib64/libqcrilNrLogger.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so"
+      ],
+      "runtime_path": "vendor/lib64/libqcrilNrQtiBus.so",
+      "stock_path": "vendor_a/lib64/libqcrilNrQtiBus.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrFramework.so",
+        "vendor_a/lib64/libqcrilNrQtiBus.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libril-legacy.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/qcrilInterfaces.so",
+        "vendor_a/lib64/qcrilIntermodulemsgs.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrilNr_aidl_common.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so",
+        "vendor_a/lib64/qtiril-utils.so",
+        "vendor_a/lib64/qtiwakelock.so"
+      ],
+      "runtime_path": "vendor/lib64/libqcrilNrQtiMutex.so",
+      "stock_path": "vendor_a/lib64/libqcrilNrQtiMutex.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/libqcrilNrVoiceModule.so",
+      "stock_path": "vendor_a/lib64/libqcrilNrVoiceModule.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libdsi_netctrl.so"
+      ],
+      "runtime_path": "vendor/lib64/libqdi.so",
+      "stock_path": "vendor_a/lib64/libqdi.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libxiaomi_qcril.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmi.so",
+      "stock_path": "vendor_a/lib64/libqmi.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libnicm_dsi.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmi_cci.so",
+      "stock_path": "vendor_a/lib64/libqmi_cci.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmi_client_helper.so",
+      "stock_path": "vendor_a/lib64/libqmi_client_helper.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmi_client_qmux.so",
+      "stock_path": "vendor_a/lib64/libqmi_client_qmux.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/librilqmimiscservices.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmi_common_so.so",
+      "stock_path": "vendor_a/lib64/libqmi_common_so.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/lib-imscommon.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmi_csi.so",
+      "stock_path": "vendor_a/lib64/libqmi_csi.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libqmi_cci.so",
+        "vendor_a/lib64/libqmi_csi.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmi_encdec.so",
+      "stock_path": "vendor_a/lib64/libqmi_encdec.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcci_legacy.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmi_legacy.so",
+      "stock_path": "vendor_a/lib64/libqmi_legacy.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so"
+      ],
+      "runtime_path": "vendor/lib64/libqmiservices.so",
+      "stock_path": "vendor_a/lib64/libqmiservices.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libminksocket_vendor.so"
+      ],
+      "runtime_path": "vendor/lib64/libqrtr.so",
+      "stock_path": "vendor_a/lib64/libqrtr.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-rtpsl.so"
+      ],
+      "runtime_path": "vendor/lib64/libqti_vndfwk_detect_vendor.so",
+      "stock_path": "vendor_a/lib64/libqti_vndfwk_detect_vendor.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imsvtcore.so"
+      ],
+      "runtime_path": "vendor/lib64/librcc.so",
+      "stock_path": "vendor_a/lib64/librcc.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/libril-db.so",
+      "stock_path": "vendor_a/lib64/libril-db.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/libril-legacy.so",
+      "stock_path": "vendor_a/lib64/libril-legacy.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/librilqmimiscservices.so",
+      "stock_path": "vendor_a/lib64/librilqmimiscservices.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so"
+      ],
+      "runtime_path": "vendor/lib64/libsoc_helper.so",
+      "stock_path": "vendor_a/lib64/libsoc_helper.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/libspukeymintutils.so"
+      ],
+      "runtime_path": "vendor/lib64/libspcom.so",
+      "stock_path": "vendor_a/lib64/libspcom.so"
+    },
+    {
+      "already_in_manifest": true,
+      "required_by": [
+        "vendor_a/lib64/libspukeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/libspukeymintdeviceutils.so",
+      "stock_path": "vendor_a/lib64/libspukeymintdeviceutils.so"
+    },
+    {
+      "already_in_manifest": true,
+      "required_by": [
+        "vendor_a/lib64/libspukeymint.so"
+      ],
+      "runtime_path": "vendor/lib64/libspukeymintutils.so",
+      "stock_path": "vendor_a/lib64/libspukeymintutils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libxiaomi_qcril.so"
+      ],
+      "runtime_path": "vendor/lib64/libsqlite.so",
+      "stock_path": "vendor_a/lib64/libsqlite.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/libnicm_utils.so"
+      ],
+      "runtime_path": "vendor/lib64/libssl.so",
+      "stock_path": "vendor_a/lib64/libssl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so"
+      ],
+      "runtime_path": "vendor/lib64/libsystem_health_mon2.so",
+      "stock_path": "vendor_a/lib64/libsystem_health_mon2.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imsdpl.so"
+      ],
+      "runtime_path": "vendor/lib64/libtime_genoff.so",
+      "stock_path": "vendor_a/lib64/libtime_genoff.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth@1.0.so",
+        "vendor_a/lib64/android.hardware.health@1.0.so",
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/android.hardware.thermal@1.0.so",
+        "vendor_a/lib64/android.hardware.thermal@2.0.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libbinder.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libdisplayconfig.qti.so",
+        "vendor_a/lib64/libgps.utils.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libjson.so",
+        "vendor_a/lib64/libloc_core.so",
+        "vendor_a/lib64/liblocation_api.so",
+        "vendor_a/lib64/libmdmdetect.so",
+        "vendor_a/lib64/libminkdescriptor.so",
+        "vendor_a/lib64/libnicm.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libqcbor.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqmi_cci.so",
+        "vendor_a/lib64/libqmi_common_so.so",
+        "vendor_a/lib64/libqmi_csi.so",
+        "vendor_a/lib64/libqmi_encdec.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/librcc.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/vendor.display.config@2.0.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so"
+      ],
+      "runtime_path": "vendor/lib64/libutils.so",
+      "stock_path": "vendor_a/lib64/libutils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libminksocket_vendor.so",
+        "vendor_a/lib64/libspcom.so"
+      ],
+      "runtime_path": "vendor/lib64/libvmmem.so",
+      "stock_path": "vendor_a/lib64/libvmmem.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/libxiaomi_qcril.so",
+      "stock_path": "vendor_a/lib64/libxiaomi_qcril.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libconfigdb.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libxiaomi_qcril.so"
+      ],
+      "runtime_path": "vendor/lib64/libxml.so",
+      "stock_path": "vendor_a/lib64/libxml.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libxiaomi_qcril.so"
+      ],
+      "runtime_path": "vendor/lib64/libxml2.so",
+      "stock_path": "vendor_a/lib64/libxml2.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/libpng.so",
+        "vendor_a/lib64/libprotobuf-cpp-full-21.12.so",
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/libz.so",
+      "stock_path": "vendor_a/lib64/libz.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilInterfaces.so",
+      "stock_path": "vendor_a/lib64/qcrilInterfaces.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qtiril-utils.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilIntermodulemsgs.so",
+      "stock_path": "vendor_a/lib64/qcrilIntermodulemsgs.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilMarshal.so",
+      "stock_path": "vendor_a/lib64/qcrilMarshal.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNrQmiModule.so",
+      "stock_path": "vendor_a/lib64/qcrilNrQmiModule.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNrSecureMode.so",
+      "stock_path": "vendor_a/lib64/qcrilNrSecureMode.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_IRadioConfig.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_IRadioMessaging.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_IRadioModem.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_IRadioNetwork.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_IRadioSap.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_IRadioSim.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_IRadioVoice.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_SecureElementService.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_UimLpaService.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_UimRemoteClient.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_UimRemoteServer.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_UimService.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_UimService.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrilNr_aidl_common.so",
+      "stock_path": "vendor_a/lib64/qcrilNr_aidl_common.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/qcrilNrd"
+      ],
+      "runtime_path": "vendor/lib64/qcrild_libqcrilnr.so",
+      "stock_path": "vendor_a/lib64/qcrild_libqcrilnr.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/qcrild_libqcrilnrutils.so",
+      "stock_path": "vendor_a/lib64/qcrild_libqcrilnrutils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libril-legacy.so"
+      ],
+      "runtime_path": "vendor/lib64/qtiPeripheralMgr.so",
+      "stock_path": "vendor_a/lib64/qtiPeripheralMgr.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libril-legacy.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/qcrilInterfaces.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so"
+      ],
+      "runtime_path": "vendor/lib64/qtiril-utils.so",
+      "stock_path": "vendor_a/lib64/qtiril-utils.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/qcrilNr_aidl_common.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so"
+      ],
+      "runtime_path": "vendor/lib64/qtiwakelock.so",
+      "stock_path": "vendor_a/lib64/qtiwakelock.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libdisplayconfig.qti.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.display.config@2.0.so",
+      "stock_path": "vendor_a/lib64/vendor.display.config@2.0.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.ImsRtpService-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.ImsRtpService-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/lib64/lib-imsvtcore.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libcneapiclient.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.data.factoryservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.data.mwqemaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.data.mwqemaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.bluetooth_sar-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.bluetooth_sar-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.bttpi-V3-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.bttpi-V3-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.data.cneaidlservice.internal.api-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.api-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.api-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.server-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.data.cneaidlservice.internal.constants-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.constants-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.data.cneaidlservice.internal.server-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.server-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.data.dynamicddsaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.data.dynamicddsaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.data.flowaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.data.flowaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.data.lceaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.data.lceaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.data.qmiaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.data.qmiaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.fm-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.fm-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.fm@1.0.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.am-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.am-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libATFWD.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.atfwd-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.atfwd-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradioconfig-V6-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.common-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.common-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.ims-V16-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.ims-V16-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.lpa-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.lpa-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.qcriNvOpt-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.qcriNvOpt-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.qcrilhook-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.qcrilhook-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libqcrilNr.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.qtiradio-V16-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.qtiradio-V16-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.qtiradioconfig-V6-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.qtiradioconfig-V6-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.uim-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.uim-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.uim_remote_client-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_client-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.hardware.radio.uim_remote_server-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_server-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.ims.callcapabilityaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.ims.callcapabilityaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.ims.configaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.ims.configaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.ims.connectionaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.ims.connectionaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/lib-imscommon.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.ims.rcssipaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.ims.rcssipaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.ims.rcsuceaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.ims.rcsuceaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.latencyaidlservice-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.latencyaidlservice-V1-ndk.so"
+    },
+    {
+      "already_in_manifest": false,
+      "required_by": [
+        "vendor_a/lib64/libsystem_health_mon2.so"
+      ],
+      "runtime_path": "vendor/lib64/vendor.qti.syshealthmon-V1-ndk.so",
+      "stock_path": "vendor_a/lib64/vendor.qti.syshealthmon-V1-ndk.so"
+    }
+  ],
+  "unresolved_sonames_not_proven_missing": [
+    {
+      "required_by": [
+        "vendor_a/lib64/libqtikeymint.so"
+      ],
+      "soname": "android.hardware.keymaster@4.0.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/lib64/libqtikeymint.so"
+      ],
+      "soname": "android.hardware.keymaster@4.1.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/lib64/android.hardware.gatekeeper-V1-ndk.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspukeymint.so"
+      ],
+      "soname": "android.hardware.security.keymint-V3-ndk.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/libcneapiclient.so"
+      ],
+      "soname": "libandroid_net.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/lib64/libbinder.so"
+      ],
+      "soname": "libapexsupport.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.common-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.gatekeeper-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.gnss-V4-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.config-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.messaging-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.modem-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.network-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sap-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sim-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.voice-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.secure_element-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.rkp-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.security.secureclock-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V2-ndk.so",
+        "vendor_a/lib64/android.system.suspend-V1-ndk.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libsystem_health_mon2.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.data.mwqemaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bluetooth_sar-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bttpi-V3-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.api-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.constants-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.dynamicddsaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.flowaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.lceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.qmiaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.am-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.atfwd-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.common-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.ims-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.lpa-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcriNvOpt-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcrilhook-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradio-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradioconfig-V6-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_client-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.callcapabilityaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.configaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.connectionaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcssipaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcsuceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.latencyaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.syshealthmon-V1-ndk.so"
+      ],
+      "soname": "libbinder_ndk.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gatekeeper-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.bluetooth@1.0.so",
+        "vendor_a/lib64/android.hardware.common-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.gatekeeper-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.gnss-V4-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.health@1.0.so",
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/android.hardware.radio-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.config-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.messaging-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.modem-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.network-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sap-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sim-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.voice-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.secure_element-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.rkp-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.security.secureclock-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal@1.0.so",
+        "vendor_a/lib64/android.hardware.thermal@2.0.so",
+        "vendor_a/lib64/android.system.suspend-V1-ndk.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libQtiRilLoadable.so",
+        "vendor_a/lib64/libavservices_minijail.so",
+        "vendor_a/lib64/libbase.so",
+        "vendor_a/lib64/libbinder.so",
+        "vendor_a/lib64/libbtnv.so",
+        "vendor_a/lib64/libc++.so",
+        "vendor_a/lib64/libcap.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libconfigdb.so",
+        "vendor_a/lib64/libcrypto.so",
+        "vendor_a/lib64/libcutils.so",
+        "vendor_a/lib64/libdiag.so",
+        "vendor_a/lib64/libdisplayconfig.qti.so",
+        "vendor_a/lib64/libdmabufheap.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libdsutils.so",
+        "vendor_a/lib64/libgatekeeper.so",
+        "vendor_a/lib64/libgps.utils.so",
+        "vendor_a/lib64/libhardware.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libidl.so",
+        "vendor_a/lib64/libion.so",
+        "vendor_a/lib64/libjson.so",
+        "vendor_a/lib64/libkeymaster_messages.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libkeymasterutils.so",
+        "vendor_a/lib64/libloc_core.so",
+        "vendor_a/lib64/liblocation_api.so",
+        "vendor_a/lib64/libmdmdetect.so",
+        "vendor_a/lib64/libminijail.so",
+        "vendor_a/lib64/libminkdescriptor.so",
+        "vendor_a/lib64/libminksocket_vendor.so",
+        "vendor_a/lib64/libnetutils.so",
+        "vendor_a/lib64/libnicm.so",
+        "vendor_a/lib64/libnicm_dsi.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libnl.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libpng.so",
+        "vendor_a/lib64/libprocessgroup.so",
+        "vendor_a/lib64/libprotobuf-cpp-full-21.12.so",
+        "vendor_a/lib64/libqcbor.so",
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrFramework.so",
+        "vendor_a/lib64/libqcrilNrLogger.so",
+        "vendor_a/lib64/libqcrilNrQtiBus.so",
+        "vendor_a/lib64/libqcrilNrQtiMutex.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_cci.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_common_so.so",
+        "vendor_a/lib64/libqmi_csi.so",
+        "vendor_a/lib64/libqmi_encdec.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/libqmiservices.so",
+        "vendor_a/lib64/libqrtr.so",
+        "vendor_a/lib64/libqti_vndfwk_detect_vendor.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/librcc.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libril-legacy.so",
+        "vendor_a/lib64/librilqmimiscservices.so",
+        "vendor_a/lib64/libsoc_helper.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/libspukeymintutils.so",
+        "vendor_a/lib64/libsqlite.so",
+        "vendor_a/lib64/libssl.so",
+        "vendor_a/lib64/libsystem_health_mon2.so",
+        "vendor_a/lib64/libtime_genoff.so",
+        "vendor_a/lib64/libutils.so",
+        "vendor_a/lib64/libvmmem.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/libxml.so",
+        "vendor_a/lib64/libxml2.so",
+        "vendor_a/lib64/libz.so",
+        "vendor_a/lib64/qcrilInterfaces.so",
+        "vendor_a/lib64/qcrilIntermodulemsgs.so",
+        "vendor_a/lib64/qcrilMarshal.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrilNr_aidl_common.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/qcrild_libqcrilnrutils.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so",
+        "vendor_a/lib64/qtiril-utils.so",
+        "vendor_a/lib64/qtiwakelock.so",
+        "vendor_a/lib64/vendor.display.config@2.0.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.data.mwqemaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bluetooth_sar-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bttpi-V3-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.api-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.constants-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.dynamicddsaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.flowaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.lceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.qmiaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.am-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.atfwd-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.common-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.ims-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.lpa-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcriNvOpt-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcrilhook-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradio-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradioconfig-V6-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_client-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.callcapabilityaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.configaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.connectionaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcssipaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcsuceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.latencyaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.syshealthmon-V1-ndk.so"
+      ],
+      "soname": "libc.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/lib64/libprocessgroup.so"
+      ],
+      "soname": "libcgrouprc.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gatekeeper-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.bluetooth@1.0.so",
+        "vendor_a/lib64/android.hardware.common-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.gatekeeper-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.gnss-V4-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.health@1.0.so",
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/android.hardware.radio-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.config-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.messaging-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.modem-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.network-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sap-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sim-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.voice-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.secure_element-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.rkp-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.security.secureclock-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal@1.0.so",
+        "vendor_a/lib64/android.hardware.thermal@2.0.so",
+        "vendor_a/lib64/android.system.suspend-V1-ndk.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libQtiRilLoadable.so",
+        "vendor_a/lib64/libavservices_minijail.so",
+        "vendor_a/lib64/libbase.so",
+        "vendor_a/lib64/libbinder.so",
+        "vendor_a/lib64/libbtnv.so",
+        "vendor_a/lib64/libc++.so",
+        "vendor_a/lib64/libcap.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libconfigdb.so",
+        "vendor_a/lib64/libcrypto.so",
+        "vendor_a/lib64/libcutils.so",
+        "vendor_a/lib64/libdiag.so",
+        "vendor_a/lib64/libdisplayconfig.qti.so",
+        "vendor_a/lib64/libdmabufheap.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libdsutils.so",
+        "vendor_a/lib64/libgatekeeper.so",
+        "vendor_a/lib64/libgps.utils.so",
+        "vendor_a/lib64/libhardware.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libidl.so",
+        "vendor_a/lib64/libion.so",
+        "vendor_a/lib64/libjson.so",
+        "vendor_a/lib64/libkeymaster_messages.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libkeymasterutils.so",
+        "vendor_a/lib64/libloc_core.so",
+        "vendor_a/lib64/liblocation_api.so",
+        "vendor_a/lib64/libmdmdetect.so",
+        "vendor_a/lib64/libminijail.so",
+        "vendor_a/lib64/libminkdescriptor.so",
+        "vendor_a/lib64/libminksocket_vendor.so",
+        "vendor_a/lib64/libnetutils.so",
+        "vendor_a/lib64/libnicm.so",
+        "vendor_a/lib64/libnicm_dsi.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libnl.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libpng.so",
+        "vendor_a/lib64/libprocessgroup.so",
+        "vendor_a/lib64/libprotobuf-cpp-full-21.12.so",
+        "vendor_a/lib64/libqcbor.so",
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrFramework.so",
+        "vendor_a/lib64/libqcrilNrLogger.so",
+        "vendor_a/lib64/libqcrilNrQtiBus.so",
+        "vendor_a/lib64/libqcrilNrQtiMutex.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_cci.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_common_so.so",
+        "vendor_a/lib64/libqmi_csi.so",
+        "vendor_a/lib64/libqmi_encdec.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/libqmiservices.so",
+        "vendor_a/lib64/libqrtr.so",
+        "vendor_a/lib64/libqti_vndfwk_detect_vendor.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/librcc.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libril-legacy.so",
+        "vendor_a/lib64/librilqmimiscservices.so",
+        "vendor_a/lib64/libsoc_helper.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/libspukeymintutils.so",
+        "vendor_a/lib64/libsqlite.so",
+        "vendor_a/lib64/libssl.so",
+        "vendor_a/lib64/libsystem_health_mon2.so",
+        "vendor_a/lib64/libtime_genoff.so",
+        "vendor_a/lib64/libutils.so",
+        "vendor_a/lib64/libvmmem.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/libxml.so",
+        "vendor_a/lib64/libxml2.so",
+        "vendor_a/lib64/libz.so",
+        "vendor_a/lib64/qcrilInterfaces.so",
+        "vendor_a/lib64/qcrilIntermodulemsgs.so",
+        "vendor_a/lib64/qcrilMarshal.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrilNr_aidl_common.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/qcrild_libqcrilnrutils.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so",
+        "vendor_a/lib64/qtiril-utils.so",
+        "vendor_a/lib64/qtiwakelock.so",
+        "vendor_a/lib64/vendor.display.config@2.0.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.data.mwqemaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bluetooth_sar-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bttpi-V3-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.api-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.constants-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.dynamicddsaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.flowaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.lceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.qmiaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.am-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.atfwd-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.common-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.ims-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.lpa-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcriNvOpt-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcrilhook-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradio-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradioconfig-V6-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_client-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.callcapabilityaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.configaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.connectionaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcssipaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcsuceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.latencyaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.syshealthmon-V1-ndk.so"
+      ],
+      "soname": "libdl.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth@1.0.so",
+        "vendor_a/lib64/android.hardware.health@1.0.so",
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/android.hardware.thermal@1.0.so",
+        "vendor_a/lib64/android.hardware.thermal@2.0.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libbase.so",
+        "vendor_a/lib64/libbinder.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libconfigdb.so",
+        "vendor_a/lib64/libcutils.so",
+        "vendor_a/lib64/libdiag.so",
+        "vendor_a/lib64/libdisplayconfig.qti.so",
+        "vendor_a/lib64/libdmabufheap.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libdsutils.so",
+        "vendor_a/lib64/libgps.utils.so",
+        "vendor_a/lib64/libhardware.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libion.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libkeymasterutils.so",
+        "vendor_a/lib64/libloc_core.so",
+        "vendor_a/lib64/liblocation_api.so",
+        "vendor_a/lib64/libmdmdetect.so",
+        "vendor_a/lib64/libminkdescriptor.so",
+        "vendor_a/lib64/libminksocket_vendor.so",
+        "vendor_a/lib64/libnetutils.so",
+        "vendor_a/lib64/libnicm_dsi.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libprotobuf-cpp-full-21.12.so",
+        "vendor_a/lib64/libqcbor.so",
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrLogger.so",
+        "vendor_a/lib64/libqcrilNrQtiBus.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_cci.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_csi.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/librcc.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/libspukeymintutils.so",
+        "vendor_a/lib64/libsqlite.so",
+        "vendor_a/lib64/libsystem_health_mon2.so",
+        "vendor_a/lib64/libtime_genoff.so",
+        "vendor_a/lib64/libutils.so",
+        "vendor_a/lib64/libvmmem.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/libxml.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so",
+        "vendor_a/lib64/vendor.display.config@2.0.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so"
+      ],
+      "soname": "liblog.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.gatekeeper-service-qti",
+        "vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti",
+        "vendor_a/bin/hw/android.hardware.health-service.qti",
+        "vendor_a/bin/hw/android.hardware.thermal-service.qti",
+        "vendor_a/bin/hw/qcrilNrd",
+        "vendor_a/bin/ims_rtp_daemon",
+        "vendor_a/bin/imsdaemon",
+        "vendor_a/lib64/android.hardware.bluetooth-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.bluetooth@1.0.so",
+        "vendor_a/lib64/android.hardware.common-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.gatekeeper-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.gnss-V4-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.health-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.health@1.0.so",
+        "vendor_a/lib64/android.hardware.health@2.0.so",
+        "vendor_a/lib64/android.hardware.health@2.1.so",
+        "vendor_a/lib64/android.hardware.radio-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.config-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.messaging-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.modem-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.network-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sap-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.sim-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.radio.voice-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.secure_element-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.rkp-V3-ndk.so",
+        "vendor_a/lib64/android.hardware.security.secureclock-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.security.sharedsecret-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V1-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal-V2-ndk.so",
+        "vendor_a/lib64/android.hardware.thermal@1.0.so",
+        "vendor_a/lib64/android.hardware.thermal@2.0.so",
+        "vendor_a/lib64/android.system.suspend-V1-ndk.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so",
+        "vendor_a/lib64/hw/android.hardware.gnss-aidl-impl-qti.so",
+        "vendor_a/lib64/hw/libqtigatekeeper.so",
+        "vendor_a/lib64/hw/mbedtls_qti.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bluetooth_sar@aidl-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.bttpi-impl.so",
+        "vendor_a/lib64/hw/vendor.qti.hardware.fm-impl.so",
+        "vendor_a/lib64/lib-imscommon.so",
+        "vendor_a/lib64/lib-imsdpl.so",
+        "vendor_a/lib64/lib-imsvtcore.so",
+        "vendor_a/lib64/lib-rtpcommon.so",
+        "vendor_a/lib64/lib-rtpcore.so",
+        "vendor_a/lib64/lib-rtpsl.so",
+        "vendor_a/lib64/libATFWD.so",
+        "vendor_a/lib64/libQSEEComAPI.so",
+        "vendor_a/lib64/libQtiRilLoadable.so",
+        "vendor_a/lib64/libavservices_minijail.so",
+        "vendor_a/lib64/libbase.so",
+        "vendor_a/lib64/libbinder.so",
+        "vendor_a/lib64/libbtnv.so",
+        "vendor_a/lib64/libc++.so",
+        "vendor_a/lib64/libcap.so",
+        "vendor_a/lib64/libcneapiclient.so",
+        "vendor_a/lib64/libconfigdb.so",
+        "vendor_a/lib64/libcrypto.so",
+        "vendor_a/lib64/libcutils.so",
+        "vendor_a/lib64/libdiag.so",
+        "vendor_a/lib64/libdisplayconfig.qti.so",
+        "vendor_a/lib64/libdmabufheap.so",
+        "vendor_a/lib64/libdsi_netctrl.so",
+        "vendor_a/lib64/libdsutils.so",
+        "vendor_a/lib64/libgatekeeper.so",
+        "vendor_a/lib64/libgps.utils.so",
+        "vendor_a/lib64/libhardware.so",
+        "vendor_a/lib64/libhardware_legacy.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libidl.so",
+        "vendor_a/lib64/libion.so",
+        "vendor_a/lib64/libjson.so",
+        "vendor_a/lib64/libkeymaster_messages.so",
+        "vendor_a/lib64/libkeymasterdeviceutils.so",
+        "vendor_a/lib64/libkeymasterutils.so",
+        "vendor_a/lib64/libloc_core.so",
+        "vendor_a/lib64/liblocation_api.so",
+        "vendor_a/lib64/libmdmdetect.so",
+        "vendor_a/lib64/libminijail.so",
+        "vendor_a/lib64/libminkdescriptor.so",
+        "vendor_a/lib64/libminksocket_vendor.so",
+        "vendor_a/lib64/libnetutils.so",
+        "vendor_a/lib64/libnicm.so",
+        "vendor_a/lib64/libnicm_dsi.so",
+        "vendor_a/lib64/libnicm_utils.so",
+        "vendor_a/lib64/libnl.so",
+        "vendor_a/lib64/libpdmapper.so",
+        "vendor_a/lib64/libpdnotifier.so",
+        "vendor_a/lib64/libperipheral_client.so",
+        "vendor_a/lib64/libpng.so",
+        "vendor_a/lib64/libprocessgroup.so",
+        "vendor_a/lib64/libprotobuf-cpp-full-21.12.so",
+        "vendor_a/lib64/libqcbor.so",
+        "vendor_a/lib64/libqcci_legacy.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libqcrilNrFramework.so",
+        "vendor_a/lib64/libqcrilNrLogger.so",
+        "vendor_a/lib64/libqcrilNrQtiBus.so",
+        "vendor_a/lib64/libqcrilNrQtiMutex.so",
+        "vendor_a/lib64/libqcrilNrVoiceModule.so",
+        "vendor_a/lib64/libqdi.so",
+        "vendor_a/lib64/libqmi.so",
+        "vendor_a/lib64/libqmi_cci.so",
+        "vendor_a/lib64/libqmi_client_helper.so",
+        "vendor_a/lib64/libqmi_client_qmux.so",
+        "vendor_a/lib64/libqmi_common_so.so",
+        "vendor_a/lib64/libqmi_csi.so",
+        "vendor_a/lib64/libqmi_encdec.so",
+        "vendor_a/lib64/libqmi_legacy.so",
+        "vendor_a/lib64/libqmiservices.so",
+        "vendor_a/lib64/libqrtr.so",
+        "vendor_a/lib64/libqti_vndfwk_detect_vendor.so",
+        "vendor_a/lib64/libqtikeymint.so",
+        "vendor_a/lib64/librcc.so",
+        "vendor_a/lib64/libril-db.so",
+        "vendor_a/lib64/libril-legacy.so",
+        "vendor_a/lib64/librilqmimiscservices.so",
+        "vendor_a/lib64/libsoc_helper.so",
+        "vendor_a/lib64/libspcom.so",
+        "vendor_a/lib64/libspukeymint.so",
+        "vendor_a/lib64/libspukeymintdeviceutils.so",
+        "vendor_a/lib64/libspukeymintutils.so",
+        "vendor_a/lib64/libsqlite.so",
+        "vendor_a/lib64/libssl.so",
+        "vendor_a/lib64/libsystem_health_mon2.so",
+        "vendor_a/lib64/libtime_genoff.so",
+        "vendor_a/lib64/libutils.so",
+        "vendor_a/lib64/libvmmem.so",
+        "vendor_a/lib64/libxiaomi_qcril.so",
+        "vendor_a/lib64/libxml.so",
+        "vendor_a/lib64/libxml2.so",
+        "vendor_a/lib64/libz.so",
+        "vendor_a/lib64/qcrilInterfaces.so",
+        "vendor_a/lib64/qcrilIntermodulemsgs.so",
+        "vendor_a/lib64/qcrilMarshal.so",
+        "vendor_a/lib64/qcrilNrQmiModule.so",
+        "vendor_a/lib64/qcrilNrSecureMode.so",
+        "vendor_a/lib64/qcrilNr_aidl_IQtiRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioConfig.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioMessaging.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioModem.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioNetwork.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSap.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioSim.so",
+        "vendor_a/lib64/qcrilNr_aidl_IRadioVoice.so",
+        "vendor_a/lib64/qcrilNr_aidl_SecureElementService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimLpaService.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteClient.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimRemoteServer.so",
+        "vendor_a/lib64/qcrilNr_aidl_UimService.so",
+        "vendor_a/lib64/qcrilNr_aidl_common.so",
+        "vendor_a/lib64/qcrild_libqcrilnr.so",
+        "vendor_a/lib64/qcrild_libqcrilnrutils.so",
+        "vendor_a/lib64/qtiPeripheralMgr.so",
+        "vendor_a/lib64/qtiril-utils.so",
+        "vendor_a/lib64/qtiwakelock.so",
+        "vendor_a/lib64/vendor.display.config@2.0.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ImsRtpService-aidl-Impl.so",
+        "vendor_a/lib64/vendor.qti.data.factoryservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.data.mwqemaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bluetooth_sar-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.bttpi-V3-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.api-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.constants-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.cneaidlservice.internal.server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.dynamicddsaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.flowaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.lceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.data.qmiaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.fm@1.0.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.am-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.atfwd-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.common-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.ims-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.lpa-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcriNvOpt-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qcrilhook-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradio-V16-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.qtiradioconfig-V6-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_client-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.hardware.radio.uim_remote_server-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.callcapabilityaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.configaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.connectionaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.factoryaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcssipaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.ims.rcsuceaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.latencyaidlservice-V1-ndk.so",
+        "vendor_a/lib64/vendor.qti.syshealthmon-V1-ndk.so"
+      ],
+      "soname": "libm.so"
+    },
+    {
+      "required_by": [
+        "vendor_a/lib64/libbinder.so",
+        "vendor_a/lib64/libhardware.so",
+        "vendor_a/lib64/libhidlbase.so",
+        "vendor_a/lib64/libqcrilNr.so",
+        "vendor_a/lib64/libutils.so"
+      ],
+      "soname": "libvndksupport.so"
+    }
+  ]
+}
