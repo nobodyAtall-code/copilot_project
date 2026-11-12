@@ -7,6 +7,8 @@ on:
       - '.github/workflows/mist-stock-super-metadata.yml'
       - 'scripts/inspect_mist_super_metadata.py'
       - 'scripts/mist_independent_lp_sizes.go'
+      - 'scripts/mist_independent_lp_groups.go'
+      - 'scripts/compare_mist_super_groups.py'
       - 'scripts/compare_mist_super_sizes.py'
 permissions:
   contents: read
@@ -83,6 +85,20 @@ jobs:
             --python-report reports/mist-super-metadata.json \
             --go-report reports/mist-go-independent-partitions.json \
             --output reports/mist-super-independent-comparison.json
+      - name: Independently cross-check logical partition group capacities
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp scripts/mist_independent_lp_groups.go work/lpunpack-independent/mist_independent_lp_groups.go
+          ROOT="$PWD"
+          (
+            cd work/lpunpack-independent
+            go run super.go mist_independent_lp_groups.go "$ROOT/work/super.raw.img" > "$ROOT/reports/mist-go-independent-groups.json"
+          )
+          python3 scripts/compare_mist_super_groups.py \
+            --python-report reports/mist-super-metadata.json \
+            --go-report reports/mist-go-independent-groups.json \
+            --output reports/mist-super-independent-group-comparison.json
       - name: Upload reports without raw proprietary images
         if: always()
         uses: actions/upload-artifact@v4
@@ -93,5 +109,7 @@ jobs:
             reports/mist-super-metadata.json
             reports/mist-go-independent-partitions.json
             reports/mist-super-independent-comparison.json
+            reports/mist-go-independent-groups.json
+            reports/mist-super-independent-group-comparison.json
           if-no-files-found: warn
           retention-days: 14
