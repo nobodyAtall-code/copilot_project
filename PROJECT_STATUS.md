@@ -37,7 +37,7 @@ Existing device skeleton: `BoardConfig.mk`, `AndroidProducts.mk`, `device.mk`, `
 | [43181251762](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43181251762) | success | 107 VINTF XML, 132 HAL names, 3 fstab files, 47 mountpoints, 143 RC files, 251 services, 14 module metadata files |
 | [43183815801](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43183815801) | success | archive membership cross-check: 4,352 safe paths; 180/198 service references found; three modules.load lists matched by basename |
 | [43184532913](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43184532913) | success | publishes durable membership Markdown/JSON reports in `research/generated/` |
-| [43185479167](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43185479167) | **VERIFY status** | newly added missing service/KeyMint near-match reconciliation; status was in progress when this note was authored |
+| [43185479167](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43185479167) | **success** | inspected 18 missing service references (16 unique paths), one VINTF manifest path and 13 KeyMint/Keymaster-related stock filenames; outputs committed to research/generated/ |
 
 **Previous failure context**: early stock configuration review runs failed on Python invalid Markdown backtick escapes. Fixed and verified by successful run 43181251762. The first archive membership run failed before later runs succeeded.
 
@@ -59,19 +59,31 @@ From the published `mist-archive-membership.json`:
 - The 18 missing service references include `/vendor/bin/hw/rild`, `/vendor/bin/ATFWD-daemon`, `/vendor/bin/wifi_qos_daemon`, plus legacy/factory/optional candidates. Do **not** add broken binaries or delete init services based only on the name inventory.
 - `modules.load` checks: system_dlkm flattened 78, system_dlkm versioned 78, vendor_dlkm 350; **zero missing .ko basenames** in archive inventory. Note 350 vendor load entries but 268 distinct `modules.dep` records. Basename-only matches prove neither module ABI nor load compatibility.
 
+### Newly resolved research detail: 12 November 2026
+
+- Run [43185479167](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43185479167), job `131071453344`: **SUCCESS**. The script `scripts/reconcile_missing_stock_paths.py` and `.github/workflows/missing-stock-path-review.yml` are in `copilot_project` only; workflow saved two new reports to `research/generated/`.
+- **18 missing init service declarations correspond to 16 distinct executable paths**, so avoid double-counting `rild` and `LKCore` from multiple RC declarations.
+- Missing `vendor_a/bin/hw/rild`: a different binary `vendor_a/bin/hw/qcrilNrd` exists; **not validated as a drop-in replacement**. Need inspect active RIL/IMS services, RC files, ELF dependencies and runtime SKU.
+- Missing `vendor_a/bin/init.qti.fm.sh`: same basename exists at `vendor_a/etc/init.qti.fm.sh`; **path mismatch**, not proof that this stock RC service launches as written.
+- Missing `vendor_a/bin/boringssl_self_test32`: `vendor_a/bin/boringssl_self_test64` exists. Architecture mismatch means **do not substitute automatically**.
+- Missing `vendor_a/bin/check_keybox`: `vendor_a/bin/StoreKeybox` and `vendor_a/bin/spu_install_keybox` are filename-near alternatives only, not verified equivalents.
+- KeyMint VINTF XML exact path remains absent from the reviewed stock vendor archive. **13 related KeyMint/Keymaster filenames are libraries**, such as `libqtikeymint.so` and `libspukeymint.so`; no service executable or registration can be inferred from these names. Review stock/active VINTF fragment loading, binary location, SELinux and KeyStore.
+- Module basenames and original 350 vendor `modules.load` entries remain **unverified for ABI, dependency resolution and duplicate semantics**.
+- **NEXT engineering gate**: read-only stock file metadata + symlink-target/hash inventory and recursive ELF `DT_NEEDED` closure for a tightly chosen set (RIL/IMS, KeyMint, fingerprint, audio, camera); then curated proprietary manifest. No blanket vendor copying.
+
 ## 4. Research/report files — read in this order
 
 1. `research/device-facts.md`: on-device facts and boot/partition sizes.
 2. `research/mist-evidence-reconciliation-2026-11-12.md`: HAL/RC evidence and key cautions.
 3. `research/generated/mist-stock-config.md` and `.json`: actual VINTF, init, fstab and module research output.
 4. `research/generated/mist-archive-membership.md` and `.json`: service and manifest path membership results.
-5. `research/generated/mist-missing-path-review.md` and `.json` **once run 43185479167 succeeds**: alternative paths and KeyMint-related filename candidates; candidates are **never proof of equivalence**.
+5. `research/generated/mist-missing-path-review.md` and `.json`: **published after successful run 43185479167**; 16 unique missing service executable paths, one missing KeyMint VINTF path, relevant near-name candidates; candidates are **never proof of equivalence**.
 6. `research/stock-audit-run-43174896778.md` and `research/staged-archive-audit-run-43178657329.md`: raw extraction and hash evidence.
 7. `research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf`: previous dated PDF handover; superseded by this live status file for new work.
 
 ## 5. Next actionable development tasks (in priority order)
 
-1. **START WITH LATEST RUN**: check status and logs for [43185479167](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43185479167). If failure, fix the underlying script/workflow on `copilot_project/main`; if successful, inspect `mist-missing-path-review.md/json` and report the precise alternate filenames/KeyMint evidence. Update this status file.
+1. **START WITH LATEST GITHUB STATUS**, then inspect the successfully published [missing-path review](https://github.com/nobodyAtall-code/copilot_project/blob/main/research/generated/mist-missing-path-review.md) from [run 43185479167](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43185479167). Missing references: 18 declarations, 16 unique paths; one missing KeyMint VINTF XML file; 13 related stock KeyMint/Keymaster filenames. Review each clue, not just counts.
 2. Resolve missing KeyMint VINTF path and missing service executables **against real stock archive members**, relevant symlink targets, executable presence, filename variations, alternate partition mounts and active SKU manifest combinations. Distinguish missing vs optional factory features. Do not invent results.
 3. Build a safe, read-only **file metadata and recursive ELF DT_NEEDED** checker for a *curated candidate set*: preserve provenance, hash, type, symlinks, permissions, dependency edges, missing library resolution and partition-mount mapping. Keep the analysis workflow solely inside `copilot_project`.
 4. Inspect actual boot/vendor_boot/init_boot/recovery images and DTBO, ramdisk fragments, module lists/load ordering and AVB flags against the mist kernel tree. Populate kernel prebuilts only when proven correct.
