@@ -1,7 +1,7 @@
 # MIST / LINEAGEOS 23.2 — LIVE PROJECT STATUS AND NEXT-CHAT HANDOVER
 
 **Last reviewed: 13 November 2026 (Malaysia time).**  
-**Start every new chat here:** `copilot_project/PROJECT_STATUS.md`. Check GitHub Actions for later runs and update this file with **verified** changes before ending a development session. This is a living Markdown status file. For an explicit **HANDOVER**, also generate a proper, updated PDF; do not merely reuse an older PDF.
+**Start every new chat here:** `copilot_project/PROJECT_STATUS.md`. **Workflow execution rule: trigger, provide run link, and do not monitor unless user requests investigation.** Check GitHub Actions for later runs and update this file with **verified** changes before ending a development session. This is a living Markdown status file. For an explicit **HANDOVER**, also generate a proper, updated PDF; do not merely reuse an older PDF.
 
 ## 1. Goal and strict rules
 
@@ -320,6 +320,10 @@ From the published `mist-archive-membership.json`:
 - **No compile/ABI claim**: Existing prebuilt library and HAL modules still have `check_elf_files: false` and incomplete `DT_NEEDED`/runtime closure, and the complete proprietary manifest is not built. `ready_for_rom_build_claim=false`, `flashable=false`, no ROM build, no device boot.
 - **NEXT priority:** AOSP `lpdump` verification of group maxima/virtual A/B `mi_ext` semantics, actual vendor_boot ramdisk/DTB/DTBO module evidence, ELF closure and VINTF/SELinux, then real LineageOS 23.2 lunch and build. Do not copy settings from another Snapdragon device.
 
+### Workflow handoff rule — 13 November 2026 (user instruction)
+
+**For future chats and all subsequent development milestones:** after implementing and committing a new GitHub Actions workflow or a workflow fix directly to existing `copilot_project/main`, **launch/trigger the workflow and share its exact run link, then stop**. **Do not monitor, poll, wait for completion, or repeatedly inspect its logs/results** by default. The user will send the run link if it fails or when they want the result investigated. Only inspect a completed run when explicitly requested, and then implement the next fix/milestone accordingly. This supersedes older next-chat instructions that automatically ask for status monitoring. Always update `PROJECT_STATUS.md` with what was pushed and the launched run ID, marking execution results **pending/unverified** until the user supplies outcome for review. Never claim an unmonitored workflow passed or the ROM booted. Keep all workflow/research files in `copilot_project`; production trees clean; no PRs/branches; use requested Git author identity for workflow cross-repository pushes.
+
 ## 4. Research/report files — read in this order
 
 1. `research/mist-vendor-soong-audit-2026-11-13.md`: most recent verified 31-module Soong/product structural parity check and explicit limitations.
@@ -356,6 +360,6 @@ From the published `mist-archive-membership.json`:
 
 **Copyable continuation instruction:**
 
-> Continue my Redmi Note 17 5G (mist) LineageOS 23.2 Android 16 bring-up. Read `nobodyAtall-code/copilot_project/PROJECT_STATUS.md` on GitHub main first, then check the latest Actions run and report any new results. Keep this status document updated after substantive work. Next inspect missing stock service paths and KeyMint references from the new research report, and implement only evidence-based vendor/kernel bring-up. Commit only to existing main branches, never use PRs or new branches, and keep ALL workflows and experiments exclusively in `copilot_project`. Other SM4450 device trees are architectural references, not mist configurations. Do not expose GH_PAT or touch local LineageOS checkout destructively. Tell me what was committed, verified, and still pending. When I say HANDOVER, produce a freshly checked, properly formatted PDF in addition to updating this repo status document.
+> Continue my Redmi Note 17 5G (mist) LineageOS 23.2 Android 16 bring-up. Read `nobodyAtall-code/copilot_project/PROJECT_STATUS.md` on GitHub main first, then continue from the latest recorded milestone; trigger the next workflow, share its run URL and do not monitor/poll unless I send a failed run or specifically request an inspection. Keep this status document updated after substantive work. Next inspect missing stock service paths and KeyMint references from the new research report, and implement only evidence-based vendor/kernel bring-up. Commit only to existing main branches, never use PRs or new branches, and keep ALL workflows and experiments exclusively in `copilot_project`. Other SM4450 device trees are architectural references, not mist configurations. Do not expose GH_PAT or touch local LineageOS checkout destructively. Tell me what was committed, verified, and still pending. When I say HANDOVER, produce a freshly checked, properly formatted PDF in addition to updating this repo status document.
 
-This file is the durable canonical continuation record. **Update it when future results change; do not leave it frozen after the next workflow completes.**
+This file is the durable canonical continuation record. **Update after meaningful commits and record newly launched workflows as pending; do not monitor them by default. When the user supplies a run link for investigation, verify logs and update this file with the outcome.**
