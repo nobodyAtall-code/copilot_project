@@ -79,6 +79,62 @@ def main():
     checks["vendor_makefile_bytes"] = len(vendor_mk.encode())
     checks["vendor_soong_bytes"] = len(bp.encode())
     checks["manifest_file_count"] = len(paths)
+    # Structural-only Soong audit: verify every currently published vendor
+    # module is requested by product makefiles and installs where its source
+    # path indicates. This is NOT a substitute for actual Soong compilation.
+    module_blocks = re.findall(
+        r"(?ms)^(cc_prebuilt_library_shared|cc_prebuilt_binary|prebuilt_etc)\s*\{(.*?)^\}",
+        bp,
+    )
+    parsed = []
+    for kind, body in module_blocks:
+        n = re.search(r'\bname:\s*"([^"]+)"', body)
+        src = re.search(r'\bsrcs?:\s*(?:\[\s*)?"([^"]+)"', body)
+        stem = re.search(r'\b(?:stem|filename):\s*"([^"]+)"', body)
+        if not n or not src or not stem:
+            problems.append("Unparseable vendor Soong module (missing name/src/stem)")
+            continue
+        name, source, filename = n.group(1), src.group(1), stem.group(1)
+        source_present = (vendor / source).is_file()
+        if not source_present:
+            problems.append("Vendor Soong source missing: " + source)
+        if kind == "cc_prebuilt_binary":
+            folder = "vendor/bin"
+            prop = re.search(r'\brelative_install_path:\s*"([^"]+)"', body)
+            if prop:
+                folder += "/" + prop.group(1)
+        elif kind == "cc_prebuilt_library_shared":
+            folder = "vendor/lib64"
+            prop = re.search(r'\brelative_install_path:\s*"([^"]+)"', body)
+            if prop:
+                folder += "/" + prop.group(1)
+            if not re.search(r'\bcompile_multilib:\s*"64"', body):
+                problems.append("Stock AArch64 library lacks explicit 64-bit install: " + name)
+        else:
+            folder = "vendor/etc"
+            prop = re.search(r'\bsub_dir:\s*"([^"]+)"', body)
+            if prop:
+                folder += "/" + prop.group(1)
+        target = folder + "/" + filename
+        stock_path = source.removeprefix("proprietary/")
+        if target != stock_path:
+            problems.append("Soong destination differs from stock source: " + name +
+                            " (" + target + " != " + stock_path + ")")
+        parsed.append(name)
+    pack = re.findall(r'\bmist_[A-Za-z0-9_]+\b', vendor_mk)
+    check("vendor Soong modules parsed", len(parsed) == len(module_blocks) and bool(parsed),
+          "all currently supported Soong prebuilt blocks must parse")
+    check("vendor Soong unique names", len(parsed) == len(set(parsed)),
+          "no duplicate Soong module names")
+    check("vendor product packages unique", len(pack) == len(set(pack)),
+          "no duplicate PRODUCT_PACKAGES module references")
+    missing_pack = sorted(set(parsed) - set(pack))
+    dangling_pack = sorted(set(pack) - set(parsed))
+    check("vendor Soong/product package parity", not missing_pack and not dangling_pack,
+          "Soong not packaged: " + repr(missing_pack) +
+          "; product package with no Soong module: " + repr(dangling_pack))
+    checks["vendor_parsed_module_count"] = len(parsed)
+    checks["vendor_product_package_count"] = len(pack)
     # Explicit unsatisfied gates. No inference from physical super size.
     gates = {
         "authoritative dynamic partition group metadata": False,
