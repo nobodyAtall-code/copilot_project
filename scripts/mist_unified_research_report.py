@@ -20,15 +20,18 @@ def main():
     p=argparse.ArgumentParser()
     for field in ("super","groups","sizes","boot","preflight"):
         p.add_argument("--"+field,type=Path,required=True)
+    p.add_argument("--boot-deep",type=Path,required=True)
     p.add_argument("--out",type=Path,required=True)
     p.add_argument("--markdown",type=Path,required=True)
     a=p.parse_args()
     super_data,groups,sizes,boot,preflight=[load(getattr(a,k)) for k in ("super","groups","sizes","boot","preflight")]
+    deep=load(a.boot_deep)
     gates={}
     gates["stock_lp_primary_backup_checksum"]=bool(super_data and super_data.get("integrity_checks_passed"))
     gates["go_python_group_parity"]=bool(groups and groups.get("groups_match"))
     gates["go_python_partition_size_parity"]=bool(sizes and sizes.get("partition_sizes_match"))
     gates["stock_boot_structural_report_present"]=boot is not None
+    gates["stock_avb_dtbo_fdt_metadata_structure"]=bool(deep and deep.get("stock_metadata_structures_valid"))
     gates["production_preflight_report_present"]=preflight is not None
     # These require separate authoritative/build/device evidence and are
     # deliberately never inferred from the third-party Go reader.
@@ -49,6 +52,7 @@ def main():
       "scope":"offline read-only cross-artifact research, not flashing or ROM build",
       "stock_super_source_run":43268799416,
       "stock_boot_source_run":43266837030,
+      "deeper_stock_boot_metadata": deep,
       "gates":gates,
       "stock_metadata_slot_count":len(slots),
       "groups":group_info,
@@ -68,7 +72,7 @@ def main():
       ],
       "raw_source_reports_available":{k:v is not None for k,v in
          (("super",super_data),("groups",groups),("sizes",sizes),
-          ("boot",boot),("preflight",preflight))}
+          ("boot",boot),("deep_boot",deep),("preflight",preflight))}
     }
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,indent=2)+"\n")
@@ -92,7 +96,7 @@ def main():
     a.markdown.write_text("\n".join(lines)+"\n")
     print(json.dumps({"verified_offline_gates":sum(gates.values()),
                       "total_gates":len(gates),"stock_groups":group_info},indent=2))
-    required=("stock_lp_primary_backup_checksum","go_python_group_parity",
+    required=("stock_avb_dtbo_fdt_metadata_structure","stock_lp_primary_backup_checksum","go_python_group_parity",
               "go_python_partition_size_parity","production_preflight_report_present")
     if not all(gates[k] for k in required):
         raise SystemExit("Required previously verified evidence or current preflight report missing")
