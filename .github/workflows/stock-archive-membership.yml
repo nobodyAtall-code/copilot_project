@@ -1,0 +1,56 @@
+name: Mist stock archive membership gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/stock-archive-membership.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout research tools
+        uses: actions/checkout@v4
+
+      - name: Install zstd for verified archive
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+
+      - name: Download and SHA-check previously verified stock source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/vendor reports/archive-membership
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor
+          test -s input/vendor/stock-vendor-source.tar.zst
+          test -s input/vendor/stock-vendor-source.sha256
+          (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+
+      - name: Cross-check HAL executable paths and module inventory
+        run: |
+          set -euo pipefail
+          python3 scripts/check_stock_archive_membership.py \
+            --archive input/vendor/stock-vendor-source.tar.zst \
+            --config research/generated/mist-stock-config.json \
+            --out reports/archive-membership
+          test -s reports/archive-membership/archive-membership.json
+          test -s reports/archive-membership/archive-membership.md
+
+      - name: Upload review only reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-archive-membership-review
+          path: reports/archive-membership/
+          if-no-files-found: warn
+          retention-days: 14
