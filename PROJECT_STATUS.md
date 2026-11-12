@@ -1,6 +1,6 @@
 # MIST / LINEAGEOS 23.2 — LIVE PROJECT STATUS AND NEXT-CHAT HANDOVER
 
-**Last reviewed: 12 November 2026 (Malaysia time).**  
+**Last reviewed: 13 November 2026 (Malaysia time).**  
 **Start every new chat here:** `copilot_project/PROJECT_STATUS.md`. Check GitHub Actions for later runs and update this file with **verified** changes before ending a development session. This is a living Markdown status file. For an explicit **HANDOVER**, also generate a proper, updated PDF; do not merely reuse an older PDF.
 
 ## 1. Goal and strict rules
@@ -303,9 +303,19 @@ From the published `mist-archive-membership.json`:
 - [Commit 151e3c8](https://github.com/nobodyAtall-code/copilot_project/commit/151e3c8849e3a795affd653f63cbec2acbf0d0af) modifies **only** `.github/workflows/mist-stock-super-metadata.yml` in `copilot_project/main`: installs Ubuntu `golang-go` alongside existing metadata tools, asserts `command -v go`, reports compiler version, and formats comparator invocation. It preserves all firmware, checksum and independent size comparison checks; no production repository modifications.
 - New [run 43265353383](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43265353383) was **in progress** at documentation time. Its Go/Python partition comparison is **not yet confirmed**. Check the exact result and compare JSON; on success, group maxima still require AOSP `lpdump`/OTA interpretation before editing production `BoardConfig.mk`. No LineageOS build, boot or flash validation exists.
 
+### 13 November 2026 — independent LP size match; boot-chain layout review and first evidence-based BoardConfig update
+
+- **Super verification COMPLETE for populated partition allocations only:** [run 43265353383](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43265353383), job 131347323611, **SUCCESS**; full job logs and uploaded [artifact 13967135180](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43265353383/artifacts/13967135180) personally inspected. Go 1.22.2 installed; the original Xiaomi firmware MD5 `c4450c4e168052ca9de1211306d3beff` verified; all three LP metadata slots passed Python integrity and primary/backup checks; pinned Go parser agrees with **all 8 populated partition names and sizes**, with zero missing, unexpected, or differing allocations. See [complete independent report](research/mist-lp-boot-chain-verified-2026-11-13.md).
+- **Important remaining LP gate:** Go reader does **not** independently validate `qti_dynamic_partitions_a/b` group maximum `10190061568` bytes, membership, A/B OTA design or `mi_ext` repackaging. Those maxima are checksum-verified by the Python parser **only**. Keep production `BOARD_SUPER_PARTITION_GROUPS` unset until official AOSP `lpdump`/device evidence and OTA engineering corroborate it.
+- **Stock boot-chain structures checked:** committed [read-only inspector](scripts/inspect_mist_boot_chain.py) `28c4933` and [research workflow](.github/workflows/mist-stock-boot-chain-review.yml) `3007961`, **only in copilot_project**. [Run 43266837030](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43266837030), job 131352527506, **SUCCESS**. Checked actual logs and [artifact 13966113003](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43266837030/artifacts/13966113003); all 7 original stock boot-image SHA256 values pass; no header/offset parser errors.
+- Boot facts: `boot.img` header v4, exact 36801024-byte kernel, **no ramdisk**; `init_boot.img` header v4 and 2478317-byte LZ4-legacy ramdisk; dedicated `recovery.img` header v4 with 28157475-byte LZ4-legacy ramdisk; `vendor_boot.img` header v4 with one ramdisk fragment (10992661 bytes, LZ4-legacy), 4390641-byte DTB and 204-byte bootconfig; `dtbo.img` Android DT table v0 with **22 entries**; stock `vbmeta.img` and `vbmeta_system.img` AVB0 headers parse but **AVB signatures, chains, rollback keys not validated**.
+- **Production device tree advanced**, not experimental: [`android_device_xiaomi_mist` commit 81e6bed](https://github.com/nobodyAtall-code/android_device_xiaomi_mist/commit/81e6bed4685e4557a83b8e5d9ab5d98047846305) on existing `main` adds `BOARD_INIT_BOOT_HEADER_VERSION := 4`, `BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)`, and `BOARD_RAMDISK_USE_LZ4 := true`. Based on verified stock structure and LineageOS 23.2 board conventions; no unverified DTBO, group sizing, fstab, keys, HAL or binary files added.
+- Extended the **research-only** production tree preflight script [commit 2b87184](https://github.com/nobodyAtall-code/copilot_project/commit/2b871846d178b5f74d3a3065eb0b37eb562b1a01) to check the new stock-backed BoardConfig fields. [Run 43267449619](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43267449619) **in progress when this section was first written**; inspect its final outcome and logs before declaring the new preflight passed. All GitHub Actions workflows remain exclusively in copilot_project. No PRs or new branches.
+- **NEXT:** validate revised preflight run; independently verify group capacities/slot semantics with official AOSP `lpdump`; review dtb/dtbo fragment mapping, bootconfig, vendor ramdisk modules; then source-backed partition/boot packaging, VINTF/SEPolicy and first real LineageOS 23.2 lunch/Soong build. **No ROM build/boot/flash success** is demonstrated.
+
 ## 4. Research/report files — read in this order
 
-1. `research/device-facts.md`: on-device facts and boot/partition sizes.
+1. `research/mist-lp-boot-chain-verified-2026-11-13.md`: latest independent LP partition-size agreement and SHA256-verified stock boot-chain header audit, including the first evidence-based device BoardConfig change.\n2. `research/device-facts.md`: on-device facts and boot/partition sizes.
 2. `research/mist-evidence-reconciliation-2026-11-12.md`: HAL/RC evidence and key cautions.
 3. `research/generated/mist-stock-config.md` and `.json`: actual VINTF, init, fstab and module research output.
 4. `research/generated/mist-archive-membership.md` and `.json`: service and manifest path membership results.
@@ -313,7 +323,7 @@ From the published `mist-archive-membership.json`:
 6. `research/stock-audit-run-43174896778.md` and `research/staged-archive-audit-run-43178657329.md`: raw extraction and hash evidence.
 7. `research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf`: previous dated PDF handover; superseded by this live status file for new work.
 
-## 5. Next actionable development tasks (in priority order)
+## 5. Next actionable development tasks (historical backlog; latest 13 November priority above supersedes order)
 
 1. **START WITH LATEST GITHUB STATUS**, then inspect the successfully published [missing-path review](https://github.com/nobodyAtall-code/copilot_project/blob/main/research/generated/mist-missing-path-review.md) from [run 43185479167](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43185479167). Missing references: 18 declarations, 16 unique paths; one missing KeyMint VINTF XML file; 13 related stock KeyMint/Keymaster filenames. Review each clue, not just counts.
 2. Resolve missing KeyMint VINTF path and missing service executables **against real stock archive members**, relevant symlink targets, executable presence, filename variations, alternate partition mounts and active SKU manifest combinations. Distinguish missing vs optional factory features. Do not invent results.
@@ -329,7 +339,7 @@ From the published `mist-archive-membership.json`:
 - Device `proprietary-files.txt` now covers **31** stock files (13 security libraries, 5 HAL binaries, 5 init RC, 4 VINTF manifests, 4 HAL implementation shared libraries); the complete device-wide proprietary manifest remains incomplete.
 - Production proprietary vendor tree contains **22 binary/library files** and corresponding build declarations (commits 129e2b1, b5b802b, e728fe4), but **the full vendor tree remains incomplete**. Kernel-prebuilt repository now contains verified stock ARM64 Image (commit 6981da9), wired in device BoardConfig (cf78970), but module/DTBO/vendor_boot integration remains incomplete.
 - Research-only metadata/DT_NEEDED inspector committed, but no verified completed report or complete library closure, symlink/mode validation, or actual module ABI assessment.
-- No validated dynamic partition group capacities or finished BoardConfig/AVB/SELinux configuration.
+- Stock dynamic group maxima and per-partition allocations are checksum-validated, and **eight populated partition sizes match the independent Go parser**; however, group maxima/slot OTA semantics lack independent AOSP `lpdump` verification. Production dynamic-group BoardConfig, AVB and SELinux remain incomplete.
 - No ROM build, lunch verification, boot, recovery validation or hardware testing.
 - No evidence that missing service names mean their functionality is absent from the device.
 
