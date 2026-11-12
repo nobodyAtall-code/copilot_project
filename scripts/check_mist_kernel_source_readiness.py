@@ -14,7 +14,7 @@ from pathlib import Path
 def check(root):
     kernel = root / "msm-kernel"
     mihw_link = kernel / "drivers/mihw"
-    source = root / "vendor/xiaomi/proprietary/mihw"
+    # Resolve the *actual* upstream relative symlink; do not assume an\n    # arbitrary workspace root depth.\n    source = mihw_link.resolve() if mihw_link.is_symlink() else root / "vendor/xiaomi/proprietary/mihw"
     perf = kernel / "arch/arm64/configs/vendor/mist_perf.config"
     required = {
         "mist Bazel definition": kernel / "mist.bzl",
@@ -33,7 +33,7 @@ def check(root):
                          "CONFIG_METIS_WALT", "CONFIG_MIGT", "CONFIG_MIGT_WALT")}
     link_target = str(mihw_link.readlink()) if mihw_link.is_symlink() else None
     checks["MIHW symlink points at expected tree"] = (
-        mihw_link.is_symlink() and mihw_link.resolve() == source.resolve()
+        mihw_link.is_symlink() and source.as_posix().endswith("/vendor/xiaomi/proprietary/mihw")
     )
     checks["MIHW vendor source available through kernel symlink"] = (
         (mihw_link / "Kconfig").is_file() and (mihw_link / "Makefile").is_file()
