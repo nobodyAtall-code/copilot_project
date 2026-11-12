@@ -1,0 +1,96 @@
+name: Mist HAL dependency closure gate
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/summarize_mist_hal_dependencies.py'
+      - '.github/workflows/mist-hal-dependency-closure.yml'
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: mist-hal-dependency-closure
+  cancel-in-progress: false
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install and verify source, with full fastboot fallback
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          python3 -m venv .elf-venv
+          .elf-venv/bin/python -m pip install pyelftools==0.32
+          mkdir -p input/vendor
+          if gh run download 43174896778 --repo "${{ github.repository }}" --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor &&
+             test -s input/vendor/stock-vendor-source.tar.zst &&
+             (cd input/vendor && sha256sum -c stock-vendor-source.sha256); then
+            echo "SHA-verified prior archive from full fastboot extraction"
+          else
+            echo "Archived data unavailable: downloading complete fastboot firmware"
+            rm -rf input/vendor
+            mkdir -p input/vendor work reports
+            sudo apt-get install -y --no-install-recommends pigz android-sdk-libsparse-utils erofs-utils golang-go
+            python3 -u scripts/multicdn.py
+            grep -q 'c4450c4e168052ca9de1211306d3beff' reports/firmware.md5
+            mkdir -p work/unpacked
+            pigz -dc work/*.tgz | tar -xf - -C work/unpacked
+            rm -f work/*.tgz
+            git clone -q https://github.com/soe1hom-arch/lpunpack-go.git work/lpunpack-src
+            git -C work/lpunpack-src checkout --detach -q 073a3302a3c3ffae01633989e6dd1e60b6de15b7
+            (cd work/lpunpack-src && CGO_ENABLED=0 go build -o "$GITHUB_WORKSPACE/work/lpunpack" .)
+            chmod +x work/lpunpack
+            bash scripts/extract_partitions.sh
+            sudo python3 scripts/stage_vendor_sources.py
+            cp reports/stock-vendor-source.tar.zst reports/stock-vendor-source.sha256 input/vendor/
+            (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+          fi
+      - name: Get published device manifest
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 https://raw.githubusercontent.com/nobodyAtall-code/android_device_xiaomi_mist/main/proprietary-files.txt -o device-manifest.txt
+          test "$(grep -c '^vendor/' device-manifest.txt)" -eq 27
+      - name: Inspect five real vendor HAL ELF dependency closures
+        run: |
+          set -euo pipefail
+          .elf-venv/bin/python -m py_compile scripts/inspect_stock_elf_metadata.py scripts/summarize_mist_hal_dependencies.py
+          .elf-venv/bin/python scripts/inspect_stock_elf_metadata.py \
+            --archive input/vendor/stock-vendor-source.tar.zst \
+            --output reports/actual-hal-elf.json \
+            --seed vendor_a/bin/hw/android.hardware.bluetooth@aidl-service-qti \
+            --seed vendor_a/bin/hw/android.hardware.gatekeeper-service-qti \
+            --seed vendor_a/bin/hw/android.hardware.gnss-aidl-service-qti \
+            --seed vendor_a/bin/hw/android.hardware.health-service.qti \
+            --seed vendor_a/bin/hw/android.hardware.thermal-service.qti
+          .elf-venv/bin/python scripts/summarize_mist_hal_dependencies.py \
+            --input reports/actual-hal-elf.json \
+            --output research/generated/mist-five-hal-dependencies.json \
+            --vendor-manifest device-manifest.txt
+      - name: Upload dependency graph research
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-five-hal-dependency-graph
+          path: |
+            reports/actual-hal-elf.json
+            research/generated/mist-five-hal-dependencies.json
+            research/generated/mist-five-hal-dependencies.md
+          retention-days: 14
+          if-no-files-found: error
+      - name: Persist actionable report on main
+        run: |
+          set -euo pipefail
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          git add -- research/generated/mist-five-hal-dependencies.json research/generated/mist-five-hal-dependencies.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "mist: publish five HAL stock dependency closure findings"
+          git pull --rebase origin main
+          git push origin HEAD:main
