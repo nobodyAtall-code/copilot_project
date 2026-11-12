@@ -35,7 +35,16 @@ def main():
     k = kernel / "kernel"
     check("kernel payload present", k.is_file() and k.stat().st_size > 1024 * 1024, "stock Image must be committed to kernel prebuilt tree")
     if k.is_file():
-        checks["kernel_sha256"] = hashlib.file_digest(k.open("rb"), "sha256").hexdigest()
+        with k.open("rb") as stream:
+            digest = hashlib.file_digest(stream, "sha256").hexdigest()
+        checks["kernel_sha256"] = digest
+        lock = kernel / "kernel-source.json"
+        if lock.is_file():
+            stock_meta = json.loads(lock.read_text())
+            check("kernel stock SHA256", digest == stock_meta.get("kernel_sha256"), "kernel Image must match the locked stock boot-image extraction")
+            check("kernel stock source", stock_meta.get("source") == "Xiaomi Global OS3.0.304.0.WPUMIXM", "expected exact stock firmware provenance")
+        else:
+            problems.append("Missing kernel-source.json provenance lock")
     manifest = device / "proprietary-files.txt"
     paths = []
     if manifest.is_file():
