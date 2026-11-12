@@ -100,6 +100,23 @@ jobs:
           shutil.copy2(src_ext,root_build/'msm_kernel_extensions.bzl')
           if not (root_build/'BUILD.bazel').exists() and not (root_build/'BUILD').exists():
             (root_build/'BUILD.bazel').write_text('package(default_visibility = ["//visibility:public"])\\n')
+          # DIAGNOSTIC-ONLY: public Xiaomi source points drivers/mihw to
+          # unreleased vendor/xiaomi/proprietary/mihw. Do not fabricate code.
+          # With both source config fragments verified to omit CONFIG_MIHW,
+          # guard only the unavailable Kconfig include in this temporary clone.
+          kconfig=pathlib.Path('msm-kernel/drivers/Kconfig')
+          required='source "drivers/mihw/Kconfig"'
+          base=pathlib.Path('msm-kernel/arch/arm64/configs/gki_defconfig')
+          perf=pathlib.Path('msm-kernel/arch/arm64/configs/vendor/mist_perf.config')
+          for cfg in (base,perf):
+            assert cfg.is_file(), 'Required defconfig missing: '+str(cfg)
+            assert not any(line.strip().startswith('CONFIG_MIHW=') for line in cfg.read_text().splitlines()), 'Refusing to guard configured MIHW: '+str(cfg)
+          assert pathlib.Path('msm-kernel/drivers/mihw').is_symlink(), 'Unexpected MIHW layout'
+          assert not pathlib.Path('vendor/xiaomi/proprietary/mihw/Kconfig').exists(), 'MIHW source now available; remove diagnostic workaround'
+          content=kconfig.read_text()
+          assert content.count(required)==1, 'Expected exactly one MIHW Kconfig include'
+          kconfig.write_text(content.replace(required,'# DIAGNOSTIC ONLY: missing proprietary MIHW source (not boot validated)'))
+          print('DIAGNOSTIC-ONLY: guarded unavailable MIHW Kconfig include; kernel output MUST NOT replace stock',flush=True)
           print('Pinned Xiaomi sources and //build extension assembled',flush=True)
           PY
       - name: Query and attempt real Mist Bazel compilation
@@ -125,7 +142,7 @@ jobs:
           echo "BAZEL_BUILD_EXIT=$build_rc"
           python3 - "$RESULT" "$query_rc" "$build_rc" <<'PY'
           import json,sys
-          json.dump(dict(query_exit=int(sys.argv[2]),build_exit=int(sys.argv[3]),kernel_compiled=int(sys.argv[3])==0,validated_stock_abi=False,boot_tested=False),open(sys.argv[1],'w'),indent=2)
+          json.dump(dict(query_exit=int(sys.argv[2]),build_exit=int(sys.argv[3]),experimental_kernel_compiled=int(sys.argv[3])==0,kernel_compiled=False,diagnostic_missing_mihw_guard=True,validated_stock_abi=False,boot_tested=False),open(sys.argv[1],'w'),indent=2)
           PY
           exit "$build_rc"
       - name: Upload build diagnostic log
