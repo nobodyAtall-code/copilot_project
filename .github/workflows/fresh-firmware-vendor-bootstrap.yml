@@ -2,11 +2,6 @@ name: Mist fresh-firmware vendor library bootstrap
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/fresh-firmware-vendor-bootstrap.yml'
-      - 'scripts/publish_mist_vendor_batch.py'
 
 permissions:
   contents: read
@@ -86,8 +81,8 @@ jobs:
           gh repo clone nobodyAtall-code/proprietary_vendor_xiaomi_mist output/production -- --quiet
           cd output/production
           git checkout -B main
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
           if test -e Android.bp || test -e mist-vendor.mk; then
             echo 'Production vendor files already exist; refusing destructive replacement'
             exit 1
