@@ -218,6 +218,14 @@ From the published `mist-archive-membership.json`:
 - New [run 43207575528](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43207575528) **in progress at last check**. Inspect logs for additional fatal dependencies and move toward original-source-preserving build and stock ABI verification. Treat restoring missing official MIHW source as the preferred production path.
 - Known limitation: this run still performs full pinned Android kernel dependency sync on each fresh hosted runner (several minutes), and its outcome or speed improvement has not been verified.
 
+### 12 November 2026 — confirmed MIHW-enabled stock config; isolated diagnostic-only override
+
+- [Run 43207575528](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43207575528), job 131146526689: **FAILED in Xiaomi source overlay before Bazel**, after Android repo sync and all nine pinned Xiaomi clones succeeded. Exact assertion: `Refusing to guard configured MIHW: msm-kernel/arch/arm64/configs/vendor/mist_perf.config`. No compiler run or kernel output; artifact upload found no generated files.
+- Directly checked pinned Mist source configuration: `arch/arm64/configs/vendor/mist_perf.config` **line 348 contains `CONFIG_MIHW=y`**. The previous status claim that Mist perf omits MIHW was incorrect; this is explicitly corrected here. Missing `vendor/xiaomi/proprietary/mihw/Kconfig` remains a genuine source dependency. Do not imply MIHW is optional for a stock-compatible build.
+- In [commit ca606f5](https://github.com/nobodyAtall-code/copilot_project/commit/ca606f5e9c3e3a2fb4c125bc9246e945cab83293), changed only the research GitHub Actions workflow: a strict assertion confirms exactly one stock `CONFIG_MIHW=y`, then temporarily changes it to `# CONFIG_MIHW is not set` in the disposable runner clone *before* guarding the unavailable Kconfig include. GKI configuration must not enable MIHW. This is solely intended to reveal subsequent toolchain/compile blockers. Original production source and stock kernel prebuilt remain untouched. **Any output from this modified config is not flashable, not ABI validated, and not an acceptable production kernel.**
+- Workflow push on existing `main` should trigger the next run; verify the actual new run ID and job outcome rather than assuming success.
+- **Production blocker remains:** identify and pin authentic Mist-compatible MIHW sources and restore the official `CONFIG_MIHW=y` build. Separately validate any eventual kernel binary/modules and stock ABI before device usage.
+
 ## 4. Research/report files — read in this order
 
 1. `research/device-facts.md`: on-device facts and boot/partition sizes.
