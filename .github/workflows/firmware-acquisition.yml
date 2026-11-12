@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p work reports
-          python3 -m py_compile scripts/multicdn.py scripts/inventory_partitions.py
+          python3 -m py_compile scripts/multicdn.py scripts/inventory_partitions.py scripts/stage_vendor_sources.py
           bash -n scripts/extract_partitions.sh
           python3 -u scripts/multicdn.py
           sha256sum work/*.tgz > reports/firmware.sha256
@@ -68,6 +68,7 @@ jobs:
         run: |
           set -euo pipefail
           bash scripts/extract_partitions.sh
+          sudo python3 scripts/stage_vendor_sources.py
           df -h . > reports/disk-after-partitions.txt
 
       - name: Upload partition and library inventories
@@ -80,6 +81,7 @@ jobs:
             reports/*.txt
             reports/*.sha256
             reports/*.md5
+            reports/proprietary-candidates.txt
           if-no-files-found: warn
           retention-days: 14
 
@@ -89,6 +91,18 @@ jobs:
         with:
           name: mist-global-OS3.0.304.0-all-so
           path: reports/all-shared-libraries.tar.zst
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload stock vendor sources for review
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-global-OS3.0.304.0-vendor-source
+          path: |
+            reports/stock-vendor-source.tar.zst
+            reports/stock-vendor-source.sha256
           compression-level: 0
           if-no-files-found: error
           retention-days: 14
