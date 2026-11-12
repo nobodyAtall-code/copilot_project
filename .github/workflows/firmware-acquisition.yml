@@ -17,31 +17,102 @@ jobs:
           set -euo pipefail
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk /opt/hostedtoolcache
           sudo apt-get update -qq
-          sudo apt-get install -y aria2 pigz p7zip-full
+          sudo apt-get install -y --no-install-recommends aria2 pigz
           df -h .
-      - name: Download official Global fastboot ROM (16 connections)
+
+      - name: Select fastest working firmware CDN
+        id: cdn
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p work reports
           FILE="mist_global_images_OS3.0.304.0.WPUMIXM_20260917.0000.00_16.0_global_c4450c4e16.tgz"
-          URL="https://bigota.d.miui.com/OS3.0.304.0.WPUMIXM/$FILE"
-          aria2c --continue=true --max-connection-per-server=16 --split=16 --min-split-size=1M --file-allocation=none --max-tries=10 --retry-wait=10 --timeout=60 --dir=work --out="$FILE" "$URL"
-          echo "c4450c4e168052ca9de1211306d3beff  work/$FILE" | md5sum --check
-          sha256sum "work/$FILE" > reports/firmware.sha256
-          printf 'source=%s\nversion=OS3.0.304.0.WPUMIXM\nregion=Global\nmd5=c4450c4e168052ca9de1211306d3beff\n' "$URL" > reports/source.txt
+          REL="OS3.0.304.0.WPUMIXM/$FILE"
+          OFFICIAL="https://bigota.d.miui.com/$REL"
+          # Alternative Xiaomi OTA CDN used for the same path; verify it serves a byte range.
+          ALTERNATIVE="https://cdn-ota.azureedge.net/$REL"
+          BEST_URL="$OFFICIAL"
+          BEST_SPEED=0
+          : > reports/cdn-probes.tsv
+          printf 'endpoint\thttp_status\tspeed_Bps\tbytes_received\n' > reports/cdn-probes.tsv
+
+          for URL in "$OFFICIAL" "$ALTERNATIVE"; do
+            echo "::group::Probing ${URL%%/OS3*}"
+            RESULT=$(curl -L -sS --connect-timeout 6 --max-time 18 \
+              --range 0-4194303 -o /dev/null \
+              -w '%{http_code} %{speed_download} %{size_download}' \
+              "$URL") || RESULT="000 0 0"
+            read -r STATUS SPEED BYTES <<< "$RESULT"
+            printf '%s\t%s\t%s\t%s\n' "$URL" "$STATUS" "$SPEED" "$BYTES" >> reports/cdn-probes.tsv
+            echo "HTTP: $STATUS, average bytes/sec: $SPEED, bytes returned: $BYTES"
+            # 206 + exact length proves byte-range support, not whole-file correctness.
+            if [[ "$STATUS" == 206 && "$BYTES" == 4194304 ]]; then
+              if awk -v a="$SPEED" -v b="$BEST_SPEED" 'BEGIN {exit !(a > b)}'; then
+                BEST_SPEED="$SPEED"
+                BEST_URL="$URL"
+              fi
+            fi
+            echo "::endgroup::"
+          done
+
+          echo "Selected CDN: $BEST_URL"
+          printf 'selected=%s\n' "$BEST_URL" > reports/cdn-selection.txt
+          echo "url=$BEST_URL" >> "$GITHUB_OUTPUT"
+          echo "official=$OFFICIAL" >> "$GITHUB_OUTPUT"
+          echo "filename=$FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Download Global fastboot ROM (16 connections, fallback)
+        shell: bash
+        env:
+          PRIMARY_URL: ${{ steps.cdn.outputs.url }}
+          OFFICIAL_URL: ${{ steps.cdn.outputs.official }}
+          FIRMWARE_FILE: ${{ steps.cdn.outputs.filename }}
+        run: |
+          set -euo pipefail
+          download() {
+            local url="$1"
+            aria2c \
+              --continue=true \
+              --max-connection-per-server=16 \
+              --split=16 \
+              --min-split-size=1M \
+              --piece-length=1M \
+              --file-allocation=none \
+              --enable-http-keep-alive=true \
+              --connect-timeout=15 \
+              --timeout=45 \
+              --max-tries=5 \
+              --retry-wait=3 \
+              --summary-interval=30 \
+              --dir=work --out="$FIRMWARE_FILE" "$url"
+          }
+          if ! download "$PRIMARY_URL"; then
+            if [[ "$PRIMARY_URL" == "$OFFICIAL_URL" ]]; then
+              echo "::error::The official CDN download failed."
+              exit 1
+            fi
+            echo "::warning::Selected CDN failed; resuming against the official Xiaomi CDN."
+            download "$OFFICIAL_URL"
+          fi
+          echo "Verifying complete downloaded ROM against known MD5"
+          echo "c4450c4e168052ca9de1211306d3beff  work/$FIRMWARE_FILE" | md5sum --check
+          sha256sum "work/$FIRMWARE_FILE" > reports/firmware.sha256
+          printf 'version=OS3.0.304.0.WPUMIXM\nregion=Global\nmd5=c4450c4e168052ca9de1211306d3beff\nselected_url=%s\n' "$PRIMARY_URL" > reports/source.txt
+
       - name: Extract archive and inventory images
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p work/unpacked
-          tar -xzf work/*.tgz -C work/unpacked
+          # pigz decompresses in parallel; tar reads the stream.
+          pigz -dc work/*.tgz | tar -xf - -C work/unpacked
           find work/unpacked -type f -printf '%P\t%s bytes\n' | sort > reports/archive-files.tsv
           find work/unpacked -type f -name '*.img' -printf '%P\t%s bytes\n' | sort > reports/images.tsv
           find work/unpacked -type f -name '*.img' -print0 | xargs -0 -r sha256sum > reports/images.sha256
           df -h . > reports/disk-usage.txt
           test -s reports/images.tsv
-      - name: Upload verified acquisition reports
+
+      - name: Upload acquisition reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
