@@ -369,6 +369,14 @@ From the published `mist-archive-membership.json`:
 - **Next practical implementation task**: check these specific SONAMEs against actual LineageOS 23.2 platform and system/APEX contents and linker namespaces, prioritize KeyMint/Keymaster VINTF and service registration against verified stock, then build production device/vendor/kernel content once evidence supports it; do not keep re-running the entire expensive stock scanner just to reproduce the same 11 names. First real LineageOS build remains outstanding.
 - This turn documented existing evidence only; **no new workflow launched** because the stock inventory is already conclusive for its restricted scope and repeating the workflow would be wasteful. Standing run/pause rule still applies for the next meaningful engineering workflow.
 
+
+### 13 November 2026 — stock filesystem BoardConfig integration and first live build-system attempt
+
+- Read this status file and `research/mist-elf-soname-triage-2026-11-13.md` before changes; checked current main trees: device `1f8fee56`, vendor `e728fe4`, prebuilt kernel `6981da9`, kernel source `fe8024a`, kernel_build `ee8c9d0`.
+- Made a **production device-tree configuration change**, commit [223faf9](https://github.com/nobodyAtall-code/android_device_xiaomi_mist/commit/223faf95071b79d49092f3bd0febf75a0422698e), to explicitly set `BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs` and `BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs` in `BoardConfig.mk` based on stock OS3.0.304.0 vendor EROFS / userdata F2FS observations. Does not change dynamic-group maximums or AVB metadata. Commit made through GitHub file API; Git commit author is determined by connected GitHub identity, **not verified as requested git author**; future cross-repo workflow shell commits must explicitly configure `nobodyAtall-code <hashyofficial@gmail.com>`.
+- Confirmed the official LineageOS source manifest has `lineage-23.2` and official `android_vendor_lineage/vars/aosp_target_release` currently contains `aosp_target_release=bp4a`. Next integration test uses the real `lineage_mist-bp4a-userdebug` release selection, not the older two-component lunch shorthand.
+- **Still unresolved:** 11-SONAME platform/APEX namespace triage; KeyMint service / VINTF missing-stock-path discrepancy; incomplete vendor dependencies and dynamic partitions; real build/boot. No generated bootable images. The staged build-system workflow will attempt full source sync in temporary hosted-runner storage; sync/storage failures must be treated as infra blockers, not Soong failures. Do not publish firmware in logs/artifacts.
+
 ## 4. Research/report files — read in this order
 
 1. `research/mist-vendor-soong-audit-2026-11-13.md`: most recent verified 31-module Soong/product structural parity check and explicit limitations.
