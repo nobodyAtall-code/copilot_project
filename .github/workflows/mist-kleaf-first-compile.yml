@@ -1,0 +1,131 @@
+name: Mist first pinned Kleaf kernel compile attempt
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-kleaf-first-compile.yml'
+permissions:
+  contents: read
+concurrency:
+  group: mist-first-kleaf-compile
+  cancel-in-progress: false
+jobs:
+  compile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure host and Git identity
+        run: |
+          set -euo pipefail
+          git config --global user.name "nobodyAtall-code"
+          git config --global user.email "hashyofficial@gmail.com"
+          sudo apt-get update
+          sudo apt-get install -y git git-lfs curl python3 python3-pip unzip zip rsync bc bison flex libssl-dev libelf-dev build-essential
+          git lfs install
+      - name: Assemble Android 15 / Linux 6.6 Kleaf dependency workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/mist-kleaf"
+          cd "$RUNNER_TEMP/mist-kleaf"
+          curl -fsSL https://storage.googleapis.com/git-repo-downloads/repo -o repo
+          install -m 755 repo "$RUNNER_TEMP/repo"
+          export PATH="$RUNNER_TEMP:$PATH"
+          repo init -u https://android.googlesource.com/kernel/manifest -b common-android15-6.6 --partial-clone --no-repo-verify
+          git -C .repo/manifests checkout --detach 1863b57ae47bf254a3a08d21ba6c8c2ac13ff239
+          echo "Using pinned Google kernel manifest $(git -C .repo/manifests rev-parse HEAD)"
+          repo sync -c -j 4 --no-tags --fail-fast --partial-clone
+          test -d build/kernel
+          test -d common
+          test -d prebuilts/clang/host/linux-x86
+          test -f build/bazel_common_rules/dist/dist.bzl
+          df -h .
+      - name: Overlay exact pinned Xiaomi sources in disposable workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/mist-kleaf"
+          python3 - "${GITHUB_WORKSPACE}/research/micode-mist-w-oss-source-lock.json" <<'PY'
+          import json,subprocess,sys,os,shutil,pathlib
+          lock=json.load(open(sys.argv[1]))
+          expected={x['repo']:x['sha'] for x in lock['sources']}
+          specs=[
+            ('nobodyAtall-code/kernel_build','build/kernel'),
+            ('nobodyAtall-code/android_kernel_xiaomi_mist','msm-kernel'),
+            ('MiCode/kernel_devicetree','_mist_extra/kernel_devicetree'),
+            ('MiCode/vendor_qcom_opensource_wlan','_mist_extra/vendor_qcom_opensource_wlan'),
+            ('MiCode/vendor_qcom_opensource_audio-kernel','_mist_extra/vendor_qcom_opensource_audio-kernel'),
+            ('MiCode/vendor_qcom_opensource_data-kernel','_mist_extra/vendor_qcom_opensource_data-kernel'),
+            ('MiCode/vendor_qcom_opensource_camera-kernel','_mist_extra/vendor_qcom_opensource_camera-kernel'),
+            ('MiCode/vendor_qcom_proprietary_display-devicetree','_mist_extra/vendor_qcom_proprietary_display-devicetree'),
+            ('MiCode/vendor_qcom_proprietary_camera-devicetree','_mist_extra/vendor_qcom_proprietary_camera-devicetree'),
+          ]
+          for remote,dest in specs:
+            path=pathlib.Path(dest)
+            # No production checkout is ever touched: this workspace is under RUNNER_TEMP.
+            if path.exists(): shutil.rmtree(path)
+            path.parent.mkdir(parents=True,exist_ok=True)
+            url='https://github.com/'+remote+'.git'
+            subprocess.run(['git','clone','--filter=blob:none','--no-checkout',url,dest],check=True)
+            subprocess.run(['git','-C',dest,'checkout','--detach',expected[remote]],check=True)
+            got=subprocess.check_output(['git','-C',dest,'rev-parse','HEAD'],text=True).strip()
+            assert got==expected[remote],(remote,got,expected[remote])
+            print('PIN',remote,got,flush=True)
+          source=pathlib.Path('_mist_extra/kernel_devicetree')
+          dest=pathlib.Path('msm-kernel/arch/arm64/boot/dts/vendor')
+          dest.mkdir(parents=True,exist_ok=True)
+          shutil.copytree(source,dest,dirs_exist_ok=True,ignore=shutil.ignore_patterns('.git'))
+          # Map vendor kernel trees to the directory layout expected by Qualcomm build rules.
+          mappings={
+            'vendor_qcom_opensource_wlan':'vendor/qcom/opensource/wlan',
+            'vendor_qcom_opensource_audio-kernel':'vendor/qcom/opensource/audio-kernel',
+            'vendor_qcom_opensource_data-kernel':'vendor/qcom/opensource/data-kernel',
+            'vendor_qcom_opensource_camera-kernel':'vendor/qcom/opensource/camera-kernel',
+            'vendor_qcom_proprietary_display-devicetree':'vendor/qcom/proprietary/display-devicetree',
+            'vendor_qcom_proprietary_camera-devicetree':'vendor/qcom/proprietary/camera-devicetree',
+          }
+          for name,target in mappings.items():
+            dst=pathlib.Path(target);dst.parent.mkdir(parents=True,exist_ok=True)
+            if dst.is_symlink():dst.unlink()
+            elif dst.exists():shutil.rmtree(dst)
+            dst.symlink_to(pathlib.Path(os.path.relpath(pathlib.Path('_mist_extra')/name,dst.parent)))
+          print('Pinned Xiaomi sources assembled; compile validation still pending',flush=True)
+          PY
+      - name: Query and attempt real Mist Bazel compilation
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$RUNNER_TEMP/mist-kleaf"
+          mkdir -p "$GITHUB_WORKSPACE/research/generated"
+          LOG="$GITHUB_WORKSPACE/research/generated/mist-kleaf-first-compile.log"
+          RESULT="$GITHUB_WORKSPACE/research/generated/mist-kleaf-first-compile-result.json"
+          exec > >(tee "$LOG") 2>&1
+          echo "=== Actual Bazel target discovery ==="
+          if [[ -x tools/bazel ]]; then BAZEL=tools/bazel
+          elif [[ -x build/kernel/kleaf/bazel.sh ]]; then BAZEL=build/kernel/kleaf/bazel.sh
+          else echo 'No runnable Kleaf Bazel launcher found'; exit 20; fi
+          "$BAZEL" query '//msm-kernel:*mist*' --output=label
+          query_rc=$?
+          echo "BAZEL_QUERY_EXIT=$query_rc"
+          if [[ "$query_rc" -ne 0 ]]; then exit "$query_rc"; fi
+          echo "=== Actual Mist kernel build attempt ==="
+          "$BAZEL" build //msm-kernel:mist --verbose_failures
+          build_rc=$?
+          echo "BAZEL_BUILD_EXIT=$build_rc"
+          python3 - "$RESULT" "$query_rc" "$build_rc" <<'PY'
+          import json,sys
+          json.dump(dict(query_exit=int(sys.argv[2]),build_exit=int(sys.argv[3]),kernel_compiled=int(sys.argv[3])==0,validated_stock_abi=False,boot_tested=False),open(sys.argv[1],'w'),indent=2)
+          PY
+          exit "$build_rc"
+      - name: Upload build diagnostic log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-first-kleaf-compile-diagnostics
+          path: |
+            research/generated/mist-kleaf-first-compile.log
+            research/generated/mist-kleaf-first-compile-result.json
+          if-no-files-found: warn
+          retention-days: 14
