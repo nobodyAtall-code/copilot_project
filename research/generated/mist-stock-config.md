@@ -1,0 +1,389 @@
+# Mist stock VINTF / fstab / init / module audit
+
+**Research evidence only. Not a LineageOS device-tree validation or approved proprietary manifest.**
+
+- Source run: https://github.com/nobodyAtall-code/copilot_project/actions/runs/43178657329
+- Firmware staging run: https://github.com/nobodyAtall-code/copilot_project/actions/runs/43174896778
+- Stock source SHA256: `fe3cb8c3ab6a0e507fc3bcb9aa33222e5b3a218b370323ca1de6e805a36dedfe`
+- Archive members: 4373; selected config entries: 356
+- Parsed VINTF XML: 107; HAL names: 132
+- Fstab files: 3; mountpoints: 47
+- Init .rc files: 143; service names: 251
+- Kernel module metadata files: 14
+- Skipped symlinks/oversized config: 0
+
+## VINTF HAL names (stock declarations, not compatibility proof)
+- `android.hardware.audio.core`
+- `android.hardware.audio.effect`
+- `android.hardware.biometrics.face`
+- `android.hardware.biometrics.fingerprint`
+- `android.hardware.bluetooth`
+- `android.hardware.bluetooth.audio`
+- `android.hardware.boot`
+- `android.hardware.camera.provider`
+- `android.hardware.drm`
+- `android.hardware.dumpstate`
+- `android.hardware.gatekeeper`
+- `android.hardware.gnss`
+- `android.hardware.graphics.allocator`
+- `android.hardware.graphics.composer3`
+- `android.hardware.health`
+- `android.hardware.ir`
+- `android.hardware.light`
+- `android.hardware.media.c2`
+- `android.hardware.memtrack`
+- `android.hardware.nfc`
+- `android.hardware.power`
+- `android.hardware.radio.config`
+- `android.hardware.radio.data`
+- `android.hardware.radio.messaging`
+- `android.hardware.radio.modem`
+- `android.hardware.radio.network`
+- `android.hardware.radio.sap`
+- `android.hardware.radio.sim`
+- `android.hardware.radio.voice`
+- `android.hardware.secure_element`
+- `android.hardware.security.keymint`
+- `android.hardware.security.secureclock`
+- `android.hardware.security.sharedsecret`
+- `android.hardware.sensors`
+- `android.hardware.soundtrigger3`
+- `android.hardware.tetheroffload`
+- `android.hardware.thermal`
+- `android.hardware.usb`
+- `android.hardware.usb.gadget`
+- `android.hardware.vibrator`
+- `android.hardware.weaver`
+- `android.hardware.wifi`
+- `android.hardware.wifi.hostapd`
+- `android.hardware.wifi.supplicant`
+- `interfaces.customNvService`
+- `interfaces.factoryAta`
+- `interfaces.factoryInterface`
+- `mapper`
+- `vendor.qti.ImsRtpService`
+- `vendor.qti.MemHal`
+- `vendor.qti.data.dmapconsent`
+- `vendor.qti.data.factoryservice`
+- `vendor.qti.data.ntn`
+- `vendor.qti.data.txpwrservice`
+- `vendor.qti.diaghal`
+- `vendor.qti.gnss`
+- `vendor.qti.hardware.ListenSoundModelAidl`
+- `vendor.qti.hardware.agm`
+- `vendor.qti.hardware.alarm`
+- `vendor.qti.hardware.bluetooth_sar`
+- `vendor.qti.hardware.bttpi`
+- `vendor.qti.hardware.cacertaidlservice`
+- `vendor.qti.hardware.camera.postproc`
+- `vendor.qti.hardware.capabilityconfigstore`
+- `vendor.qti.hardware.data.connectionaidl`
+- `vendor.qti.hardware.data.connectionfactory`
+- `vendor.qti.hardware.data.iwlandata`
+- `vendor.qti.hardware.display.color`
+- `vendor.qti.hardware.display.config`
+- `vendor.qti.hardware.display.postproc`
+- `vendor.qti.hardware.dpmaidlservice`
+- `vendor.qti.hardware.dsp`
+- `vendor.qti.hardware.embmssl`
+- `vendor.qti.hardware.fm`
+- `vendor.qti.hardware.mwqemadapteraidlservice`
+- `vendor.qti.hardware.pal`
+- `vendor.qti.hardware.perf2`
+- `vendor.qti.hardware.power.powermodule`
+- `vendor.qti.hardware.qseecom`
+- `vendor.qti.hardware.qspa`
+- `vendor.qti.hardware.qteeconnector`
+- `vendor.qti.hardware.radio.am`
+- `vendor.qti.hardware.radio.atfwd`
+- `vendor.qti.hardware.radio.ims`
+- `vendor.qti.hardware.radio.internal.deviceinfo`
+- `vendor.qti.hardware.radio.lpa`
+- `vendor.qti.hardware.radio.qcriNvOpt`
+- `vendor.qti.hardware.radio.qcrilhook`
+- `vendor.qti.hardware.radio.qtiradio`
+- `vendor.qti.hardware.radio.qtiradioconfig`
+- `vendor.qti.hardware.radio.uim`
+- `vendor.qti.hardware.radio.uim_remote_client`
+- `vendor.qti.hardware.radio.uim_remote_server`
+- `vendor.qti.hardware.secureprocessor.device`
+- `vendor.qti.hardware.sensorscalibrate`
+- `vendor.qti.hardware.servicetrackeraidl`
+- `vendor.qti.hardware.soter`
+- `vendor.qti.hardware.wifi.supplicant`
+- `vendor.qti.hardware.wifi.wifilearner`
+- `vendor.qti.hardware.wifidisplaysession_aidl`
+- `vendor.qti.ims.datachannelservice`
+- `vendor.qti.ims.factoryaidlservice`
+- `vendor.qti.ims.imscmaidlservice`
+- `vendor.qti.ims.uceaidlservice`
+- `vendor.qti.qccvndhal_aidl`
+- `vendor.qti.qesdhalaidl`
+- `vendor.qti.qspmhal`
+- `vendor.qti.snapdragonServices`
+- `vendor.qti.syshealthmon`
+- `vendor.tms.tmsese_aidl`
+- `vendor.tms.tmsnfc_aidl`
+- `vendor.xiaomi.hardware.aidl.mtdservice`
+- `vendor.xiaomi.hardware.aidl.tidaservice`
+- `vendor.xiaomi.hardware.batteryantiaging`
+- `vendor.xiaomi.hardware.blackbox`
+- `vendor.xiaomi.hardware.cld_aidl`
+- `vendor.xiaomi.hardware.displayfeature_aidl`
+- `vendor.xiaomi.hardware.fingerprintextension`
+- `vendor.xiaomi.hardware.fx.tunnel`
+- `vendor.xiaomi.hardware.mfidoca`
+- `vendor.xiaomi.hardware.micharge`
+- `vendor.xiaomi.hardware.miguardca`
+- `vendor.xiaomi.hardware.mikeybag`
+- `vendor.xiaomi.hardware.misauth`
+- `vendor.xiaomi.hardware.misys.common`
+- `vendor.xiaomi.hardware.misys.core`
+- `vendor.xiaomi.hardware.mlipay`
+- `vendor.xiaomi.hardware.mpayjoyca`
+- `vendor.xiaomi.hardware.mrm`
+- `vendor.xiaomi.hardware.vsimapp`
+- `vendor.xiaomi.hw.touchfeature`
+- `vendor.xiaomi.sensor.citsensorservice`
+
+## Fstab mountpoints and filesystem types
+### `vendor_a/etc/charger_fw_fstab.qti`
+- `/vendor/firmware_mnt` : `vfat` ; `wait,slotselect`
+### `vendor_a/etc/fstab.default`
+- `/system` : `erofs` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey:/avb/t-gsi.avbpubkey:/avb/u-gsi.avbpubkey:/avb/v-gsi.avbpubkey`
+- `/system` : `ext4` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey:/avb/t-gsi.avbpubkey:/avb/u-gsi.avbpubkey:/avb/v-gsi.avbpubkey`
+- `/system_ext` : `erofs` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount`
+- `/system_ext` : `ext4` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount`
+- `/product` : `erofs` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount`
+- `/product` : `ext4` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount`
+- `/vendor` : `erofs` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/vendor` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/vendor_dlkm` : `erofs` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/vendor_dlkm` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/system_dlkm` : `erofs` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/system_dlkm` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/odm` : `erofs` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/odm` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/mnt/vendor/mi_ext` : `erofs` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount,nofail`
+- `/mnt/vendor/mi_ext` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount,nofail`
+- `/mi_ext` : `erofs` ; `wait,nofail`
+- `/product/overlay` : `overlay` ; `check,nofail`
+- `/product/app` : `overlay` ; `check,nofail`
+- `/product/priv-app` : `overlay` ; `check,nofail`
+- `/product/lib` : `overlay` ; `check,nofail`
+- `/product/lib64` : `overlay` ; `check,nofail`
+- `/product/bin` : `overlay` ; `check,nofail`
+- `/product/framework` : `overlay` ; `check,nofail`
+- `/product/media` : `overlay` ; `check,nofail`
+- `/product/opcust` : `overlay` ; `check,nofail`
+- `/product/data-app` : `overlay` ; `check,nofail`
+- `/product/etc/sysconfig` : `overlay` ; `check,nofail`
+- `/product/etc/permissions` : `overlay` ; `check,nofail`
+- `/system/app` : `overlay` ; `check,nofail`
+- `/system/priv-app` : `overlay` ; `check,nofail`
+- `/system/framework` : `overlay` ; `check,nofail`
+- `/system/etc/sysconfig` : `overlay` ; `check,nofail`
+- `/system/etc/permissions` : `overlay` ; `check,nofail`
+- `/product/usr` : `overlay` ; `check,nofail`
+- `/product/etc/precust_theme` : `overlay` ; `check,nofail`
+- `/product/etc/preferred-apps` : `overlay` ; `check,nofail`
+- `/product/etc/security` : `overlay` ; `check,nofail`
+- `/system_ext/etc/permissions` : `overlay` ; `check,nofail`
+- `/boot` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/init_boot` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/vendor_boot` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/dtbo` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/recovery` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/metadata` : `f2fs` ; `wait,check,formattable,first_stage_mount`
+- `/mnt/vendor/persist` : `ext4` ; `wait,check`
+- `/data` : `f2fs` ; `latemount,wait,check,formattable,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption,metadata_encryption=aes-256-xts:wrappedkey_v0,quota,reservedsize=128M,sysfs_path=/sys/devices/platform/soc/1d84000.ufshc,checkpoint=fs`
+- `/misc` : `emmc` ; `defaults`
+- `/storage/sdcard1` : `vfat` ; `wait,voldmanaged=sdcard1:auto,encryptable=footer`
+- `/storage/usbotg` : `vfat` ; `wait,voldmanaged=usbotg:auto`
+- `/vendor/firmware_mnt` : `vfat` ; `wait,slotselect`
+- `/vendor/dsp` : `ext4` ; `wait,slotselect`
+- `/vendor/bt_firmware` : `vfat` ; `wait,slotselect`
+- `/mnt/vendor/qmcs` : `vfat` ; `wait,check,formattable`
+### `vendor_a/etc/fstab.emmc`
+- `/system` : `ext4` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey:/avb/t-gsi.avbpubkey:/avb/u-gsi.avbpubkey:/avb/v-gsi.avbpubkey`
+- `/system_ext` : `ext4` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount`
+- `/product` : `ext4` ; `wait,slotselect,avb=vbmeta_system,logical,first_stage_mount`
+- `/vendor` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/vendor_dlkm` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/system_dlkm` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/odm` : `ext4` ; `wait,slotselect,avb=vbmeta,logical,first_stage_mount`
+- `/boot` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/init_boot` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/vendor_boot` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/dtbo` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/recovery` : `emmc` ; `slotselect,avb=vbmeta,first_stage_mount`
+- `/metadata` : `f2fs` ; `wait,check,formattable,first_stage_mount`
+- `/mnt/vendor/persist` : `ext4` ; `wait`
+- `/data` : `f2fs` ; `latemount,wait,check,formattable,fileencryption=aes-256-xts:aes-256-cts:v2+emmc_optimized+wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption,metadata_encryption=aes-256-xts:wrappedkey_v0,quota,reservedsize=128M,checkpoint=fs`
+- `/misc` : `emmc` ; `defaults`
+- `/storage/sdcard1` : `vfat` ; `wait,voldmanaged=sdcard1:auto,encryptable=footer`
+- `/storage/usbotg` : `vfat` ; `wait,voldmanaged=usbotg:auto`
+- `/vendor/firmware_mnt` : `vfat` ; `wait,slotselect`
+- `/vendor/dsp` : `ext4` ; `wait,slotselect`
+- `/product/vm-system` : `ext4` ; `wait,slotselect`
+- `/vendor/bt_firmware` : `vfat` ; `wait,slotselect`
+- `/mnt/vendor/qmcs` : `vfat` ; `wait,check,formattable`
+
+## Stock init services (name and file only)
+- `odm_a/etc/init/android.hardware.weaver.rc`: miweaver_hal_service
+- `odm_a/etc/init/mrm.rc`: vendor.mrmd
+- `odm_a/etc/init/vendor.xiaomi.hardware.aidl.mtdservice-service.rc`: vendor.mtdservice
+- `odm_a/etc/init/vendor.xiaomi.hardware.aidl.tidaservice-service.rc`: vendor.tidaservice
+- `odm_a/etc/init/vendor.xiaomi.hardware.mfidoca-service.rc`: vendor.mfidoca
+- `odm_a/etc/init/vendor.xiaomi.hardware.miguardca.rc`: vendor.miguardca
+- `odm_a/etc/init/vendor.xiaomi.hardware.mikeybag.rc`: vendor.mikeybag
+- `odm_a/etc/init/vendor.xiaomi.hardware.mlipay-service.rc`: vendor.mlipay
+- `odm_a/etc/init/vendor.xiaomi.hardware.mpayjoyca.rc`: vendor.mpayjoyca
+- `odm_a/etc/init/vendor.xiaomi.hardware.vsimapp-service.rc`: vendor.vsimservice
+- `odm_a/etc/init/vendor.xiaomi.hw.touchfeature-service.rc`: touchfeature-service, panel-info-sh, touch-kmsg-init-sh
+- `odm_a/etc/init/vendor.xiaomi.sensor.citsensorservice.aidl.rc`: citsensorservice
+- `vendor_a/etc/init/android.hardware.bluetooth@aidl-service-qti.rc`: vendor.bluetooth-aidl-qti
+- `vendor_a/etc/init/android.hardware.boot-service.qti.rc`: vendor.boot-qti
+- `vendor_a/etc/init/android.hardware.drm-service.clearkey.rc`: vendor.drm-clearkey-service
+- `vendor_a/etc/init/android.hardware.drm@1.1-service.wfdhdcp.rc`: wfdhdcphalservice
+- `vendor_a/etc/init/android.hardware.gatekeeper-service-qti.rc`: vendor.gatekeeper_default
+- `vendor_a/etc/init/android.hardware.gnss-aidl-service-qti.rc`: gnss_service
+- `vendor_a/etc/init/android.hardware.health-service.qti.rc`: vendor.health-default, vendor.charger
+- `vendor_a/etc/init/android.hardware.ir-service.example.rc`: vendor.ir-default
+- `vendor_a/etc/init/android.hardware.power-service.rc`: vendor.power
+- `vendor_a/etc/init/android.hardware.security.keymint-service-qti.rc`: vendor.keymint-qti
+- `vendor_a/etc/init/android.hardware.sensors-service-multihal.rc`: vendor.sensors-hal-multihal
+- `vendor_a/etc/init/android.hardware.thermal-service.qti.rc`: vendor.thermal-hal
+- `vendor_a/etc/init/android.hardware.usb-service.qti.rc`: vendor.usb-hal
+- `vendor_a/etc/init/android.hardware.usb.gadget-service.qti.rc`: vendor.usbgadget-hal
+- `vendor_a/etc/init/android.hardware.wifi-service.rc`: vendor.wifi_hal_legacy
+- `vendor_a/etc/init/android.hardware.wifi.supplicant-service.rc`: wpa_supplicant
+- `vendor_a/etc/init/audiohalservice_qti.rc`: vendor.audio-hal-aidl
+- `vendor_a/etc/init/boringssl_self_test.rc`: boringssl_self_test32_vendor, boringssl_self_test64_vendor
+- `vendor_a/etc/init/cnd.rc`: vendor.cnd
+- `vendor_a/etc/init/com.qualcomm.qti.wifidisplayhal@1.0-service.rc`: wifidisplayhalservice
+- `vendor_a/etc/init/dataadpl.rc`: vendor.dataadpl
+- `vendor_a/etc/init/dataqti.rc`: vendor.dataqti
+- `vendor_a/etc/init/ddr_training.rc`: do_ddr_training
+- `vendor_a/etc/init/dlsc.rc`: vendor.dlsc
+- `vendor_a/etc/init/dumpstate-xiaomi.rc`: vendor.dumpstate-xiaomi
+- `vendor_a/etc/init/factorybsp_service.rc`: check_keymaster_factory, check_keybox_factory
+- `vendor_a/etc/init/factorybsp_service_qcom.rc`: interfaces.factoryInterface-V1-service, ffbm_bt, ffbm_wifi
+- `vendor_a/etc/init/ffu.rc`: ffu_w, ffu_r
+- `vendor_a/etc/init/fingerprint-odm.rc`: vendor.fps_hal
+- `vendor_a/etc/init/hostapd.android.rc`: hostapd
+- `vendor_a/etc/init/hw/init.qcom.factory.rc`: fastmmi, vendor.mmid, mmi_diag, vendor.audio_tc53, vendor.audio_tc1, vendor.audio_tc2, vendor.audio_tc3, vendor.audio_tc4, vendor.audio_tc51, vendor.audio_tc56, vendor.audio_tc222, vendor.audio_tc334, vendor.audio_tc228, vendor.audio_tc229, vendor.audio_tc230, vendor.audio_tc337, vendor.audio_tc338, vendor.audio_tc225, vendor.audio_tc246, vendor.audio_tc247, vendor.audio_tc250, vendor.audio_tc251, vendor.audio_tc252, vendor.audio_tc253, vendor.audio_tc11, vendor.audio_tc101, vendor.audio_tc102, vendor.audio_tc103, vendor.audio_tc104, vendor.audio_tc20, vendor.audio_tc21
+- `vendor_a/etc/init/hw/init.qcom.rc`: nqnfcinfo, iop, qcomsysd, vendor.ssr_setup, vendor.ss_ramdump, qcom-c_core-sh, qcom-c_main-sh, irsc_util, qmiproxy, vendor.wigig_supplicant, vendor.move_wifi_data, wigignpt, vendor.sensingdaemon, dhcpcd_wlan0, dhcpcd_bond0, dhcpcd_p2p, dhcpcd_wigig0, iprenew_wlan0, iprenew_bond0, iprenew_p2p, iprenew_wigig0, ptt_socket_app, ptt_ffbm, wifi_ftmd, cnss-daemon, dhcpcd_bt-pan, iprenew_bt-pan, ssgqmigd, mlid, qcom-sh, qcom-post-boot, qti-testscripts, wifi-sdio-on, wifi-crda, qvop-daemon, vendor.atfwd, hostapd_fst, battery_monitor, vendor.ril-daemon2, vendor.ril-daemon3, profiler_daemon, vendor.ssr_diag, diag_mdlog_start, diag_mdlog_stop, qlogd, vm_bms, vendor.msm_irqbalance, vendor.msm_irqbal_lb, vendor.msm_irqbl_sdm630, vendor.LKCore-dbg, vendor.LKCore-rel, qseeproxydaemon, esepmdaemon, poweroffhandler, time_daemon, vendor.power_off_alarm, vendor.hbtp, chre, bugreport
+- `vendor_a/etc/init/hw/init.qti.kernel.rc`: memory-init-boot, memory-post-boot, start-subsys, kernel-boot, kernel-post-boot, vendor.msm_irqbalance, gki.modprobe, vendor.modprobe
+- `vendor_a/etc/init/hw/init.target.rc`: vendor.pd_mapper, vendor.per_mgr, fatal_err_check, vendor.per_proxy, vendor.mdm_launcher, vendor.cnss_diag, vendor.tcpdump, sniffer, startpktlog, stoppktlog
+- `vendor_a/etc/init/hypsys_vendor.rc`: vendor.misys.common
+- `vendor_a/etc/init/ims-dataservice-daemon.rc`: vendor.ims-dataservice-daemon
+- `vendor_a/etc/init/ims_rtp_daemon.rc`: vendor.ims_rtp_daemon
+- `vendor_a/etc/init/imsdaemon.rc`: vendor.imsdaemon
+- `vendor_a/etc/init/init.batterysecret.rc`: batterysecret
+- `vendor_a/etc/init/init.boot_mode.rc`: boot_mode
+- `vendor_a/etc/init/init.charge_logger.rc`: charge_logger
+- `vendor_a/etc/init/init.embmssl_server.rc`: vendor.embmsslServer
+- `vendor_a/etc/init/init.eu_mode.rc`: eu_mode
+- `vendor_a/etc/init/init.mi_thermald.rc`: mi_thermald
+- `vendor_a/etc/init/init.qccvendor.rc`: vendor.qcc-vendor
+- `vendor_a/etc/init/init.qlm-service.rc`: vendor.qlm-service
+- `vendor_a/etc/init/init.qti.display_boot.rc`: qti_display_boot
+- `vendor_a/etc/init/init.qti.fm.rc`: fm_dl
+- `vendor_a/etc/init/init.qti.media.rc`: qti-media
+- `vendor_a/etc/init/init.time_daemon.rc`: time_daemon
+- `vendor_a/etc/init/init.vendor.wlan.rc`: wifi_qos_daemon
+- `vendor_a/etc/init/init.wallpapercolor.rc`: wallpapercolor
+- `vendor_a/etc/init/ipacm-diag.rc`: vendor.ipacm-diag
+- `vendor_a/etc/init/ipacm.rc`: vendor.ipacm
+- `vendor_a/etc/init/loc-launcher.rc`: loc_launcher
+- `vendor_a/etc/init/memtrack_qti.rc`: vendor.qti.hardware.memtrack
+- `vendor_a/etc/init/mi_ic.rc`: mi_ic
+- `vendor_a/etc/init/mi_ric.rc`: mi_ric_init, mi_ric_run, mi_ric_file, mi_ric_snapshot
+- `vendor_a/etc/init/miface.rc`: vendor.miface
+- `vendor_a/etc/init/nfc-service-tms.rc`: nfc_hal_service.tms.aidl
+- `vendor_a/etc/init/nicmd.rc`: vendor.nicmd
+- `vendor_a/etc/init/port-bridge.rc`: vendor.port-bridge
+- `vendor_a/etc/init/poweropt-service.rc`: poweropt-service
+- `vendor_a/etc/init/qcrilNrd.rc`: vendor.qcrild, vendor.qcrild2, vendor.qcrild3, vendor.qcrild_bootservice-sh, vendor.qcrild_service-sh
+- `vendor_a/etc/init/qdcmss.rc`: qdcmss
+- `vendor_a/etc/init/qesdk-manager.rc`: vendor.qesdk-mgr
+- `vendor_a/etc/init/qesdk-secmanager.rc`: vendor.qesdk-securitymgr
+- `vendor_a/etc/init/qguard.rc`: qguard
+- `vendor_a/etc/init/qmipriod.rc`: vendor.qmipriod
+- `vendor_a/etc/init/qms.rc`: vendor.qms
+- `vendor_a/etc/init/qseecomd.rc`: vendor.qseecomd
+- `vendor_a/etc/init/qwesd.rc`: vendor.qwesd
+- `vendor_a/etc/init/secure_element-service-tms.rc`: secure_element_hal_service.aidl
+- `vendor_a/etc/init/shsusrd.rc`: vendor.shsusrd
+- `vendor_a/etc/init/snapdragon_services.rc`: vendor.qti.snapdragonServices
+- `vendor_a/etc/init/ssgtzd.rc`: vendor.ssgtzd
+- `vendor_a/etc/init/tlpd.rc`: vendor.tlpd
+- `vendor_a/etc/init/vendor.dpmd.rc`: vendor.dpmd
+- `vendor_a/etc/init/vendor.qsap.qapeservice.rc`: vendor.qsap.qapeservice
+- `vendor_a/etc/init/vendor.qti.MemHal-service.rc`: MemHal-1-0
+- `vendor_a/etc/init/vendor.qti.adsprpc-guestos-service.rc`: vendor.adsprpcd
+- `vendor_a/etc/init/vendor.qti.audio-adsprpc-service.rc`: vendor.audioadsprpcd_audiopd
+- `vendor_a/etc/init/vendor.qti.camera.provider-service_64.rc`: vendor.camera-provider
+- `vendor_a/etc/init/vendor.qti.cdsprpc-service.rc`: vendor.cdsprpcd
+- `vendor_a/etc/init/vendor.qti.diag_userdebug.rc`: vendor.diag-router
+- `vendor_a/etc/init/vendor.qti.hardware.alarm-service.rc`: vendor.qti.hardware.alarm-service
+- `vendor_a/etc/init/vendor.qti.hardware.capabilityconfigstore-service.rc`: vendor.capabilityconfigstore
+- `vendor_a/etc/init/vendor.qti.hardware.display.allocator-service.rc`: vendor.qti.hardware.display.allocator
+- `vendor_a/etc/init/vendor.qti.hardware.display.color-service.rc`: vendor.qti.hardware.display.color-service
+- `vendor_a/etc/init/vendor.qti.hardware.display.composer-service.rc`: vendor.qti.hardware.display.composer
+- `vendor_a/etc/init/vendor.qti.hardware.dsp-service.rc`: vendor.dspservice
+- `vendor_a/etc/init/vendor.qti.hardware.lights.service.rc`: vendor.qti.light
+- `vendor_a/etc/init/vendor.qti.hardware.perf2-hal-service.rc`: perf2-hal-1-0
+- `vendor_a/etc/init/vendor.qti.hardware.qseecom@1.0-service.rc`: qseecom-service
+- `vendor_a/etc/init/vendor.qti.hardware.qteeconnector@1.0-service.rc`: qteeconnector-hal-1-0
+- `vendor_a/etc/init/vendor.qti.hardware.secureprocessor.rc`: vendor.secureprocessor
+- `vendor_a/etc/init/vendor.qti.hardware.sensorscalibrate-service.rc`: vendor.qti.hardware.sensorscalibrate-service
+- `vendor_a/etc/init/vendor.qti.hardware.servicetrackeraidl-service.rc`: vendor.servicetrackeraidl
+- `vendor_a/etc/init/vendor.qti.hardware.soter-service.rc`: vendor.soter
+- `vendor_a/etc/init/vendor.qti.hardware.vibrator.service.rc`: vendor.qti.vibrator
+- `vendor_a/etc/init/vendor.qti.hardware.wifi.wifilearner-service.rc`: vendor.wifilearner
+- `vendor_a/etc/init/vendor.qti.media.c2@1.0-service.rc`: vendor-qti-media-c2-hal-1-0
+- `vendor_a/etc/init/vendor.qti.media.c2audio@1.0-service.rc`: vendor-qti-media-c2audio-hal-1-0
+- `vendor_a/etc/init/vendor.qti.psiclient@1.0-service.rc`: psiclient
+- `vendor_a/etc/init/vendor.qti.qspa-service.rc`: vendor.qspa-service
+- `vendor_a/etc/init/vendor.qti.qspmhal-service.rc`: qspmhal
+- `vendor_a/etc/init/vendor.qti.rmt_storage.rc`: vendor.rmt_storage
+- `vendor_a/etc/init/vendor.qti.syshealthmon-service.rc`: syshealthmon-service
+- `vendor_a/etc/init/vendor.qti.tftp.rc`: vendor.tftp_server
+- `vendor_a/etc/init/vendor.sensors.qesdk.rc`: vendor.sensors.qesdk
+- `vendor_a/etc/init/vendor.sensors.sscrpcd.rc`: vendor.sensors
+- `vendor_a/etc/init/vendor.xiaomi.hardware.batteryantiaging-service.rc`: batteryantiaging
+- `vendor_a/etc/init/vendor.xiaomi.hardware.cld_aidl-service.rc`: vendor.cld-hal-aidl
+- `vendor_a/etc/init/vendor.xiaomi.hardware.displayfeature_aidl-service.rc`: vendor.displayfeatureaidl-hal, displayfeature, svi_on
+- `vendor_a/etc/init/vendor.xiaomi.hardware.micharge-service.rc`: micharge-hal
+- `vendor_a/etc/init/vendor.xiaomi.hardware.mimd2.rc`: mimd-service2_0
+- `vendor_a/etc/init/vendor.xiaomi.hardware.misys.core-service.rc`: vendor.misys.core
+- `vendor_a/etc/init/vmmgr.rc`: vendor.vm-mgr
+- `vendor_a/etc/init/vndservicemanager.rc`: vndservicemanager
+- `vendor_a/etc/init/wfdvndservice.rc`: wfdvndservice
+
+## Kernel module metadata files
+- `system_dlkm_a/flatten/lib/modules/modules.alias`: 1288 non-comment lines
+- `system_dlkm_a/flatten/lib/modules/modules.dep`: 96 non-comment lines
+- `system_dlkm_a/flatten/lib/modules/modules.load`: 78 non-comment lines
+- `system_dlkm_a/lib/modules/6.6.118-android15-8-g666ad52b8230-ab15657065-4k/modules.alias`: 1288 non-comment lines
+- `system_dlkm_a/lib/modules/6.6.118-android15-8-g666ad52b8230-ab15657065-4k/modules.alias.bin`: 223 non-comment lines
+- `system_dlkm_a/lib/modules/6.6.118-android15-8-g666ad52b8230-ab15657065-4k/modules.dep`: 96 non-comment lines
+- `system_dlkm_a/lib/modules/6.6.118-android15-8-g666ad52b8230-ab15657065-4k/modules.dep.bin`: 36 non-comment lines
+- `system_dlkm_a/lib/modules/6.6.118-android15-8-g666ad52b8230-ab15657065-4k/modules.load`: 78 non-comment lines
+- `system_dlkm_a/lib/modules/6.6.118-android15-8-g666ad52b8230-ab15657065-4k/modules.softdep`: 0 non-comment lines
+- `vendor_dlkm_a/lib/modules/modules.alias`: 912 non-comment lines
+- `vendor_dlkm_a/lib/modules/modules.blocklist`: 62 non-comment lines
+- `vendor_dlkm_a/lib/modules/modules.dep`: 268 non-comment lines
+- `vendor_dlkm_a/lib/modules/modules.load`: 350 non-comment lines
+- `vendor_dlkm_a/lib/modules/modules.softdep`: 9 non-comment lines
+
+## Review gates
+- Compare stock HAL declarations against LineageOS 23.2 framework expectations.
+- Inspect and validate full fstab flags and AVB chains before any BoardConfig changes.
+- Match module loads, dependencies, and kernel release against the actual stock boot ramdisk.
+- Determine which proprietary binaries are truly needed; avoid copying stock packages wholesale.
+- No conclusions about successful boot, SELinux, radio, camera, NFC or fingerprint are made here.
+
+Detailed structured records: `mist-stock-config.json`.
