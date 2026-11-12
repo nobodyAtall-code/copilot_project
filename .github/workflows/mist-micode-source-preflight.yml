@@ -1,0 +1,49 @@
+name: Mist pinned MiCode kernel source preflight
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-micode-source-preflight.yml'
+      - 'research/micode-mist-w-oss-source-lock.json'
+      - 'scripts/verify_micode_mist_sources.py'
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Validate all pinned source trees and Mist-specific files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/verify_micode_mist_sources.py
+          python3 scripts/verify_micode_mist_sources.py \
+            --lock research/micode-mist-w-oss-source-lock.json \
+            --report research/generated/micode-mist-source-preflight.json
+      - name: Upload provenance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-micode-source-preflight
+          path: |
+            research/generated/micode-mist-source-preflight.json
+            research/generated/micode-mist-source-preflight.md
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Commit validated source provenance on copilot main
+        if: success()
+        run: |
+          set -euo pipefail
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          git add -- research/generated/micode-mist-source-preflight.json research/generated/micode-mist-source-preflight.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "mist: verify pinned Xiaomi kernel source provenance"
+          git pull --rebase origin main
+          git push origin HEAD:main
