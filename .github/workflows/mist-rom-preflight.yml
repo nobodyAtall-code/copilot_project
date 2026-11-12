@@ -1,0 +1,39 @@
+name: Mist ROM tree integration preflight
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/check_mist_rom_preflight.py'
+      - '.github/workflows/mist-rom-preflight.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout production source read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git "$RUNNER_TEMP/device"
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist.git "$RUNNER_TEMP/vendor"
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel.git "$RUNNER_TEMP/kernel"
+          git -C "$RUNNER_TEMP/device" rev-parse HEAD
+          git -C "$RUNNER_TEMP/vendor" rev-parse HEAD
+          git -C "$RUNNER_TEMP/kernel" rev-parse HEAD
+      - name: Check production tree integration and preserve report
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_mist_rom_preflight.py "$RUNNER_TEMP/device" "$RUNNER_TEMP/vendor" "$RUNNER_TEMP/kernel" --report research/generated/mist-rom-preflight.json
+      - name: Upload bounded diagnostic JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-rom-preflight
+          path: research/generated/mist-rom-preflight.json
+          if-no-files-found: warn
+          retention-days: 14
