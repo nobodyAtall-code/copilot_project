@@ -131,7 +131,7 @@ jobs:
             exact=symbol+'='+value
             assert sum(line.strip()==exact for line in lines)==1, 'Unexpected source config: '+symbol
             assert sum(line.strip().startswith(symbol+'=') for line in lines)==1, 'Multiple source config assignments: '+symbol
-            lines=[('# '+symbol+' is not set'+ ('\\n' if line.endswith('\\n') else '')) if line.strip()==exact else line for line in lines]
+            lines=[('# '+symbol+' is not set'+ ('\n' if line.endswith('\n') else '')) if line.strip()==exact else line for line in lines]
           perf.write_text(''.join(lines))
           print('DIAGNOSTIC-ONLY: disabled exact MIHW-dependent config values '+','.join(diagnostic_disabled)+' in runner clone; NEVER FLASH',flush=True)
           assert pathlib.Path('msm-kernel/drivers/mihw').is_symlink(), 'Unexpected MIHW layout'
