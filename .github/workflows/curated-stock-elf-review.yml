@@ -1,0 +1,62 @@
+name: Mist curated stock ELF and metadata review
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/curated-stock-elf-review.yml'
+      - 'scripts/inspect_stock_elf_metadata.py'
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: mist-curated-elf-research
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - name: Checkout research main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install read-only ELF dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          python3 -m pip install --user pyelftools==0.32
+      - name: Download and verify staged stock source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/vendor
+          gh run download 43174896778 --repo "${{ github.repository }}" --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor
+          test -s input/vendor/stock-vendor-source.tar.zst
+          (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+      - name: Validate script and inspect curated ELF seeds
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/inspect_stock_elf_metadata.py
+          python3 scripts/inspect_stock_elf_metadata.py --archive input/vendor/stock-vendor-source.tar.zst --output reports/mist-curated-elf-metadata.json
+          test -s reports/mist-curated-elf-metadata.json
+          python3 - <<'PY'
+          import json
+          doc = json.load(open("reports/mist-curated-elf-metadata.json"))
+          assert doc["archive_members_accepted"] >= 4000
+          assert len(doc["dependency_graph"]) >= 5
+          print("Reviewed seed graph nodes:", len(doc["dependency_graph"]))
+          PY
+      - name: Save research report as workflow artifact only
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-curated-elf-metadata-review
+          path: reports/mist-curated-elf-metadata.json
+          retention-days: 14
+          if-no-files-found: error
