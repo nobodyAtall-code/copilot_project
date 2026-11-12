@@ -22,11 +22,11 @@ Bring up Android 16 **LineageOS 23.2** for **Redmi Note 17 5G / mist**, platform
 | --- | --- | --- |
 | [copilot_project](https://github.com/nobodyAtall-code/copilot_project) | research, staging, workflows, persistent reports and these handover notes | active, `main` |
 | [android_device_xiaomi_mist](https://github.com/nobodyAtall-code/android_device_xiaomi_mist) | production device configuration | preliminary six-file skeleton only; not build-ready |
-| [proprietary_vendor_xiaomi_mist](https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist) | production proprietary vendor tree | still empty |
+| [proprietary_vendor_xiaomi_mist](https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist) | production proprietary vendor tree | empty at this session's start; fresh-firmware batch publication run 43188422838 pending |
 | [android_device_xiaomi_mist-kernel](https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel) | stock-compatible kernel prebuilts/integration | still empty |
 | [android_kernel_xiaomi_mist](https://github.com/nobodyAtall-code/android_kernel_xiaomi_mist) | Linux 6.6.118 source | populated; includes `mist.bzl` and `build.config.msm.mist` |
 
-Existing device skeleton: `BoardConfig.mk`, `AndroidProducts.mk`, `device.mk`, `lineage_mist.mk`, `extract-files.py`, `setup-makefiles.py`. Preserve these; extend only with verified configuration.
+Device now has its original six-file skeleton **plus** an incremental `proprietary-files.txt` listing 13 observed stock lib64 files (commit e6f9e52). Preserve these; extend only with verified configuration.
 
 ## 3. Completed and verified pipeline
 
@@ -80,6 +80,15 @@ From the published `mist-archive-membership.json`:
 - The analyzer is a research starting point, not a comprehensive dynamic linker simulator: namespace selection, `RUNPATH`, system/APEX resolution, `dlopen`, duplicate archive members, symlink semantics and library ABI remain to be validated. Do not approve a `proprietary-files.txt` from its results alone.
 - **Next:** download and review the successful post-`b241f60` run artifact JSON, distinguish genuine unresolved vendor dependencies from framework/APEX libraries, then extend curated seeds to fingerprint/audio/camera using actual stock paths. Keep verifying and documenting after each milestone.
 
+### 12 November 2026 — fresh firmware and real vendor publication attempt
+
+- User requested ending the research/artifact loop: use direct full firmware download where necessary, integrate required stock `.so` files into the vendor tree, consult LineageOS 23.2 sources for existing modules, and use `sm4450-development` for architecture **only**, never blind device config.
+- Confirmed `proprietary_vendor_xiaomi_mist` was empty; `lineage_mist.mk` already inherits `vendor/xiaomi/mist/mist-vendor.mk` when present. LineageOS Python extract-utils is the project-standard device/vendor workflow; a starter `proprietary-files.txt` was added to [android_device_xiaomi_mist](https://github.com/nobodyAtall-code/android_device_xiaomi_mist) `main` at commit [`e6f9e52`](https://github.com/nobodyAtall-code/android_device_xiaomi_mist/commit/e6f9e52179f9120544c67bcc732e123464a585ed).
+- Added `scripts/publish_mist_vendor_batch.py` (`3944825`) and research-only workflow `.github/workflows/fresh-firmware-vendor-bootstrap.yml` (`e318a85`) to `copilot_project/main`. The workflow uses existing `scripts/multicdn.py` to download the **entire fastboot firmware afresh**, verifies archive MD5 `c4450c4e168052ca9de1211306d3beff`, extracts/mounts the vendor stock partition, checks the source archive hash, validates 13 exact 64-bit ELF libraries against an explicit allowlist, builds `Android.bp` and `mist-vendor.mk`, and attempts scoped GitHub `GH_PAT` publication on the existing vendor `main`. No GitHub Actions files or experiment scripts are placed in vendor or device repositories.
+- **Workflow [43188422838](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43188422838): IN PROGRESS at last check**; job `131081325867` had completed checkout and was installing firmware tools. **Do not claim vendor blobs were published until the final push is confirmed.** The workflow intentionally refuses to overwrite existing vendor build files and never downloads/commits private device partitions or stock apps.
+- **Important limitation:** the first batch is **13 known-in-archive KeyMint/Keymaster/SecureClock/SharedSecret libraries**, not a full vendor blob list; this does not demonstrate that their associated KeyMint service executable or missing VINTF manifest exists. Soong module collisions, ELF linkage, SELinux, runtime HAL configuration and build success are NOT verified. Review the first actual build before expanding the list.
+- **Immediate next:** inspect workflow [43188422838](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43188422838) to completion; fix actual failures and verify vendor `main` contains 13 binaries and build definitions. Check actual LineageOS 23.2 provided modules to exclude duplicate platform libraries, then expand curated extraction to real RIL/IMS, audio, camera, fingerprint services and dependent libraries based on stock VINTF/init and compiled output. Continue tracking every major result here.
+
 ## 4. Research/report files — read in this order
 
 1. `research/device-facts.md`: on-device facts and boot/partition sizes.
@@ -103,7 +112,7 @@ From the published `mist-archive-membership.json`:
 
 ## 6. What has NOT been completed (do not overclaim)
 
-- No final or approved `proprietary-files.txt`.
+- Incremental 13-library `proprietary-files.txt` committed; a final device-wide proprietary manifest remains incomplete.
 - No populated production proprietary vendor or kernel-prebuilt repository.
 - Research-only metadata/DT_NEEDED inspector committed, but no verified completed report or complete library closure, symlink/mode validation, or actual module ABI assessment.
 - No validated dynamic partition group capacities or finished BoardConfig/AVB/SELinux configuration.
