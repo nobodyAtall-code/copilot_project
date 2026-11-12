@@ -178,6 +178,6 @@ lines += [
     "",
     "Detailed structured records: `mist-stock-config.json`.",
 ]
-(OUTPUT / "mist-stock-config.md").write_text("\n".join(lines).replace("\`", "`") + "\n")
+(OUTPUT / "mist-stock-config.md").write_text("\n".join(lines) + "\n")
 print(f"Report ready: {len(hals)} HAL names; {len(fstab_records)} fstab files; "
       f"{len(services)} services; {len(module_records)} module metadata files")
