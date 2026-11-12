@@ -95,7 +95,7 @@ md = [
     "# Mist staged archive inspection (research only)",
     "",
     "This is an inventory, **not** an approved proprietary manifest or bootable kernel tree.",
-    f"Source archive SHA256: \`{data['source_sha256']}\`",
+    f"Source archive SHA256: `{data['source_sha256']}`",
     f"Archive members: {len(paths)}; selected config entries: {len(selected)}",
     "",
     "## Members by partition",
@@ -104,7 +104,7 @@ md = [
     "## Stock boot images",
     "| Image | Size (bytes) | Magic | SHA256 |",
     "| --- | ---: | --- | --- |",
-    *[f"| {r['file']} | {r['bytes']} | {r['recognized_header']} | \`{r['sha256']}\` |"
+    *[f"| {r['file']} | {r['bytes']} | {r['recognized_header']} | `{r['sha256']}` |"
       for r in boot_rows],
     "",
     "Inspect selected-stock-config/ for actual fstab, VINTF, init and module metadata.",
