@@ -120,7 +120,7 @@ jobs:
           echo "BAZEL_QUERY_EXIT=$query_rc"
           if [[ "$query_rc" -ne 0 ]]; then exit "$query_rc"; fi
           echo "=== Actual Mist kernel build attempt ==="
-          "$BAZEL" build //msm-kernel:mist_perf --verbose_failures
+          "$BAZEL" build //msm-kernel:mist_perf --define=FACTORY_BUILD=0 --verbose_failures
           build_rc=$?
           echo "BAZEL_BUILD_EXIT=$build_rc"
           python3 - "$RESULT" "$query_rc" "$build_rc" <<'PY'
