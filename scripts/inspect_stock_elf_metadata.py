@@ -32,7 +32,7 @@ def accepted(name):
     return name
 
 def elf_details(data):
-    if data[:4] != b"\\x7fELF":
+    if data[:4] != b"\x7fELF":
         return None
     elf = ELFFile(io.BytesIO(data))
     dynamic = elf.get_section_by_name(".dynamic")
@@ -90,7 +90,7 @@ def main():
                         data = f.read(MAX_FILE + 1)
                         if len(data) <= MAX_FILE:
                             entry["sha256"] = hashlib.sha256(data).hexdigest()
-                            if data.startswith(b"\\x7fELF"):
+                            if data.startswith(b"\x7fELF"):
                                 try:
                                     elfs[name] = elf_details(data)
                                 except Exception as exc:
@@ -161,7 +161,7 @@ def main():
                               "RUNPATH, namespace restrictions, ABI and dlopen dependencies are not verified",
                               "SHA256 records file contents, not kernel/module compatibility"]}
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\\n")
+    args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     print(f"accepted={len(members)} elf={len(elfs)} tracked={len(tracked)} unresolved={sum(d['matched_path'] is None for r in graph for d in r.get('dependencies', []))}")
 
 if __name__ == "__main__":
