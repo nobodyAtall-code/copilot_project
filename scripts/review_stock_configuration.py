@@ -141,7 +141,7 @@ lines = [
     "",
     "- Source run: https://github.com/nobodyAtall-code/copilot_project/actions/runs/43178657329",
     "- Firmware staging run: https://github.com/nobodyAtall-code/copilot_project/actions/runs/43174896778",
-    f"- Stock source SHA256: \`{audit.get('source_sha256', 'unknown')}\`",
+    f"- Stock source SHA256: `{audit.get('source_sha256', 'unknown')}`",
     f"- Archive members: {audit.get('members')}; selected config entries: {audit.get('selected_config_count')}",
     f"- Parsed VINTF XML: {len(xml_records)}; HAL names: {len(hals)}",
     f"- Fstab files: {len(fstab_records)}; mountpoints: {len(all_mounts)}",
@@ -150,24 +150,24 @@ lines = [
     f"- Skipped symlinks/oversized config: {len(skipped)}",
     "",
     "## VINTF HAL names (stock declarations, not compatibility proof)",
-    *[f"- \`{n}\`" for n in hals],
+    *[f"- `{n}`" for n in hals],
     "",
     "## Fstab mountpoints and filesystem types",
 ]
 for rec in fstab_records:
-    lines += [f"### \`{rec['file']}\`"]
+    lines += [f"### `{rec['file']}`"]
     if not rec["entries"]:
         lines += ["No conventional fstab entries parsed."]
     else:
         for ent in rec["entries"]:
-            lines.append(f"- \`{ent['mountpoint']}\` : \`{ent['fs']}\` ; \`{ent['fs_mgr_flags']}\`")
+            lines.append(f"- `{ent['mountpoint']}` : `{ent['fs']}` ; `{ent['fs_mgr_flags']}`")
 lines += ["", "## Stock init services (name and file only)"]
 for rec in rc_records:
     if rec["services"]:
-        lines.append(f"- \`{rec['file']}\`: " + ", ".join(s["name"] for s in rec["services"]))
+        lines.append(f"- `{rec['file']}`: " + ", ".join(s["name"] for s in rec["services"]))
 lines += ["", "## Kernel module metadata files"]
 for rec in module_records:
-    lines.append(f"- \`{rec['file']}\`: {rec['entry_count']} non-comment lines")
+    lines.append(f"- `{rec['file']}`: {rec['entry_count']} non-comment lines")
 lines += [
     "", "## Review gates",
     "- Compare stock HAL declarations against LineageOS 23.2 framework expectations.",
@@ -176,8 +176,8 @@ lines += [
     "- Determine which proprietary binaries are truly needed; avoid copying stock packages wholesale.",
     "- No conclusions about successful boot, SELinux, radio, camera, NFC or fingerprint are made here.",
     "",
-    "Detailed structured records: \`mist-stock-config.json\`.",
+    "Detailed structured records: `mist-stock-config.json`.",
 ]
-(OUTPUT / "mist-stock-config.md").write_text("\n".join(lines).replace("\\`", "`") + "\n")
+(OUTPUT / "mist-stock-config.md").write_text("\n".join(lines).replace("\`", "`") + "\n")
 print(f"Report ready: {len(hals)} HAL names; {len(fstab_records)} fstab files; "
       f"{len(services)} services; {len(module_records)} module metadata files")
