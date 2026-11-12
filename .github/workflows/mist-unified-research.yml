@@ -1,0 +1,67 @@
+name: Mist unified stock and ROM research
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-unified-research.yml'
+      - 'scripts/mist_unified_research_report.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  consolidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve validated stock reports without redownloading firmware
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/super evidence/boot reports
+          gh run download 43268799416 --repo "${{ github.repository }}" --name mist-stock-super-metadata --dir evidence/super
+          gh run download 43266837030 --repo "${{ github.repository }}" --name mist-stock-boot-chain-structure --dir evidence/boot
+          for f in mist-super-metadata.json mist-super-independent-group-comparison.json mist-super-independent-comparison.json; do
+            test -s "evidence/super/$f"
+          done
+          test -s evidence/boot/mist-boot-chain-structure.json
+      - name: Checkout current production trees read-only
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git "$RUNNER_TEMP/device"
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist.git "$RUNNER_TEMP/vendor"
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel.git "$RUNNER_TEMP/kernel"
+          for r in device vendor kernel; do
+            echo "$r SHA: $(git -C "$RUNNER_TEMP/$r" rev-parse HEAD)"
+          done
+      - name: Current vendor/kernel/Soong/BoardConfig integration audit
+        run: |
+          set -euo pipefail
+          python3 scripts/check_mist_rom_preflight.py "$RUNNER_TEMP/device" "$RUNNER_TEMP/vendor" "$RUNNER_TEMP/kernel" --report reports/mist-rom-preflight.json
+      - name: Generate one consolidated evidence and remaining-gates report
+        run: |
+          set -euo pipefail
+          python3 scripts/mist_unified_research_report.py \
+            --super evidence/super/mist-super-metadata.json \
+            --groups evidence/super/mist-super-independent-group-comparison.json \
+            --sizes evidence/super/mist-super-independent-comparison.json \
+            --boot evidence/boot/mist-boot-chain-structure.json \
+            --preflight reports/mist-rom-preflight.json \
+            --out reports/mist-unified-research.json \
+            --markdown reports/mist-unified-research.md
+          cat reports/mist-unified-research.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload single research bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-unified-stock-and-rom-research
+          path: |
+            reports/mist-rom-preflight.json
+            reports/mist-unified-research.json
+            reports/mist-unified-research.md
+            evidence/super/*.json
+            evidence/boot/*.json
+          retention-days: 14
+          if-no-files-found: warn
