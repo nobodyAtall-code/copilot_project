@@ -1,0 +1,117 @@
+name: Mist stock boot kernel payload publication
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-stock-kernel-prebuilt.yml'
+      - 'scripts/extract_mist_boot_kernel.py'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-stock-kernel-prebuilt-main
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 200
+    steps:
+      - name: Checkout research workspace
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Retrieve SHA-verified stock boot images or download complete firmware
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/boot
+          if gh run download 43174896778 --repo "${{ github.repository }}" \
+             --name mist-global-OS3.0.304.0-boot-images --dir input/boot &&
+             test -s input/boot/boot-images.sha256 &&
+             test -s input/boot/boot-images/boot.img &&
+             (cd input/boot/boot-images && sha256sum -c ../boot-images.sha256); then
+            echo "Verified original stock boot chain artifact"
+          else
+            echo "Original artifact unavailable: downloading complete stock fastboot firmware"
+            rm -rf input/boot
+            mkdir -p input/boot work reports
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends pigz
+            python3 -u scripts/multicdn.py
+            grep -q 'c4450c4e168052ca9de1211306d3beff' reports/firmware.md5
+            mkdir -p work/unpacked
+            pigz -dc work/*.tgz | tar -xf - -C work/unpacked
+            bash scripts/stage_boot_images.sh
+            mkdir -p input/boot/boot-images
+            cp reports/boot-images/*.img input/boot/boot-images/
+            cp reports/boot-images.sha256 input/boot/
+            (cd input/boot/boot-images && sha256sum -c ../boot-images.sha256)
+          fi
+      - name: Validate boot header and stage exact kernel payload
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/extract_mist_boot_kernel.py
+          python3 scripts/extract_mist_boot_kernel.py \
+            --boot input/boot/boot-images/boot.img \
+            --verified-hashes input/boot/boot-images.sha256 \
+            --out output/kernel
+          test -s output/kernel/kernel
+          test -s output/kernel/kernel-source.json
+      - name: Save provenance and digest evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-kernel-payload-provenance
+          path: output/kernel/kernel-source.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Publish exact stock-compatible kernel payload to existing kernel-prebuilt main
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo "GH_PAT missing or unset"; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist-kernel output/production -- --quiet
+          cd output/production
+          git checkout -B main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          if test -e kernel || test -e kernel-source.json; then
+            echo "Kernel prebuilt already present; refusing replacement"
+            exit 1
+          fi
+          cp ../kernel/kernel ../kernel/kernel-source.json ../kernel/README.md ./
+          git add -- kernel kernel-source.json README.md
+          git diff --cached --check
+          git commit -m "mist: publish verified stock boot kernel payload for initial bring-up"
+          git push origin HEAD:main
+      - name: Wire published kernel to existing device BoardConfig main
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist output/device -- --quiet
+          cd output/device
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          test -s BoardConfig.mk
+          if grep -q '^TARGET_PREBUILT_KERNEL' BoardConfig.mk; then
+            echo "Kernel already configured; refusing duplicate"
+            exit 1
+          fi
+          cat >> BoardConfig.mk <<'EOF'
+
+          # Exact stock kernel payload extracted from MD5-verified Android 16 boot.img.
+          # Temporary bring-up: not a verified LineageOS kernel build.
+          TARGET_PREBUILT_KERNEL := device/xiaomi/mist-kernel/kernel
+          EOF
+          git add -- BoardConfig.mk
+          git diff --cached --check
+          git commit -m "mist: wire verified stock kernel prebuilt for initial bring-up"
+          git push origin HEAD:main
