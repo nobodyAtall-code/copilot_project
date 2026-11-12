@@ -201,6 +201,14 @@ From the published `mist-archive-membership.json`:
 - Corrected run [43203333761](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43203333761) was **in progress at last status check**. Check job logs and actual result before claiming this fix was sufficient or that compilation succeeded.
 - The repeated fresh-hosted-runner `repo sync` remains expensive. Previous optimization to `-j12 --optimized-fetch` passed but requires measured comparison; a future cache or narrower verified manifest may reduce repeat downloads, provided all external revisions remain pinned/audited. No kernel, DTBO, module or ROM boot validation is established.
 
+### 12 November 2026 — kernel config runs; missing Xiaomi proprietary MIHW source
+
+- [Run 43203333761](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43203333761), job [131132112190](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43203333761/job/131132112190), **FAILED**. Pinned Google manifest dependency bootstrap and nine Xiaomi-source overlays passed; Bazel query passed and `--define=FACTORY_BUILD=0` cleared previous configuration analysis error. Bazel build reached **468/473 actions** and entered kernel `mist_perf` Kconfig generation. No kernel binary was built.
+- Exact failure: `drivers/Kconfig:248: can't open file "drivers/mihw/Kconfig"`. The pinned owned kernel `drivers/mihw` is **a symlink** to `../../../vendor/xiaomi/proprietary/mihw` (identical in official `MiCode/Xiaomi_Kernel_OpenSource` `mist-w-oss`), while current pinned build workspace does **not** contain `vendor/xiaomi/proprietary/mihw/Kconfig`. This is a **missing proprietary Xiaomi source tree**, not the previously fixed `FACTORY_BUILD` issue.
+- Source discovery did not establish a trusted, Mist-compatible official MIHW source repository or pinned revision. Avoid silently replacing MIHW with unrelated older device trees or stubbing/deleting Kconfig; any such action could compromise correctness and stock module compatibility. Original kernel and stock prebuilt remain unchanged. As of this update **no new corrective workflow run** has been started for this missing-source failure.
+- Next milestone: obtain the correct Mist `vendor/xiaomi/proprietary/mihw` source tree (and pin its exact commit and provenance) or establish an explicitly marked diagnostic-only workaround if full sources are unavailable. Overlay at the correct symlink destination, verify required Kconfig and drivers, then re-run Kleaf build. Do not assert full kernel, ROM or boot success.
+- Build efficiency: the previous sync of fresh Android 15/Linux 6.6 dependencies took several minutes per runner. Repeated runs before MIHW source identification are wasteful; consider a preflight source-completeness check and a verified cache strategy.
+
 ## 4. Research/report files — read in this order
 
 1. `research/device-facts.md`: on-device facts and boot/partition sizes.
