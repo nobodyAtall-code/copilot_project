@@ -1,0 +1,46 @@
+name: Mist stock boot chain structural review
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/inspect_mist_boot_chain.py'
+      - '.github/workflows/mist-stock-boot-chain-review.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve original exact stock boot-chain artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input reports
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-boot-images --dir input
+          test -s input/boot-images.sha256
+          for img in boot init_boot vendor_boot recovery dtbo vbmeta vbmeta_system; do
+            test -s "input/boot-images/$img.img"
+          done
+          (cd input/boot-images && sha256sum -c ../boot-images.sha256)
+      - name: Inspect Android boot, vendor boot, DTBO and AVB image headers
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/inspect_mist_boot_chain.py
+          python3 scripts/inspect_mist_boot_chain.py \
+            --images-dir input/boot-images \
+            --sha256-file input/boot-images.sha256 \
+            --output reports/mist-boot-chain-structure.json
+      - name: Upload bounded structure report only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-boot-chain-structure
+          path: reports/mist-boot-chain-structure.json
+          if-no-files-found: warn
+          retention-days: 14
