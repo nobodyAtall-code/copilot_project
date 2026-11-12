@@ -30,6 +30,15 @@ def main():
         check("vendor/" + path, (vendor / path).is_file(), "required vendor build definition")
     board = (device / "BoardConfig.mk").read_text() if (device / "BoardConfig.mk").is_file() else ""
     product = (device / "lineage_mist.mk").read_text() if (device / "lineage_mist.mk").is_file() else ""
+    device_mk = (device / "device.mk").read_text() if (device / "device.mk").is_file() else ""
+    # Physical super size is independently established by fastboot and the
+    # verified raw super image; it is NOT the LP dynamic group maximum.
+    check("stock physical super size",
+          "BOARD_SUPER_PARTITION_SIZE := 10200547328" in board,
+          "board must use the exact physical 10,200,547,328 byte super size")
+    check("stock dynamic partitions enabled",
+          "PRODUCT_USE_DYNAMIC_PARTITIONS := true" in device_mk,
+          "stock firmware has LP super groups and requires dynamic partitions")
     check("kernel prebuilt wiring", "TARGET_PREBUILT_KERNEL := device/xiaomi/mist-kernel/kernel" in board, "BoardConfig must reference checked-in verified stock kernel")
     # Verified from the SHA256-checked stock boot-chain structure artifact
     # (run 43266837030); these are structural, not image-build checks.
