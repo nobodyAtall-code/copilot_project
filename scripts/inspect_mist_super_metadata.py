@@ -48,8 +48,11 @@ def metadata(f,total,pos,max_size):
     if number(area,0,'I')!=0x414c5030:
         raise ValueError('Bad LP header magic')
     major,minor,hsize=struct.unpack_from('<HHI',area,4)
-    if major!=10 or minor>2 or hsize not in (128,132,136,140,144,148,152,156,160):
-        raise ValueError('Unsupported header version or size')
+    # Modern liblp may use an extended header (e.g. 256 bytes). Validate
+    # supported major/minor, bounded 4-byte aligned size and full checksum,
+    # rather than hard-coding an incomplete header-size whitelist.
+    if major!=10 or minor>2 or not (128<=hsize<=max_size) or hsize%4:
+        raise ValueError(f'Unsupported header version or size: {major}.{minor}, header_size={hsize}, metadata_max_size={max_size}')
     if not verified(area[:hsize],12,44,area[12:44]):
         raise ValueError('LP header SHA256 mismatch')
     length=number(area,44,'I')
@@ -132,6 +135,9 @@ def main():
     args.output.write_text(json.dumps(report,indent=2)+'\n')
     for rec in report['slots']:
         print('slot',rec['slot'],'copies match:',rec['matching_copies'])
+        for kind in ('primary','backup'):
+            if not rec[kind]['valid']:
+                print(' ',kind,'failure:',rec[kind]['error'])
         if rec['primary']['valid']:
             for group in rec['primary']['data']['groups']:
                 print('  group',group['name'],'maximum',group['maximum_size'],
