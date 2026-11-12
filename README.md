@@ -19,10 +19,15 @@ Start `.github/workflows/firmware-acquisition.yml` manually on the **main** bran
 3. Build a pinned Go super-partition reader (commit is recorded under `reports/lpunpack-version.txt`).
 4. Run `scripts/extract_partitions.sh` to convert sparse super images where needed, unpack logical partition images and mount recognized EROFS/ext4 images read-only.
 5. Run `scripts/inventory_partitions.py` to inventory files across mounted logical partitions, hash each shared library and create `all-shared-libraries.tar.zst`.
+6. Run `scripts/stage_vendor_sources.py` to generate **review-only** `proprietary-candidates.txt`, exclusions and a source archive of `vendor`, `odm`, `vendor_dlkm`, and `system_dlkm` files.
+7. Run `scripts/stage_boot_images.sh` to retain boot, init_boot, vendor_boot, dtbo, recovery and vbmeta images (never persist or modemst).
 
-The default run uploads **two artifacts**:
+The default run uploads **four artifacts**:
 - `mist-global-OS3.0.304.0-research`: all paths, shared library paths/hashes, firmware-image lists, super metadata, mount results, checksums and CDN probe data.
 - `mist-global-OS3.0.304.0-all-so`: the compressed library content and symlinks extracted from all successfully mounted logical filesystem images.
+
+- `mist-global-OS3.0.304.0-vendor-source`: stock vendor/odm and kernel-module partition file sources, with source archive checksum.
+- `mist-global-OS3.0.304.0-boot-images`: stock boot-chain images and their SHA256 checksums.
 
 An **optional** `upload_raw_partitions` input uploads raw unpacked logical images. Disabled by default due to large GitHub Actions artifact storage consumption; enabling it may exceed repository quotas. Physical firmware partitions such as boot, vendor_boot, dtbo and modem are inventoried by filename and hash, but are not mounted as EROFS/ext4 or decoded as boot/ramdisk containers in this stage.
 
@@ -38,4 +43,8 @@ An **optional** `upload_raw_partitions` input uploads raw unpacked logical image
 
 ## After the extraction run
 
-Review `super-metadata.txt`, `mounted-partitions.tsv`, `all-files.tsv` and `libraries.tsv`. Build a minimal `proprietary-files.txt`, extraction makefiles and device configuration from stock evidence. Test VINTF, SELinux, init, modules, encryption and boot integration separately before publishing production trees.
+Review `super-metadata.txt`, `mounted-partitions.tsv`, `all-files.tsv`, `libraries.tsv`, `proprietary-candidates.txt` and candidate exclusions. Build a minimal `proprietary-files.txt`, extraction makefiles and device configuration from stock evidence. Test VINTF, SELinux, init, modules, encryption and boot integration separately before publishing production trees.
+
+## Publishing policy
+
+The repository secret `GH_PAT`, when present, is reserved for future **explicitly reviewed** large-file publishing from this research repository to the production repositories' `main` branches. The current acquisition/extraction workflow does **not** use it, does not commit blobs to the production trees and never creates new branches or pull requests. Device text files may be committed separately through the GitHub connector. The source archive is not itself a complete Lineage vendor tree: it is material for reviewed selection and standard Lineage extraction/makefile generation.
