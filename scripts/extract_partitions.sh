@@ -61,5 +61,5 @@ for image in work/partitions/*.img; do
 done
 
 test -s reports/mounted-partitions.tsv
-python3 scripts/inventory_partitions.py work/mounts reports
+sudo python3 scripts/inventory_partitions.py work/mounts reports
 echo "Inventory generated; preserving full library archive as an artifact."
