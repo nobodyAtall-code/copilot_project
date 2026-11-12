@@ -226,6 +226,13 @@ From the published `mist-archive-membership.json`:
 - Workflow push on existing `main` should trigger the next run; verify the actual new run ID and job outcome rather than assuming success.
 - **Production blocker remains:** identify and pin authentic Mist-compatible MIHW sources and restore the official `CONFIG_MIHW=y` build. Separately validate any eventual kernel binary/modules and stock ABI before device usage.
 
+### 12 November 2026 — MIHW-dependent defconfig mismatch in first diagnostic build
+
+- [Run 43208679440](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43208679440), job 131150288328, **FAILED** after successful Android dependency sync, all nine pinned Xiaomi checkouts, the MIHW-only runner config override, and Bazel analysis. Actual `//msm-kernel:mist_perf` kernel config failed with `ERROR! Defconfig fragment did not apply as expected` listing five missing assignments: `METIS=m`, `MIGT=m`, `MI_MID_DEVICE_OPT=y`, `MI_SCHED=m`, `MI_SCHED_2_CLUSTER=y`. No C compilation or kernel Image. A diagnostic artifact was uploaded (ID 13940367141).
+- Verified exact official Mist perf config lines: `CONFIG_MIHW=y` at 348, `CONFIG_MI_SCHED=m` 350, `CONFIG_METIS=m` 352, `CONFIG_MIGT=m` 354, `CONFIG_MI_SCHED_2_CLUSTER=y` 355, `CONFIG_MI_MID_DEVICE_OPT=y` 358. These options were requested in the source fragment but absent from the generated effective configuration after guarding unavailable proprietary MIHW Kconfig.
+- [Commit 4ea1616](https://github.com/nobodyAtall-code/copilot_project/commit/4ea1616285bdac20ab49840878c2989e7369a01a) updates ONLY the disposable GitHub Actions diagnostic compile workflow: exact-value assertions, then overrides only those six total options (MIHW plus the five failed settings) to `# CONFIG_* is not set` in the ephemeral Mist perf fragment. Fails closed on unexpected source changes; source kernel repository, original Mist config, production kernel prebuilts, device/vendor repos unchanged. This compile probe is **NOT STOCK-COMPATIBLE, NOT FLASHABLE, NOT ABI/BOOT VALIDATED**. Its only purpose is to uncover further source/compiler blockers. Verify the triggered run and do not infer success from this patch.
+- Production path is still to locate authentic, revision-pinned Xiaomi MIHW Kconfig and driver sources, restore stock MIHW/related options and validate resulting Image/modules against stock. Repeatedly disabling more device configuration cannot solve the production gap.
+
 ## 4. Research/report files — read in this order
 
 1. `research/device-facts.md`: on-device facts and boot/partition sizes.
