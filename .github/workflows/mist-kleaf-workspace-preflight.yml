@@ -1,0 +1,97 @@
+name: Mist isolated Kleaf source workspace assembly
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-kleaf-workspace-preflight.yml'
+      - 'scripts/verify_mist_kleaf_layout.py'
+permissions:
+  contents: write
+concurrency:
+  group: mist-kleaf-source-assembly
+  cancel-in-progress: false
+jobs:
+  assemble:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Assemble disposable pinned source workspace without full blob downloads
+        run: |
+          set -euo pipefail
+          mkdir -p work/kernel-ws/build
+          cd work/kernel-ws
+
+          git clone --depth 1 --filter=blob:none --no-checkout --branch main \
+            https://github.com/nobodyAtall-code/kernel_build.git build/kernel
+          (
+            cd build/kernel
+            git sparse-checkout init --no-cone
+            git sparse-checkout set --no-cone '/BUILD.bazel' '/kleaf/kernel.bzl'
+            git checkout main
+            test "$(git rev-parse HEAD)" = ee8c9d048bfda42314e5cdb2d4ab8bd56b73fa19
+          )
+
+          git clone --depth 1 --filter=blob:none --no-checkout --branch main \
+            https://github.com/nobodyAtall-code/android_kernel_xiaomi_mist.git msm-kernel
+          (
+            cd msm-kernel
+            git sparse-checkout init --no-cone
+            git sparse-checkout set --no-cone \
+              '/BUILD.bazel' '/mist.bzl' '/msm_kernel_extensions.bzl' \
+              '/build.config.msm.mist' '/msm_kernel_la.bzl'
+            git checkout main
+            test "$(git rev-parse HEAD)" = fe8024a4c5eea6cf1135e615d44e7a3fb15fedac
+          )
+
+          git clone --depth 1 --filter=blob:none --no-checkout --branch mist-w-oss \
+            https://github.com/MiCode/kernel_devicetree.git upstream-device-tree
+          (
+            cd upstream-device-tree
+            git sparse-checkout init --no-cone
+            git sparse-checkout set --no-cone \
+              '/BUILD.bazel' '/qcom/platform_map.bzl' \
+              '/qcom/mist-common.dtsi' '/qcom/mist-qrd-overlay.dts'
+            git checkout mist-w-oss
+            test "$(git rev-parse HEAD)" = 55966b16689be0d8619c9e7b8146c6e268851844
+          )
+
+          mkdir -p msm-kernel/arch/arm64/boot/dts/vendor
+          cp upstream-device-tree/BUILD.bazel msm-kernel/arch/arm64/boot/dts/vendor/
+          mkdir -p msm-kernel/arch/arm64/boot/dts/vendor/qcom
+          cp upstream-device-tree/qcom/platform_map.bzl \
+             upstream-device-tree/qcom/mist-common.dtsi \
+             upstream-device-tree/qcom/mist-qrd-overlay.dts \
+             msm-kernel/arch/arm64/boot/dts/vendor/qcom/
+          test -f msm-kernel/arch/arm64/boot/dts/vendor/qcom/platform_map.bzl
+      - name: Validate actual source build paths and report missing external projects
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/verify_mist_kleaf_layout.py
+          python3 scripts/verify_mist_kleaf_layout.py \
+            --root work/kernel-ws \
+            --out research/generated/mist-kleaf-layout-preflight.json
+      - name: Upload workspace layout report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-kleaf-layout-preflight
+          path: |
+            research/generated/mist-kleaf-layout-preflight.json
+            research/generated/mist-kleaf-layout-preflight.md
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Persist verified findings in copilot main
+        if: success()
+        run: |
+          set -euo pipefail
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          git add -- research/generated/mist-kleaf-layout-preflight.json research/generated/mist-kleaf-layout-preflight.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "mist: record isolated Kleaf kernel source layout verification"
+          git pull --rebase origin main
+          git push origin HEAD:main
