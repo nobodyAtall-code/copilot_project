@@ -8,6 +8,7 @@ on:
       - 'scripts/mist_unified_research_report.py'
       - 'scripts/mist_verify_boot_metadata.py'
       - 'scripts/inspect_stock_elf_metadata.py'
+      - 'scripts/mist_triage_elf_dependencies.py'
 permissions:
   contents: read
   actions: read
@@ -74,6 +75,15 @@ jobs:
           assert len(d["dependency_graph"])>=5
           print("Curated stock ELF graph nodes:",len(d["dependency_graph"]))
           PY
+      - name: Deduplicate and triage unresolved ELF SONAME dependencies
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/mist_triage_elf_dependencies.py
+          python3 scripts/mist_triage_elf_dependencies.py \
+            --input reports/mist-curated-elf-metadata.json \
+            --json reports/mist-elf-dependency-triage.json \
+            --markdown reports/mist-elf-dependency-triage.md
+          cat reports/mist-elf-dependency-triage.md >> "$GITHUB_STEP_SUMMARY"
       - name: Checkout current production trees read-only
         run: |
           set -euo pipefail
@@ -109,6 +119,8 @@ jobs:
           path: |
             reports/mist-rom-preflight.json
             reports/mist-curated-elf-metadata.json
+            reports/mist-elf-dependency-triage.json
+            reports/mist-elf-dependency-triage.md
             reports/mist-deep-boot-metadata.json
             reports/mist-unified-research.json
             reports/mist-unified-research.md
