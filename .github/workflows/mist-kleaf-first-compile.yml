@@ -103,7 +103,7 @@ jobs:
           # DIAGNOSTIC-ONLY: public Xiaomi source points drivers/mihw to
           # unreleased vendor/xiaomi/proprietary/mihw. Do not fabricate code.
           # Stock mist_perf explicitly enables CONFIG_MIHW=y. Only for compiler
-          # discovery, replace that setting in the DISPOSABLE runner clone.
+          # discovery, remove that setting in the DISPOSABLE runner clone.
           # This alters the effective device configuration; never ship outputs.
           kconfig=pathlib.Path('msm-kernel/drivers/Kconfig')
           required='source "drivers/mihw/Kconfig"'
@@ -115,7 +115,7 @@ jobs:
           assert perf_text.splitlines().count('CONFIG_MIHW=y')==1, 'Unexpected mist_perf MIHW configuration'
           assert sum(line.strip().startswith('CONFIG_MIHW=') for line in perf_text.splitlines())==1, 'Multiple mist_perf MIHW overrides'
           # Missing proprietary MIHW Kconfig also prevents these five requested
-          # Xiaomi symbols from surviving config merge (verified run 43208679440).
+          # Xiaomi symbols from surviving config merge (verified runs 43208679440 and 43209948183).
           # Fail closed if upstream values drift instead of silently stripping
           # arbitrary options. This is solely a non-flashable compiler probe.
           diagnostic_disabled={
@@ -131,9 +131,9 @@ jobs:
             exact=symbol+'='+value
             assert sum(line.strip()==exact for line in lines)==1, 'Unexpected source config: '+symbol
             assert sum(line.strip().startswith(symbol+'=') for line in lines)==1, 'Multiple source config assignments: '+symbol
-            lines=[('# '+symbol+' is not set'+ ('\n' if line.endswith('\n') else '')) if line.strip()==exact else line for line in lines]
+            lines=[line for line in lines if line.strip()!=exact]
           perf.write_text(''.join(lines))
-          print('DIAGNOSTIC-ONLY: disabled exact MIHW-dependent config values '+','.join(diagnostic_disabled)+' in runner clone; NEVER FLASH',flush=True)
+          print('DIAGNOSTIC-ONLY: removed exact unavailable MIHW-related config assignments '+','.join(diagnostic_disabled)+' from runner-only fragment; NEVER FLASH',flush=True)
           assert pathlib.Path('msm-kernel/drivers/mihw').is_symlink(), 'Unexpected MIHW layout'
           assert not pathlib.Path('vendor/xiaomi/proprietary/mihw/Kconfig').exists(), 'MIHW source now available; remove diagnostic workaround'
           content=kconfig.read_text()
