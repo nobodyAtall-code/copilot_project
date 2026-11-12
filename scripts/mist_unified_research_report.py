@@ -21,17 +21,20 @@ def main():
     for field in ("super","groups","sizes","boot","preflight"):
         p.add_argument("--"+field,type=Path,required=True)
     p.add_argument("--boot-deep",type=Path,required=True)
+    p.add_argument("--stock-elf",type=Path,required=True)
     p.add_argument("--out",type=Path,required=True)
     p.add_argument("--markdown",type=Path,required=True)
     a=p.parse_args()
     super_data,groups,sizes,boot,preflight=[load(getattr(a,k)) for k in ("super","groups","sizes","boot","preflight")]
     deep=load(a.boot_deep)
+    elf=load(a.stock_elf)
     gates={}
     gates["stock_lp_primary_backup_checksum"]=bool(super_data and super_data.get("integrity_checks_passed"))
     gates["go_python_group_parity"]=bool(groups and groups.get("groups_match"))
     gates["go_python_partition_size_parity"]=bool(sizes and sizes.get("partition_sizes_match"))
     gates["stock_boot_structural_report_present"]=boot is not None
     gates["stock_avb_dtbo_fdt_metadata_structure"]=bool(deep and deep.get("stock_metadata_structures_valid"))
+    gates["curated_stock_vendor_elf_graph_collected"]=bool(elf and elf.get("archive_members_accepted",0)>=4000 and len(elf.get("dependency_graph",[]))>=5)
     gates["production_preflight_report_present"]=preflight is not None
     # These require separate authoritative/build/device evidence and are
     # deliberately never inferred from the third-party Go reader.
@@ -53,6 +56,13 @@ def main():
       "stock_super_source_run":43268799416,
       "stock_boot_source_run":43266837030,
       "deeper_stock_boot_metadata": deep,
+      "curated_stock_vendor_elf_metadata": {"source": "original SHA-verified stock vendor archive",
+          "seeds": elf.get("seeds",[]) if elf else [],
+          "archive_members_accepted": elf.get("archive_members_accepted") if elf else None,
+          "elf_files_parsed": elf.get("elf_files_parsed") if elf else None,
+          "dependency_graph_nodes": len(elf.get("dependency_graph",[])) if elf else None,
+          "vendor_archive_unresolved_dependency_edges": sum(1 for node in elf.get("dependency_graph",[]) for dep in node.get("dependencies",[]) if dep.get("matched_path") is None) if elf else None,
+          "complete_runtime_linker_closure_verified": False},
       "gates":gates,
       "stock_metadata_slot_count":len(slots),
       "groups":group_info,
@@ -67,12 +77,12 @@ def main():
        "Virtual A/B snapshot budget and mi_ext OTA inclusion cannot be deduced from LP group tables",
        "Actual AVB descriptors/chains/signatures and device-side rollback state unverified",
        "Stock DTB/DTBO applicability, kernel module load order and vendor ramdisk semantics unverified",
-       "HAL/ELF/VINTF/SELinux closure and Android 16 bring-up are unverified",
+       "Curated stock ELF DT_NEEDED inventory is not complete runtime linker/ELF/VINTF/SELinux closure",
        "No LineageOS full build, flash, boot or hardware test"
       ],
       "raw_source_reports_available":{k:v is not None for k,v in
          (("super",super_data),("groups",groups),("sizes",sizes),
-          ("boot",boot),("deep_boot",deep),("preflight",preflight))}
+          ("boot",boot),("deep_boot",deep),("stock_elf",elf),("preflight",preflight))}
     }
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,indent=2)+"\n")
@@ -96,7 +106,7 @@ def main():
     a.markdown.write_text("\n".join(lines)+"\n")
     print(json.dumps({"verified_offline_gates":sum(gates.values()),
                       "total_gates":len(gates),"stock_groups":group_info},indent=2))
-    required=("stock_avb_dtbo_fdt_metadata_structure","stock_lp_primary_backup_checksum","go_python_group_parity",
+    required=("curated_stock_vendor_elf_graph_collected","stock_avb_dtbo_fdt_metadata_structure","stock_lp_primary_backup_checksum","go_python_group_parity",
               "go_python_partition_size_parity","production_preflight_report_present")
     if not all(gates[k] for k in required):
         raise SystemExit("Required previously verified evidence or current preflight report missing")
