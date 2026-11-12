@@ -31,6 +31,14 @@ def main():
     board = (device / "BoardConfig.mk").read_text() if (device / "BoardConfig.mk").is_file() else ""
     product = (device / "lineage_mist.mk").read_text() if (device / "lineage_mist.mk").is_file() else ""
     check("kernel prebuilt wiring", "TARGET_PREBUILT_KERNEL := device/xiaomi/mist-kernel/kernel" in board, "BoardConfig must reference checked-in verified stock kernel")
+    # Verified from the SHA256-checked stock boot-chain structure artifact
+    # (run 43266837030); these are structural, not image-build checks.
+    check("init_boot header version", "BOARD_INIT_BOOT_HEADER_VERSION := 4" in board,
+          "verified stock init_boot header is v4")
+    check("init_boot mkbootimg args", "BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)" in board,
+          "init_boot packaging must request its observed header version")
+    check("stock LZ4 ramdisk format", "BOARD_RAMDISK_USE_LZ4 := true" in board,
+          "stock init_boot, vendor_boot and recovery ramdisks use LZ4")
     check("vendor product inheritance", "vendor/xiaomi/mist/mist-vendor.mk" in product, "product makefile must include vendor package definitions")
     k = kernel / "kernel"
     check("kernel payload present", k.is_file() and k.stat().st_size > 1024 * 1024, "stock Image must be committed to kernel prebuilt tree")
