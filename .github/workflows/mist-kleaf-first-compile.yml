@@ -119,6 +119,8 @@ jobs:
           # walt.c unconditionally includes missing MIHW mi_module.h under
           # CONFIG_METIS_WALT (verified run 43216970173), so omit that
           # exact diagnostic-only switch as well; never modify stock source.
+          # MIGT_WALT references missing vendor-only types in walt.c under its
+          # own #ifdef (run 43220236226); omit this exact switch too.
           # Fail closed if upstream values drift instead of silently stripping
           # arbitrary options. This is solely a non-flashable compiler probe.
           diagnostic_disabled={
@@ -127,6 +129,7 @@ jobs:
             'CONFIG_METIS':'m',
             'CONFIG_METIS_WALT':'y',
             'CONFIG_MIGT':'m',
+            'CONFIG_MIGT_WALT':'y',
             'CONFIG_MI_SCHED_2_CLUSTER':'y',
             'CONFIG_MI_MID_DEVICE_OPT':'y',
           }
