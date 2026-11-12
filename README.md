@@ -1,5 +1,7 @@
 # Redmi Note 17 5G (mist) — LineageOS 23.2 bring-up workspace
 
+> **CONTINUE DEVELOPMENT HERE:** [PROJECT_STATUS.md](PROJECT_STATUS.md) — live verified project status, GitHub Actions history, committed research, blockers, repository rules and exact next steps for future ChatGPT chats. Update it after each substantive development milestone. For a requested HANDOVER, also publish a fresh PDF.
+
 Temporary research/extraction workspace. Production build files go only into the dedicated device, vendor and kernel repositories after review.
 
 ## Device and firmware baseline
