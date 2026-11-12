@@ -313,16 +313,24 @@ From the published `mist-archive-membership.json`:
 - Extended the **research-only** production tree preflight script [commit 2b87184](https://github.com/nobodyAtall-code/copilot_project/commit/2b871846d178b5f74d3a3065eb0b37eb562b1a01) to check the new stock-backed BoardConfig fields. [Run 43267449619](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43267449619) **SUCCESS**, job 131354733412; checked full logs and all three new BoardConfig structural checks passed. The 31-entry curated proprietary manifest, vendor files and locked stock kernel SHA256 also passed. All non-structural ROM bring-up gates remain unverified. All GitHub Actions workflows remain exclusively in copilot_project. No PRs or new branches.
 - **NEXT:** validate revised preflight run; independently verify group capacities/slot semantics with official AOSP `lpdump`; review dtb/dtbo fragment mapping, bootconfig, vendor ramdisk modules; then source-backed partition/boot packaging, VINTF/SEPolicy and first real LineageOS 23.2 lunch/Soong build. **No ROM build/boot/flash success** is demonstrated.
 
+### 13 November 2026 — vendor Soong/product mapping structurally audited
+
+- Extended `scripts/check_mist_rom_preflight.py` in research-only [commit cf9f8ca](https://github.com/nobodyAtall-code/copilot_project/commit/cf9f8ca80bd2d2b8ae136cd8153727c56f174750) to verify curated Soong module source existence, expected stock install paths, unique names and exact `PRODUCT_PACKAGES` parity. No production repositories were edited by this research update.
+- [Run 43268147144](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43268147144), job 131357175936, **SUCCESS**, full logs verified: **31 Soong modules and 31 product package references**, unique, paired, sourced and destination-consistent, with `errors=[]`. All 31 device manifest paths remain present in vendor, and stock kernel hash lock plus boot v4/LZ4 structural checks pass. See [audited report](research/mist-vendor-soong-audit-2026-11-13.md).
+- **No compile/ABI claim**: Existing prebuilt library and HAL modules still have `check_elf_files: false` and incomplete `DT_NEEDED`/runtime closure, and the complete proprietary manifest is not built. `ready_for_rom_build_claim=false`, `flashable=false`, no ROM build, no device boot.
+- **NEXT priority:** AOSP `lpdump` verification of group maxima/virtual A/B `mi_ext` semantics, actual vendor_boot ramdisk/DTB/DTBO module evidence, ELF closure and VINTF/SELinux, then real LineageOS 23.2 lunch and build. Do not copy settings from another Snapdragon device.
+
 ## 4. Research/report files — read in this order
 
-1. `research/mist-lp-boot-chain-verified-2026-11-13.md`: latest independent LP partition-size agreement and SHA256-verified stock boot-chain header audit, including the first evidence-based device BoardConfig change.
-2. `research/device-facts.md`: on-device facts and boot/partition sizes.
-3. `research/mist-evidence-reconciliation-2026-11-12.md`: HAL/RC evidence and key cautions.
-4. `research/generated/mist-stock-config.md` and `.json`: actual VINTF, init, fstab and module research output.
-5. `research/generated/mist-archive-membership.md` and `.json`: service and manifest path membership results.
-6. `research/generated/mist-missing-path-review.md` and `.json`: **published after successful run 43185479167**; 16 unique missing service executable paths, one missing KeyMint VINTF path, relevant near-name candidates; candidates are **never proof of equivalence**.
-7. `research/stock-audit-run-43174896778.md` and `research/staged-archive-audit-run-43178657329.md`: raw extraction and hash evidence.
-8. `research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf`: previous dated PDF handover; superseded by this live status file for new work.
+1. `research/mist-vendor-soong-audit-2026-11-13.md`: most recent verified 31-module Soong/product structural parity check and explicit limitations.
+2. `research/mist-lp-boot-chain-verified-2026-11-13.md`: latest independent LP partition-size agreement and SHA256-verified stock boot-chain header audit, including the first evidence-based device BoardConfig change.
+3. `research/device-facts.md`: on-device facts and boot/partition sizes.
+4. `research/mist-evidence-reconciliation-2026-11-12.md`: HAL/RC evidence and key cautions.
+5. `research/generated/mist-stock-config.md` and `.json`: actual VINTF, init, fstab and module research output.
+6. `research/generated/mist-archive-membership.md` and `.json`: service and manifest path membership results.
+7. `research/generated/mist-missing-path-review.md` and `.json`: **published after successful run 43185479167**; 16 unique missing service executable paths, one missing KeyMint VINTF path, relevant near-name candidates; candidates are **never proof of equivalence**.
+8. `research/stock-audit-run-43174896778.md` and `research/staged-archive-audit-run-43178657329.md`: raw extraction and hash evidence.
+9. `research/handover/Mist_LineageOS_23_2_Handover_2026-11-12_v2.pdf`: previous dated PDF handover; superseded by this live status file for new work.
 
 ## 5. Next actionable development tasks (historical backlog; latest 13 November priority above supersedes order)
 
