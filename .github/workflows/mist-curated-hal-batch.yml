@@ -1,0 +1,98 @@
+name: Mist curated foundational HAL vendor integration
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-curated-hal-batch.yml'
+      - 'scripts/stage_mist_hal_batch.py'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: mist-curated-hal-vendor-main
+  cancel-in-progress: false
+jobs:
+  publish-curated-hal:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - name: Checkout research main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Prepare verified archive with full fastboot firmware fallback
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          mkdir -p input/vendor
+          if gh run download 43174896778 --repo "${{ github.repository }}" --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor &&
+             test -s input/vendor/stock-vendor-source.tar.zst &&
+             (cd input/vendor && sha256sum -c stock-vendor-source.sha256); then
+            echo "Verified prior full-firmware source archive"
+          else
+            echo "Archive unavailable; downloading complete fastboot firmware again"
+            rm -rf input/vendor
+            mkdir -p input/vendor work reports
+            sudo apt-get install -y --no-install-recommends pigz android-sdk-libsparse-utils erofs-utils golang-go
+            python3 -u scripts/multicdn.py
+            grep -q 'c4450c4e168052ca9de1211306d3beff' reports/firmware.md5
+            mkdir -p work/unpacked
+            pigz -dc work/*.tgz | tar -xf - -C work/unpacked
+            rm -f work/*.tgz
+            git clone -q https://github.com/soe1hom-arch/lpunpack-go.git work/lpunpack-src
+            git -C work/lpunpack-src checkout --detach -q 073a3302a3c3ffae01633989e6dd1e60b6de15b7
+            (cd work/lpunpack-src && CGO_ENABLED=0 go build -o "$GITHUB_WORKSPACE/work/lpunpack" .)
+            chmod +x work/lpunpack
+            bash scripts/extract_partitions.sh
+            sudo python3 scripts/stage_vendor_sources.py
+            cp reports/stock-vendor-source.tar.zst reports/stock-vendor-source.sha256 input/vendor/
+            (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+          fi
+      - name: Validate stock HAL files and stage packages
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/stage_mist_hal_batch.py
+          python3 scripts/stage_mist_hal_batch.py --archive input/vendor/stock-vendor-source.tar.zst --out output/staged
+          test "$(find output/staged/proprietary/vendor -type f | wc -l)" -eq 14
+      - name: Upload report only
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-curated-hal-batch-report
+          path: output/staged/batch-report.json
+          retention-days: 14
+          if-no-files-found: error
+      - name: Publish to existing vendor main under requested Git identity
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo "Missing GH_PAT write permission"; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/proprietary_vendor_xiaomi_mist output/production -- --quiet
+          cd output/production
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          test -s Android.bp && test -s mist-vendor.mk
+          if grep -q 'MIST_CURATED_HAL_BATCH_1' Android.bp || grep -q 'MIST_CURATED_HAL_BATCH_1' mist-vendor.mk; then
+            echo "Batch exists; refusing duplicate publication"
+            exit 1
+          fi
+          while IFS= read -r -d '' file; do
+            relative="${file#../staged/}"
+            test ! -e "$relative" || { echo "Would overwrite existing vendor file: $relative"; exit 1; }
+          done < <(find ../staged/proprietary/vendor -type f -print0)
+          mkdir -p proprietary/vendor
+          cp -a ../staged/proprietary/vendor/. proprietary/vendor/
+          printf '\n' >> Android.bp
+          cat ../staged/batch.bp.txt >> Android.bp
+          printf '\n' >> mist-vendor.mk
+          cat ../staged/batch.mk.txt >> mist-vendor.mk
+          git add -- Android.bp mist-vendor.mk proprietary/vendor/bin/hw/ proprietary/vendor/etc/init/ proprietary/vendor/etc/vintf/manifest/
+          git diff --cached --check
+          git commit -m "mist: integrate five stock HAL services with init and VINTF"
+          git push origin HEAD:main
