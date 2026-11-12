@@ -130,6 +130,14 @@ From the published `mist-archive-membership.json`:
 - **Important:** the result also lists generic libraries such as `libbase.so`, `libc++.so`, and AIDL interface libraries. Compare these with LineageOS 23.2 first; don't copy generic libraries en masse or automatically register duplicate Soong modules.
 - The previous first batch of 27 production files is unchanged by this research workflow; ROM compilation and runtime validation are still pending.
 
+### 12 November 2026 — bounded second vendor binary integration batch
+
+- Based on the verified [five-HAL recursive dependency report](research/generated/mist-five-hal-dependencies.json) (successful Actions run 43192475984), selected four *directly ELF-referenced* stock HAL implementation dependencies: `vendor/lib64/hw/android.hardware.bluetooth@aidl-impl-qti.so`, `vendor/lib64/hw/android.hardware.gnss-aidl-impl-qti.so`, `vendor/lib64/hw/libqtigatekeeper.so`, `vendor/lib64/libQSEEComAPI.so`. These are actionable stock linkers, not name-based guesses. This **does not** solve every transitive dependency or validate a LineageOS build.
+- Added only research-side `scripts/stage_mist_hal_implementation.py` ([commit b1f72cf](https://github.com/nobodyAtall-code/copilot_project/commit/b1f72cf30e02bcc34bcc72b670bd11c7d0f77b47)): requires each path to be present in the persisted real ELF dependency graph, verifies exact stock archive entries and ELF64 AArch64 signatures, hashes blob contents, and stages four specific `.so` files with corresponding Soong and product declaration snippets. No wildcard publishing.
+- Added workflow `.github/workflows/mist-hal-implementation-publish.yml` ([commit 9dff90e](https://github.com/nobodyAtall-code/copilot_project/commit/9dff90ec7478d4f28dec010b8c2c7e718e418706)). It prefers a checked stock archive but **re-downloads complete MD5-verified fastboot firmware** if the artifact expires, and attempts additive vendor and device manifest pushes on existing `main`, each using **`nobodyAtall-code <hashyofficial@gmail.com>`** for git author and committer. The workflow refuses overwriting existing targeted files. All Actions/scripts remain in `copilot_project`.
+- New Actions [run 43192854849](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43192854849) was **in progress** at initial check. **Do not claim four new `.so` files are published until vendor and device commits have both been verified.**
+- Next tasks: inspect real run result and repair any failure; verify vendor has 22 binaries/libraries and device manifest 31 paths if successful, then compare any remaining missing linker dependencies against LineageOS 23.2 and tackle kernel-prebuilt/config + first `lunch`. No ROM build or boot claim is authorized.
+
 ## 4. Research/report files — read in this order
 
 1. `research/device-facts.md`: on-device facts and boot/partition sizes.
