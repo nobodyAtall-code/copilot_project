@@ -116,12 +116,16 @@ jobs:
           assert sum(line.strip().startswith('CONFIG_MIHW=') for line in perf_text.splitlines())==1, 'Multiple mist_perf MIHW overrides'
           # Missing proprietary MIHW Kconfig also prevents these five requested
           # Xiaomi symbols from surviving config merge (verified runs 43208679440 and 43209948183).
+          # walt.c unconditionally includes missing MIHW mi_module.h under
+          # CONFIG_METIS_WALT (verified run 43216970173), so omit that
+          # exact diagnostic-only switch as well; never modify stock source.
           # Fail closed if upstream values drift instead of silently stripping
           # arbitrary options. This is solely a non-flashable compiler probe.
           diagnostic_disabled={
             'CONFIG_MIHW':'y',
             'CONFIG_MI_SCHED':'m',
             'CONFIG_METIS':'m',
+            'CONFIG_METIS_WALT':'y',
             'CONFIG_MIGT':'m',
             'CONFIG_MI_SCHED_2_CLUSTER':'y',
             'CONFIG_MI_MID_DEVICE_OPT':'y',
