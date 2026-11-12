@@ -43,8 +43,28 @@ jobs:
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/lineage"
           cd "$RUNNER_TEMP/lineage"
+          echo "Source checkout disk availability before init:" | tee -a "$GITHUB_STEP_SUMMARY"
+          df -h . | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "Starting official LineageOS 23.2 manifest init"
           "$HOME/bin/repo" init --depth=1 --no-repo-verify -u https://github.com/LineageOS/android.git -b lineage-23.2 --git-lfs
-          "$HOME/bin/repo" sync -c --no-tags --no-clone-bundle --fail-fast -j4
+          echo "Manifest initialized; starting bounded source synchronization"
+          # Limit simultaneous network/checkout operations to reduce peak load.
+          # Capture the sync output so a failure has actionable logs without
+          # needing redirected GitHub job-log storage.
+          set +e
+          "$HOME/bin/repo" sync -c --no-tags --no-clone-bundle --fail-fast -j2 --jobs-network=2 --jobs-checkout=2 2>&1 | tee "$RUNNER_TEMP/mist-lineage-repo-sync.log"
+          sync_rc=${PIPESTATUS[0]}
+          set -e
+          if (( sync_rc != 0 )); then
+            echo "LineageOS repo sync failed with exit code $sync_rc" | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "Disk availability on failure:" | tee -a "$GITHUB_STEP_SUMMARY"
+            df -h . | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "Last 100 lines of repo sync output:"
+            tail -n 100 "$RUNNER_TEMP/mist-lineage-repo-sync.log" || true
+            echo "Repo sync error summaries (bounded):"
+            find .repo -path '*/.git/logs/*' -prune -o -type f \\( -name '*.log' -o -name '*error*' \\) -print 2>/dev/null | head -n 20 || true
+            exit "$sync_rc"
+          fi
           test -f build/envsetup.sh
           test -f vendor/lineage/vars/aosp_target_release
           grep -Fx 'aosp_target_release=bp4a' vendor/lineage/vars/aosp_target_release
