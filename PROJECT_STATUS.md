@@ -71,6 +71,15 @@ From the published `mist-archive-membership.json`:
 - Module basenames and original 350 vendor `modules.load` entries remain **unverified for ABI, dependency resolution and duplicate semantics**.
 - **NEXT engineering gate**: read-only stock file metadata + symlink-target/hash inventory and recursive ELF `DT_NEEDED` closure for a tightly chosen set (RIL/IMS, KeyMint, fingerprint, audio, camera); then curated proprietary manifest. No blanket vendor copying.
 
+### 12 November 2026 — curated ELF metadata inspection milestone
+
+- Added [`scripts/inspect_stock_elf_metadata.py`](scripts/inspect_stock_elf_metadata.py) on `main`: bounded, read-only archive inventory records source file mode/UID/GID, symlink or hardlink targets, SHA256 for files at most 80 MiB, parsed ELF architecture and `DT_NEEDED`, and recursive candidate resolution for five narrowly scoped RIL/IMS and KeyMint library seeds. It does not extract or publish proprietary binaries.
+- Added [`.github/workflows/curated-stock-elf-review.yml`](.github/workflows/curated-stock-elf-review.yml) **only to copilot_project**; uses the prior verified stock source artifact and SHA256 check, isolates `pyelftools==0.32` in a Python virtual environment, and uploads research JSON as a temporary Actions artifact. No production device/vendor/kernel repositories were modified.
+- Commits: `e934aef` (initial inspector), `4b05e37` (Python literal correction), `f93e6d8` (workflow), `b241f60` (Ubuntu 24.04 venv fix). An intermediate no-op update `408e2fb` was not a validated script fix.
+- New workflow run [43187279491](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43187279491) was **in progress when initially checked**. A completed result, source archive analysis, ELF closure, and any report contents are **NOT yet verified**. Check current workflow runs and logs next; the venv correction was committed after the initial run started and may require a new run.
+- The analyzer is a research starting point, not a comprehensive dynamic linker simulator: namespace selection, `RUNPATH`, system/APEX resolution, `dlopen`, duplicate archive members, symlink semantics and library ABI remain to be validated. Do not approve a `proprietary-files.txt` from its results alone.
+- **Next:** confirm a post-`b241f60` run passes, inspect artifact JSON, distinguish genuine unresolved vendor dependencies from framework/APEX libraries, then extend curated seeds to fingerprint/audio/camera using actual stock paths. Keep verifying and documenting after each milestone.
+
 ## 4. Research/report files — read in this order
 
 1. `research/device-facts.md`: on-device facts and boot/partition sizes.
@@ -85,7 +94,7 @@ From the published `mist-archive-membership.json`:
 
 1. **START WITH LATEST GITHUB STATUS**, then inspect the successfully published [missing-path review](https://github.com/nobodyAtall-code/copilot_project/blob/main/research/generated/mist-missing-path-review.md) from [run 43185479167](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43185479167). Missing references: 18 declarations, 16 unique paths; one missing KeyMint VINTF XML file; 13 related stock KeyMint/Keymaster filenames. Review each clue, not just counts.
 2. Resolve missing KeyMint VINTF path and missing service executables **against real stock archive members**, relevant symlink targets, executable presence, filename variations, alternate partition mounts and active SKU manifest combinations. Distinguish missing vs optional factory features. Do not invent results.
-3. Build a safe, read-only **file metadata and recursive ELF DT_NEEDED** checker for a *curated candidate set*: preserve provenance, hash, type, symlinks, permissions, dependency edges, missing library resolution and partition-mount mapping. Keep the analysis workflow solely inside `copilot_project`.
+3. **In progress:** bounded read-only stock metadata and recursive ELF DT_NEEDED prototype committed in `copilot_project`; validate the latest workflow run and JSON, then expand to vetted fingerprint/audio/camera seeds and accurate linker namespaces/system/APEX context before treating any closure as verified.
 4. Inspect actual boot/vendor_boot/init_boot/recovery images and DTBO, ramdisk fragments, module lists/load ordering and AVB flags against the mist kernel tree. Populate kernel prebuilts only when proven correct.
 5. Obtain authoritative full `lpdump` group capacity metadata. Do not infer dynamic group size from extracted image sizes or `SUPER_IMAGE_SIZE` kernel build variable.
 6. Create a **reviewed, concise proprietary-files.txt** tied to stock paths, plus standard extract-utils makefiles. For large binary publishing, put publishing logic in `copilot_project` only, validate scoped `GH_PAT` permissions, and apply a strict verified file allowlist.
@@ -96,7 +105,7 @@ From the published `mist-archive-membership.json`:
 
 - No final or approved `proprietary-files.txt`.
 - No populated production proprietary vendor or kernel-prebuilt repository.
-- No verified complete DT_NEEDED library closure, symlink/mode metadata, or actual module ABI assessment.
+- Research-only metadata/DT_NEEDED inspector committed, but no verified completed report or complete library closure, symlink/mode validation, or actual module ABI assessment.
 - No validated dynamic partition group capacities or finished BoardConfig/AVB/SELinux configuration.
 - No ROM build, lunch verification, boot, recovery validation or hardware testing.
 - No evidence that missing service names mean their functionality is absent from the device.
