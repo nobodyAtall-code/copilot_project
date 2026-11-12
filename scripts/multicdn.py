@@ -19,7 +19,7 @@ HOSTS = (
 )
 PART = 32 * 1024 * 1024
 PROBE = 2 * 1024 * 1024
-TOTAL_RE = re.compile(r"bytes (\\d+)-(\\d+)/(\\d+)")
+TOTAL_RE = re.compile(r"bytes (\d+)-(\d+)/(\d+)")
 
 
 def ranged(url, start, end, timeout):
@@ -63,9 +63,9 @@ def main():
     with cf.ThreadPoolExecutor(max_workers=len(urls)) as pool:
         measurements = list(pool.map(probe, urls))
     with open("reports/cdn-probes.tsv", "w") as report:
-        report.write("url\\tstatus\\tsize\\tspeed_bytes_per_sec\\n")
+        report.write("url\tstatus\tsize\tspeed_bytes_per_sec\n")
         for url, size, speed, status in measurements:
-            report.write(f"{url}\\t{status}\\t{size}\\t{speed:.0f}\\n")
+            report.write(f"{url}\t{status}\t{size}\t{speed:.0f}\n")
             print(f"{url.split('/')[2]}: {status}, {speed / 1048576:.2f} MiB/s", flush=True)
     good = sorted([m for m in measurements if m[3] == "OK"], key=lambda m: m[2], reverse=True)
     if not good:
@@ -146,11 +146,11 @@ def main():
         for piece in iter(lambda: image.read(8 * 1024 * 1024), b""):
             checksum.update(piece)
     digest = checksum.hexdigest()
-    Path("reports/firmware.md5").write_text(f"{digest}  {output}\\n")
+    Path("reports/firmware.md5").write_text(f"{digest}  {output}\n")
     if digest != expected:
         output.unlink(missing_ok=True)
         raise RuntimeError(f"MD5 mismatch: {digest} != {expected}. Invalid archive deleted.")
-    Path("reports/source.txt").write_text(f"firmware={relative}\\nmd5={digest}\\nsize={total}\\n")
+    Path("reports/source.txt").write_text(f"firmware={relative}\nmd5={digest}\nsize={total}\n")
     print("Verified firmware MD5:", digest, flush=True)
 
 
