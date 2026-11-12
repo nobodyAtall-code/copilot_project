@@ -1,0 +1,80 @@
+name: Mist missing stock path reconciliation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/missing-stock-path-review.yml'
+      - 'scripts/reconcile_missing_stock_paths.py'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: mist-missing-stock-path-review-main
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - name: Checkout research workspace
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+
+      - name: Install zstd
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+
+      - name: Download verified source archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/vendor
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor
+          test -s input/vendor/stock-vendor-source.tar.zst
+          (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+
+      - name: Compare missing RC and VINTF paths with stock archive
+        run: |
+          set -euo pipefail
+          python3 -W error::SyntaxWarning -m py_compile scripts/reconcile_missing_stock_paths.py
+          python3 scripts/reconcile_missing_stock_paths.py \
+            --archive input/vendor/stock-vendor-source.tar.zst \
+            --membership research/generated/mist-archive-membership.json \
+            --out research/generated
+          test -s research/generated/mist-missing-path-review.md
+          test -s research/generated/mist-missing-path-review.json
+
+      - name: Upload research-only reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-missing-path-review
+          path: |
+            research/generated/mist-missing-path-review.md
+            research/generated/mist-missing-path-review.json
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Save reviewed research data to main
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- research/generated/mist-missing-path-review.md \
+            research/generated/mist-missing-path-review.json
+          if git diff --cached --quiet; then
+            echo "Reports unchanged"
+            exit 0
+          fi
+          git commit -m "mist: record missing stock service and KeyMint path review"
+          git push origin HEAD:main
