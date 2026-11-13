@@ -1,0 +1,57 @@
+name: Mist reconcile Power USB ELF dependencies against production tree
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-power-usb-dependency-reconcile.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: mist-power-usb-dependency-reconcile
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Download successful Power USB ELF closure report
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/review output
+          gh run download 43527718972 --repo "${{ github.repository }}" \
+            --name mist-power-usb-elf-closure-report --dir input/review
+          test -s input/review/mist-power-usb-elf-closure.json
+          python3 -m json.tool input/review/mist-power-usb-elf-closure.json >/dev/null
+      - name: Read existing production vendor/device trees
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth 1 --branch main \
+            https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist.git input/vendor
+          git clone --quiet --depth 1 --branch main \
+            https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git input/device
+          grep -q 'MIST_POWER_USB_HAL_BATCH_3' input/vendor/Android.bp
+          grep -q 'vendor/bin/hw/android.hardware.usb-service.qti' input/device/proprietary-files.txt
+          grep -q 'vendor/bin/hw/android.hardware.power-service' input/device/proprietary-files.txt
+      - name: Reconcile exact dependency paths; no production mutation
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/reconcile_mist_power_usb_dependencies.py
+          python3 scripts/reconcile_mist_power_usb_dependencies.py \
+            --report input/review/mist-power-usb-elf-closure.json \
+            --manifest input/device/proprietary-files.txt \
+            --vendor-bp input/vendor/Android.bp \
+            --output output/mist-power-usb-production-reconciliation.json
+          python3 -m json.tool output/mist-power-usb-production-reconciliation.json >/dev/null
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mist-power-usb-production-dependency-reconciliation
+          path: output/mist-power-usb-production-reconciliation.json
+          retention-days: 14
+          if-no-files-found: error
