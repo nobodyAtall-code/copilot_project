@@ -84,8 +84,7 @@ def run(archive, stock_config, membership, dest):
     if set(seen) != set(allowed):
         raise RuntimeError("missing stock files: "+str(sorted(set(allowed)-set(seen))))
     report={"firmware":"OS3.0.304.0.WPUMIXM","files":seen,"status":"review_only_no_publication","limitations":"ELF DT_NEEDED, Lineage module collisions, SEPolicy, VINTF runtime and boot unverified"}
-    (dest/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"
-")
+    (dest/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
     print("Verified and staged",len(seen),"stock files from",len(SERVICES),"services; NO PRODUCTION PUSH")
 
 if __name__ == "__main__":
