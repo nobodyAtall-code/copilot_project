@@ -1,0 +1,57 @@
+name: Mist Power and USB stock ELF closure review
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-power-usb-elf-closure.yml'
+      - 'scripts/mist_power_usb_elf_closure.py'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-power-usb-elf-closure
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Retrieve previously SHA-verified Xiaomi source archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd python3-pyelftools
+          mkdir -p input/vendor reports
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor
+          (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+      - name: Parse recursive ELF dependencies of published Power and USB services
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/inspect_stock_elf_metadata.py scripts/mist_power_usb_elf_closure.py
+          python3 scripts/inspect_stock_elf_metadata.py \
+            --archive input/vendor/stock-vendor-source.tar.zst \
+            --output reports/stock-elf-graph.json \
+            --seed vendor_a/bin/hw/android.hardware.power-service \
+            --seed vendor_a/bin/hw/android.hardware.usb-service.qti
+          python3 scripts/mist_power_usb_elf_closure.py \
+            --graph reports/stock-elf-graph.json \
+            --out reports/mist-power-usb-elf-closure.json
+          python3 -m json.tool reports/mist-power-usb-elf-closure.json >/dev/null
+      - name: Upload scoped report only
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-power-usb-elf-closure-report
+          path: reports/mist-power-usb-elf-closure.json
+          retention-days: 14
+          if-no-files-found: error
