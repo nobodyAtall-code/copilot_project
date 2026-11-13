@@ -27,18 +27,18 @@ LIMIT = 32 * 1024 * 1024
 def run(archive, stock_config, membership, dest):
     config = json.loads(stock_config.read_text())
     archive_evidence = json.loads(membership.read_text())
-    known = {(s["rc"], s["binary"]): s for x in config["init_files"] for s in x["services"]}
+    known = {(entry["file"], service["binary"]): service\n             for entry in config["init_files"]\n             for service in entry["services"]}
     membership_paths = {(e["archive_path"], e["rc"]): e for e in archive_evidence["service_executables"]}
     xml_hals = {x["file"]: {h["name"] for h in x["hals"]} for x in config["vintf_files"]}
     allowed = {}
     for subsystem, v in SERVICES.items():
         binary = "/"+v["binary"].replace("vendor_a/", "vendor/", 1)
-        assert (v["rc"], binary) in known, (subsystem, "RC executable not in audit")
-        assert membership_paths[(v["binary"], v["rc"])]["present"] is True, (subsystem, "missing ELF")
-        assert v["hal"] in xml_hals[v["xml"]], (subsystem, "VINTF mismatch")
+        if (v["rc"], binary) not in known:\n            raise ValueError(f"{subsystem}: RC executable not in audit")
+        if not membership_paths.get((v["binary"], v["rc"]), {}).get("present", False):\n            raise ValueError(f"{subsystem}: executable missing from stock archive evidence")
+        if v["hal"] not in xml_hals.get(v["xml"], set()):\n            raise ValueError(f"{subsystem}: VINTF declaration mismatch")
         for kind in ("binary","rc","xml"):
             path = v[kind]
-            assert path not in allowed, "duplicate allowlisted path"
+            if path in allowed:\n                raise ValueError("duplicate allowlisted path: " + path)
             allowed[path] = (subsystem, kind)
     seen = {}
     dest.mkdir(parents=True, exist_ok=True)
