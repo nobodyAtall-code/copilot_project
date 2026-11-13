@@ -1,0 +1,94 @@
+name: Mist publish reviewed Power and USB HALs to production main
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-power-usb-publish.yml'
+permissions:
+  actions: read
+  contents: read
+concurrency:
+  group: mist-power-usb-production-main
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout copilot project
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Get SHA-verified vendor archive and successful reviewed report
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          mkdir -p input/vendor input/review
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor
+          (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+          gh run download 43526702989 --repo "${{ github.repository }}" \
+            --name mist-power-usb-review-hashes --dir input/review
+          test -s input/review/report.json
+          python3 -m json.tool input/review/report.json >/dev/null
+      - name: Re-stage and compare every file to successful review run
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/stage_mist_power_usb_review.py scripts/publish_mist_power_usb.py
+          python3 scripts/stage_mist_power_usb_review.py \
+            --archive input/vendor/stock-vendor-source.tar.zst \
+            --stock-config research/generated/mist-stock-config.json \
+            --membership research/generated/mist-archive-membership.json \
+            --out output/power-usb
+          test "$(find output/power-usb/proprietary/vendor -type f | wc -l)" -eq 6
+      - name: Clone existing production main branches only
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo 'GH_PAT unavailable'; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/proprietary_vendor_xiaomi_mist output/vendor -- --quiet --branch main --single-branch
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist output/device -- --quiet --branch main --single-branch
+          for repo in output/vendor output/device; do
+            git -C "$repo" config user.name "nobodyAtall-code"
+            git -C "$repo" config user.email "hashyofficial@gmail.com"
+            test "$(git -C "$repo" branch --show-current)" = main
+          done
+      - name: Validate exact approved hashes and prepare both production trees
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/publish_mist_power_usb.py \
+            --staged output/power-usb \
+            --reviewed input/review/report.json \
+            --vendor output/vendor \
+            --device output/device
+          git -C output/vendor add -- Android.bp mist-vendor.mk proprietary/vendor/bin/hw/ proprietary/vendor/etc/init/ proprietary/vendor/etc/vintf/manifest/
+          git -C output/device add -- proprietary-files.txt
+          git -C output/vendor diff --cached --check
+          git -C output/device diff --cached --check
+          test "$(git -C output/vendor diff --cached --name-only | wc -l)" -eq 8
+          test "$(git -C output/device diff --cached --name-only | wc -l)" -eq 1
+          git -C output/vendor diff --cached --stat
+          git -C output/device diff --cached --stat
+      - name: Publish exact verified batch to vendor main and device main
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN"
+          git -C output/vendor commit -m "mist: integrate reviewed stock Power and USB HAL triples"
+          git -C output/device commit -m "mist: list reviewed Power and USB HAL proprietary files"
+          # Remote branches must not have advanced since the clones.
+          git -C output/vendor push origin HEAD:main
+          git -C output/device push origin HEAD:main
+          echo "Published vendor and device main updates; runtime linker/SELinux remain unproven."
