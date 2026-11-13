@@ -1,0 +1,75 @@
+name: Mist stock Power and USB HAL staging review
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-power-usb-review.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-power-usb-review
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Retrieve checked vendor archive or regenerate from exact firmware
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          mkdir -p input/vendor
+          if gh run download 43174896778 --repo "${{ github.repository }}" --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor && \
+             test -s input/vendor/stock-vendor-source.tar.zst && \
+             (cd input/vendor && sha256sum -c stock-vendor-source.sha256); then
+            echo 'Verified prior stock source archive'
+          else
+            rm -rf input/vendor
+            mkdir -p input/vendor work reports
+            sudo apt-get install -y --no-install-recommends pigz android-sdk-libsparse-utils erofs-utils golang-go
+            python3 -u scripts/multicdn.py
+            grep -q 'c4450c4e168052ca9de1211306d3beff' reports/firmware.md5
+            mkdir -p work/unpacked
+            pigz -dc work/*.tgz | tar -xf - -C work/unpacked
+            rm -f work/*.tgz
+            git clone -q https://github.com/soe1hom-arch/lpunpack-go.git work/lpunpack-src
+            git -C work/lpunpack-src checkout --detach -q 073a3302a3c3ffae01633989e6dd1e60b6de15b7
+            (cd work/lpunpack-src && CGO_ENABLED=0 go build -o "$GITHUB_WORKSPACE/work/lpunpack" .)
+            chmod +x work/lpunpack
+            bash scripts/extract_partitions.sh
+            sudo python3 scripts/stage_vendor_sources.py
+            cp reports/stock-vendor-source.tar.zst reports/stock-vendor-source.sha256 input/vendor/
+            (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+          fi
+      - name: Stage exact stock Power and USB service triples
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/stage_mist_power_usb_review.py
+          python3 scripts/stage_mist_power_usb_review.py \
+            --archive input/vendor/stock-vendor-source.tar.zst \
+            --stock-config research/generated/mist-stock-config.json \
+            --membership research/generated/mist-archive-membership.json \
+            --out output/power-usb
+          test "$(find output/power-usb/proprietary/vendor -type f | wc -l)" -eq 6
+          python3 -m json.tool output/power-usb/report.json >/dev/null
+      - name: Upload bounded review report (no vendor production modification)
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-power-usb-review-hashes
+          path: output/power-usb/report.json
+          retention-days: 14
+          if-no-files-found: error
