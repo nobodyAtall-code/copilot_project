@@ -27,18 +27,24 @@ LIMIT = 32 * 1024 * 1024
 def run(archive, stock_config, membership, dest):
     config = json.loads(stock_config.read_text())
     archive_evidence = json.loads(membership.read_text())
-    known = {(entry["file"], service["binary"]): service\n             for entry in config["init_files"]\n             for service in entry["services"]}
+    known = {(entry["file"], service["binary"]): service
+             for entry in config["init_files"]
+             for service in entry["services"]}
     membership_paths = {(e["archive_path"], e["rc"]): e for e in archive_evidence["service_executables"]}
     xml_hals = {x["file"]: {h["name"] for h in x["hals"]} for x in config["vintf_files"]}
     allowed = {}
     for subsystem, v in SERVICES.items():
         binary = "/"+v["binary"].replace("vendor_a/", "vendor/", 1)
-        if (v["rc"], binary) not in known:\n            raise ValueError(f"{subsystem}: RC executable not in audit")
-        if not membership_paths.get((v["binary"], v["rc"]), {}).get("present", False):\n            raise ValueError(f"{subsystem}: executable missing from stock archive evidence")
-        if v["hal"] not in xml_hals.get(v["xml"], set()):\n            raise ValueError(f"{subsystem}: VINTF declaration mismatch")
+        if (v["rc"], binary) not in known:
+            raise ValueError(f"{subsystem}: RC executable not in audit")
+        if not membership_paths.get((v["binary"], v["rc"]), {}).get("present", False):
+            raise ValueError(f"{subsystem}: executable missing from stock archive evidence")
+        if v["hal"] not in xml_hals.get(v["xml"], set()):
+            raise ValueError(f"{subsystem}: VINTF declaration mismatch")
         for kind in ("binary","rc","xml"):
             path = v[kind]
-            if path in allowed:\n                raise ValueError("duplicate allowlisted path: " + path)
+            if path in allowed:
+                raise ValueError("duplicate allowlisted path: " + path)
             allowed[path] = (subsystem, kind)
     seen = {}
     dest.mkdir(parents=True, exist_ok=True)
@@ -78,7 +84,8 @@ def run(archive, stock_config, membership, dest):
     if set(seen) != set(allowed):
         raise RuntimeError("missing stock files: "+str(sorted(set(allowed)-set(seen))))
     report={"firmware":"OS3.0.304.0.WPUMIXM","files":seen,"status":"review_only_no_publication","limitations":"ELF DT_NEEDED, Lineage module collisions, SEPolicy, VINTF runtime and boot unverified"}
-    (dest/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+    (dest/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"
+")
     print("Verified and staged",len(seen),"stock files from",len(SERVICES),"services; NO PRODUCTION PUSH")
 
 if __name__ == "__main__":
