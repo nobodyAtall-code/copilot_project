@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/mist-power-usb-review.yml'
+      - 'scripts/stage_mist_power_usb_review.py'
 
 permissions:
   contents: read
