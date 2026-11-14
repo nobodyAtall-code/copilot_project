@@ -147,6 +147,23 @@ jobs:
           assert content.count(required)==1, 'Expected exactly one MIHW Kconfig include'
           kconfig.write_text(content.replace(required,'# DIAGNOSTIC ONLY: missing proprietary MIHW source (not boot validated)'))
           print('DIAGNOSTIC-ONLY: guarded unavailable MIHW Kconfig include; kernel output MUST NOT replace stock',flush=True)
+          # DIAGNOSTIC ONLY: the original mist.bzl requests MIHW .ko files
+          # even after disabling MIHW Kconfig. Remove only those exact
+          # entries from the throwaway runner copy; preserve the real source.
+          mist_bzl=pathlib.Path('msm-kernel/mist.bzl')
+          bzl=mist_bzl.read_text()
+          missing_modules=[
+            'drivers/mihw/metis/metis.ko',
+            'drivers/mihw/mi_sched/mi_schedule.ko',
+            'drivers/mihw/game/migt.ko',
+          ]
+          for module in missing_modules:
+            needle='"'+module+'",'
+            assert bzl.count(needle)==1, 'Unexpected MIHW module entry: '+module
+            bzl=bzl.replace(needle, '', 1)
+          mist_bzl.write_text(bzl)
+          assert not any('drivers/mihw/' in line and '.ko' in line for line in bzl.splitlines()), 'Unhandled MIHW module target'
+          print('DIAGNOSTIC ONLY: stripped three MIHW module outputs from disposable mist.bzl; NEVER FLASH',flush=True)
           print('Pinned Xiaomi sources and //build extension assembled',flush=True)
           PY
       - name: Query and attempt real Mist Bazel compilation
