@@ -37,12 +37,12 @@ def main():
     device=root/"device/xiaomi/mist"
     mk=(vendor/"mist-vendor.mk").read_text()
     bp=(vendor/"Android.bp").read_text()
-    selected=set(re.findall(r"\\bmist_[A-Za-z0-9_]+\\b",mk))
+    selected=set(re.findall(r"\bmist_[A-Za-z0-9_]+\b",mk))
     declarations={}
-    for match in re.finditer(r"(?m)^(?:prebuilt_etc|cc_prebuilt_binary|cc_prebuilt_library_shared|sh_binary)\\s*\\{(.*?)^\\}",bp,re.S|re.M):
+    for match in re.finditer(r"(?m)^(?:prebuilt_etc|cc_prebuilt_binary|cc_prebuilt_library_shared|sh_binary)\s*\{(.*?)^\}",bp,re.S|re.M):
         body=match.group(1)
-        n=re.search(r'\\bname:\\s*"([^"]+)"',body)
-        s=re.search(r'\\b(?:src|srcs):\\s*\\[?\\s*"([^"]+)"',body)
+        n=re.search(r'\bname:\s*"([^"]+)"',body)
+        s=re.search(r'\b(?:src|srcs):\s*\[?\s*"([^"]+)"',body)
         if n and s:
             declarations[n.group(1)]=s.group(1)
     sources=sorted({declarations[n] for n in selected if n in declarations and "/vintf/" in declarations[n] and declarations[n].endswith(".xml")})
