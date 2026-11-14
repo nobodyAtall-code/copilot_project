@@ -28,7 +28,8 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends erofs-utils
           python3 -m py_compile scripts/stage_production_dlkm_images.py
-          mkfs.erofs -V
+          command -v mkfs.erofs
+          command -v dump.erofs
       - name: Clone current production device and kernel prebuilt trees
         run: |
           set -euo pipefail
