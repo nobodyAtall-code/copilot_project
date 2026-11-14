@@ -1502,3 +1502,9 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 - Compressed `mist-stock-dlkm.tar.zst` is 28,271,494 bytes; SHA256 `5d5a4b2773ea0e0c1a5f952c94c793c708b084245101353be47b676b3c9a4e0d`; local sha256sum check passed in Actions.
 - Uploaded artifact [mist-stock-dlkm-payload #14111511383](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43587815827/artifacts/14111511383) (28,295,891 bytes ZIP; expires **2026-11-28 11:05:41 UTC**). Contains the compressed source module payload, manifest, checksum and extraction summaries.
 - No changes pushed to the production kernel/device/vendor trees; **next** inspect module vermagic/release, symbols/dependency metadata, module load paths, loading order and packaging readiness; do not represent extraction as compatibility or boot proof.
+
+
+### 2026-11-14 — DLKM ABI audit workflow added (await result)
+
+- Added `scripts/audit_mist_stock_dlkm.py` at [b060207](https://github.com/nobodyAtall-code/copilot_project/commit/b06020730f303aa41395971f09ef4299dd1113cd): checks expected 268+192 stock `.ko` count, ELF signatures, `modinfo -F vermagic`, duplicate basenames and `modules.dep` references. Emits JSON report, without claiming module runtime compatibility or modifying production trees.
+- Added [`.github/workflows/mist-dlkm-abi-audit.yml`](https://github.com/nobodyAtall-code/copilot_project/blob/main/.github/workflows/mist-dlkm-abi-audit.yml) at commit [de21376](https://github.com/nobodyAtall-code/copilot_project/commit/de2137623cb9233d553b872498ce1b60892a04bc). Uses GitHub Actions artifact from verified run `43587815827`, verifies its SHA256 and audits modules without re-downloading the 8 GB original firmware. Workflow configured with push and manual triggers; **success not yet verified**. Existing 14-day artifact expires Nov 28; run audit before expiry.
