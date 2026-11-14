@@ -12,6 +12,17 @@ if [[ ! -f build/envsetup.sh || ! -f device/xiaomi/mist/BoardConfig.mk ]]; then
   exit 2
 fi
 
+# Fail before spending time compiling unrelated dependencies if kernel UAPI
+# headers cannot be generated. Existing TARGET_PREBUILT_KERNEL is an Image,
+# not an installed UAPI header tree. No dummy Makefile workaround.
+if [[ ! -f kernel/xiaomi/mist/Makefile ]]; then
+  echo "BLOCKED: kernel/xiaomi/mist/Makefile is missing." >&2
+  echo "LineageOS generated_kernel_includes calls 'make -C kernel/xiaomi/mist headers_install'." >&2
+  echo "The stock prebuilt kernel Image cannot satisfy this dependency." >&2
+  echo "Add the correct 6.6 kernel source / verified UAPI headers first." >&2
+  exit 3
+fi
+
 log_dir="${MIST_TEST_LOG_DIR:-$PWD/mist-hal-logs}"
 mkdir -p "$log_dir"
 
