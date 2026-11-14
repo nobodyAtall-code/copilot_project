@@ -1,0 +1,42 @@
+name: Mist stock RIL audio fingerprint stock validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-validate-three-entrypoints.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Fetch original verified Mist vendor archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          mkdir -p input
+          gh run download 43174896778 --repo nobodyAtall-code/copilot_project --name mist-global-OS3.0.304.0-vendor-source --dir input
+          (cd input && sha256sum -c stock-vendor-source.sha256)
+      - name: Validate and stage RIL audio fingerprint as one batch
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/stage_mist_radio_audio_fingerprint.py
+          python3 scripts/stage_mist_radio_audio_fingerprint.py --archive input/stock-vendor-source.tar.zst --output output/staged
+          test "$(find output/staged/proprietary/vendor -type f | wc -l)" -eq 9
+          test "$(grep -c '^vendor/' output/staged/manifest-additions.txt)" -eq 9
+      - name: Upload verified staging files
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-three-entrypoint-staged
+          path: output/staged
+          retention-days: 14
+          if-no-files-found: error
