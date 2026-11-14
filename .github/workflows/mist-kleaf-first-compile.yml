@@ -181,7 +181,7 @@ jobs:
           assert tls_entry not in bzl, 'TLS module already declared'
           tls_anchor='"net/wireless/cfg80211.ko",'
           assert bzl.count(tls_anchor)==1, 'Unexpected TLS insertion anchor'
-          bzl=bzl.replace(tls_anchor, tls_entry+'\\n        '+tls_anchor,1)
+          bzl=bzl.replace(tls_anchor, tls_entry+'\n        '+tls_anchor,1)
           mist_bzl.write_text(bzl)
           assert not any('drivers/mihw/' in line and '.ko' in line for line in bzl.splitlines()), 'Unhandled MIHW module target'
           print('DIAGNOSTIC ONLY: stripped three MIHW module outputs from disposable mist.bzl; NEVER FLASH',flush=True)
