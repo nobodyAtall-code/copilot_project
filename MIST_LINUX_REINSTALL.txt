@@ -430,3 +430,16 @@ Y. TARGETED STOCK VENDOR_BOOT BOOTCONFIG INSPECTION
 - Inference: fstab.emmc EXT4-only cannot mount original all-EROFS seven
   system partitions; default is the plausible stock boot selection.
   Inference is not full bootconfig/init proof. Do not flash untested images.
+
+
+Z. NON-FLASHABLE CLEAN VENDOR RAMDISK PATCHER IMPLEMENTED
+- copilot_project/scripts/prepare_mist_clean_vendor_ramdisk.py commit db9aa11,
+  requires existing original SHA-verified stock vendor_boot and lz4 CLI.
+- Replaces ONLY first_stage_ramdisk/fstab.default inside stock CPIO with
+  clean rootdir/etc/fstab.mist; original source fstab hash checked; all other
+  CPIO member records, modules.load/module binaries, modes/order preserved.
+- Produces ONLY a review-only compressed vendor ramdisk FRAGMENT and JSON,
+  NOT a vendor_boot.img. Existing stock fallback remains untouched.
+- See device research/MIST_CUSTOM_VENDOR_RAMDISK_REVIEW_2026-11-14.md
+  commit 42002fd for exact local commands. Script not yet executed against
+  user's local stock image; no real result/boot/flash proof.
