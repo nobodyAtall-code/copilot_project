@@ -1492,3 +1492,13 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 - Added read-only staging script `scripts/stage_mist_dlkm.py` at commit `10b8e014`, recording stock module hashes, `modules.load*` presence and basename closure, preserving stock `modules.*` metadata, and creating a compressed standalone DLKM payload artifact. The research artifact is **not** automatically copied to production trees and **does not** establish kernel ABI compatibility.
 - Added `.github/workflows/mist-stock-dlkm.yml` at commit `05dae31a`; runs exact MD5-checked firmware acquisition with existing `multicdn.py`, reuses `extract_partitions.sh`, stages both stock module partitions and uploads a 14-day artifact. Workflow is configured for `push` of its own YAML and `workflow_dispatch` on `main`; **execution/run status not yet verified**. No production device/vendor/kernel repository changes, no flash or full ROM build.
 - Next: obtain successful Actions run result and inspect artifact/manifests, verify kernel release/vermagic and module dependency semantics, then design production integration.
+
+
+### 2026-11-14 — stock DLKM workflow 43587815827 verified SUCCESS
+
+- [Run 43587815827 / job 132426000538](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43587815827/job/132426000538): all extraction and upload steps **success**, verified via actual Actions job steps/logs.
+- Original Global fastboot firmware verified MD5 `c4450c4e168052ca9de1211306d3beff`; unpacked 8 original super logical partitions and mounted EROFS images.
+- `vendor_dlkm_a`: **268** stock `.ko` modules, one module load list, five module metadata files; `system_dlkm_a`: **192** stock `.ko` modules, two module load lists, 17 metadata files. Staging validation detected no missing module basenames in load-list references. This does not verify ABI or runtime module dependencies.
+- Compressed `mist-stock-dlkm.tar.zst` is 28,271,494 bytes; SHA256 `5d5a4b2773ea0e0c1a5f952c94c793c708b084245101353be47b676b3c9a4e0d`; local sha256sum check passed in Actions.
+- Uploaded artifact [mist-stock-dlkm-payload #14111511383](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43587815827/artifacts/14111511383) (28,295,891 bytes ZIP; expires **2026-11-28 11:05:41 UTC**). Contains the compressed source module payload, manifest, checksum and extraction summaries.
+- No changes pushed to the production kernel/device/vendor trees; **next** inspect module vermagic/release, symbols/dependency metadata, module load paths, loading order and packaging readiness; do not represent extraction as compatibility or boot proof.
