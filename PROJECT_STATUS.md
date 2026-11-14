@@ -1559,3 +1559,11 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 - Integration image gate confirmed staging and image generation for 268 vendor + 192 system stock modules and their published metadata. This is **not** `m`/Soong-built LineageOS DLKM images and does **not** prove filesystem SELinux labels, module load compatibility, actual boot, OTA correctness, or stock `vendor_boot` init fstab compatibility.
 - Existing production `android_device_xiaomi_mist` and `android_device_xiaomi_mist-kernel` main commits remain source-of-truth; no flash, no full ROM build or production modification in this workflow.
 - Next: compare EROFS image file read-back against staging manifest and inspect remaining Lineage integration blockers (DLKM file contexts/module load handling, stock `mi_ext` boot/AVB, HAL and SELinux). Avoid re-downloading firmware unless necessary.
+
+
+### 2026-11-14 — image SELinux labeling integrated into production-source DLKM EROFS gate
+
+- Inspected current `android_device_xiaomi_mist` root: has BoardConfig.mk, device.mk, boot/rootdir, **no device-specific sepolicy folder**. Android 16 platform already supplies default file contexts for `/vendor_dlkm` (`vendor_file`, with `/etc` as `vendor_configs_file`) and `/system_dlkm` (`system_dlkm_file`). No unjustified custom allow policy was added. References: https://android.googlesource.com/platform/system/sepolicy/+/android16-release/private/file_contexts and https://source.android.com/docs/core/architecture/partitions/gki-partitions.
+- Added `config/mist-dlkm/system_dlkm_file_contexts` [62d9433] and `config/mist-dlkm/vendor_dlkm_file_contexts` [724676c] in `copilot_project` to apply these platform-backed labels to the standalone partition image gate.
+- Updated `.github/workflows/mist-production-dlkm-images.yml` [cae767f] to generate EROFS images with `--all-root`, `--mount-point` and `--file-contexts` flags; [307f4c2] added a mounted-image `security.selinux` xattr assertion (requires `attr` installed), and [b554380] corrected NUL stripping.
+- **New image workflow results are not yet inspected.** These changes affect only the GitHub Actions research image generation, not production device/vendor/kernels. Passing it still will not prove LineageOS full-build SELinux integration or boot. Do not flash these standalone images.
