@@ -1,0 +1,60 @@
+name: Mist stock boot module and fstab closure review
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-boot-module-closure.yml'
+      - 'scripts/audit_mist_boot_module_closure.py'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-boot-module-closure
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Retrieve both verified stock evidence artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          mkdir -p input/boot-audit input/vendor output
+          gh run download 43540094714 --repo "${{ github.repository }}" \
+            --name mist-stock-ramdisk-integration-audit --dir input/boot-audit
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor
+          python3 -m json.tool input/boot-audit/mist-stock-ramdisk-integration-audit.json >/dev/null
+          (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+      - name: Cross-check live production staged fstab against stock module inventory
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth=1 --branch main \
+            https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git input/device
+          python3 -m py_compile scripts/audit_mist_boot_module_closure.py
+          python3 scripts/audit_mist_boot_module_closure.py \
+            --ramdisk-audit input/boot-audit/mist-stock-ramdisk-integration-audit.json \
+            --archive input/vendor/stock-vendor-source.tar.zst \
+            --device-fstab input/device/rootdir/etc/fstab.mist \
+            --output output/mist-stock-boot-module-closure.json
+          python3 -m json.tool output/mist-stock-boot-module-closure.json >/dev/null
+          echo "Production device tree: $(git -C input/device rev-parse HEAD)"
+      - name: Upload research-only closure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-boot-module-closure
+          path: output/mist-stock-boot-module-closure.json
+          retention-days: 14
+          if-no-files-found: error
