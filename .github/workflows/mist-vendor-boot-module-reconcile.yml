@@ -1,0 +1,56 @@
+name: Mist vendor boot embedded module reconciliation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-vendor-boot-module-reconcile.yml'
+      - 'scripts/audit_mist_vendor_boot_modules.py'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-vendor-boot-module-reconcile
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Retrieve verified stock boot and prior module closure reports
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends lz4
+          mkdir -p input/boot input/closure reports
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-boot-images --dir input/boot
+          gh run download 43540343960 --repo "${{ github.repository }}" \
+            --name mist-stock-boot-module-closure --dir input/closure
+          (cd input/boot/boot-images && sha256sum -c ../boot-images.sha256)
+          python3 -m json.tool input/closure/mist-stock-boot-module-closure.json >/dev/null
+      - name: Match unmatched names against embedded vendor boot module members
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/inspect_mist_boot_chain.py scripts/audit_mist_stock_ramdisks.py scripts/audit_mist_vendor_boot_modules.py
+          python3 scripts/audit_mist_vendor_boot_modules.py \
+            --vendor-boot input/boot/boot-images/vendor_boot.img \
+            --closure input/closure/mist-stock-boot-module-closure.json \
+            --out reports/mist-vendor-boot-module-reconciliation.json
+          python3 -m json.tool reports/mist-vendor-boot-module-reconciliation.json >/dev/null
+      - name: Upload audit only
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-vendor-boot-module-reconciliation
+          path: reports/mist-vendor-boot-module-reconciliation.json
+          retention-days: 14
+          if-no-files-found: error
