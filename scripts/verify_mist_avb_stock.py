@@ -56,6 +56,10 @@ def main():
     for name in ("vbmeta.img","vbmeta_system.img","vendor_boot.img","dtbo.img"):
         if checked[name]["status"]!="STOCK_MATCH":continue
         cmd=[sys.executable,str(avb),"verify_image","--image",str(files/name)]
+        if name=="vbmeta.img":
+            # AOSP avbtool resolves chained boot/recovery/vbmeta_system images
+            # from the same verified original-stock directory.
+            cmd.append("--follow_chain_partitions")
         cp=subprocess.run(cmd,capture_output=True,text=True,timeout=120)
         executions.setdefault(name,{})["verify_exit"]=cp.returncode
         executions[name]["verify_output"]=(cp.stdout+cp.stderr)[-12000:]
