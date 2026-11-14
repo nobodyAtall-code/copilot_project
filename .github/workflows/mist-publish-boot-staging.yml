@@ -1,0 +1,65 @@
+name: Mist publish stock boot source staging to production
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-publish-boot-staging.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-publish-boot-staging-main
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout research scripts
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Download successful SHA256-based stock ramdisk inventory
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/ramdisk output
+          gh run download 43540094714 --repo "${{ github.repository }}" \
+            --name mist-stock-ramdisk-integration-audit --dir input/ramdisk
+          python3 -m json.tool input/ramdisk/mist-stock-ramdisk-integration-audit.json >/dev/null
+      - name: Generate normalized stock configuration files
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/publish_mist_stock_boot_staging.py
+          python3 scripts/publish_mist_stock_boot_staging.py \
+            --audit input/ramdisk/mist-stock-ramdisk-integration-audit.json \
+            --output-root output/device
+          test -s output/device/boot/stock_snapshot/source-manifest.json
+      - name: Publish staged source files to actual production device main
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo 'GH_PAT not set'; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist output/production -- --quiet
+          cd output/production
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          test -f BoardConfig.mk
+          test ! -e boot/stock_snapshot/source-manifest.json || {
+            echo 'Boot staging already present; refusing overwrite'; exit 1;
+          }
+          mkdir -p boot
+          cp -a ../device/boot/stock_snapshot boot/
+          git add boot/stock_snapshot
+          git diff --cached --check
+          git commit -m "mist: stage verified stock first-stage fstab and module load sequences"
+          git push origin HEAD:main
