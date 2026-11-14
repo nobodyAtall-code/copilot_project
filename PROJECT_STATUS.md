@@ -1518,3 +1518,11 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 - System vermagic: all 192 modules: 6.6.118-android15-8-g666ad52b8230-ab15657065-4k SMP preempt mod_unload modversions aarch64, matching recorded stock boot kernel release.
 - Vendor vermagic differences are a compatibility risk, not proof of failure. Next: audit __versions CRCs/exported symbols, module dependency/load order and stock kernel release before packaging, plus ensure original module metadata is preserved.
 - No production tree modifications, flash or full ROM build from this audit.
+
+
+### 2026-11-14 — actual DLKM production publishing workflow prepared
+
+- Script `scripts/integrate_mist_dlkm.py` committed in copilot_project [716425d](https://github.com/nobodyAtall-code/copilot_project/commit/716425dce5bcdb207432e71bf45ceb2a34f48897). It checks original firmware identity and individual SHA256 values from verified extraction artifact run 43587815827, and stages 268 vendor + 192 system stock .ko files and original module metadata to `android_device_xiaomi_mist-kernel`, creating exact `PRODUCT_COPY_FILES` mappings in device `device.mk`.
+- Workflow `.github/workflows/mist-publish-stock-dlkm.yml` committed in copilot_project [a226592](https://github.com/nobodyAtall-code/copilot_project/commit/a22659204afd1c710382cb3c8f9c852c045fe5ca), with push and workflow_dispatch triggers. Publishes to existing production `main` branches via `GH_PAT`, Git identity `nobodyAtall-code <hashyofficial@gmail.com>`. No workflows are created in production trees.
+- Publication is conditional on artifact availability, source integrity, Git write permission and safe destination paths. **Production push success not yet verified**. Do not claim modules are already present without the subsequent workflow result or commits.
+- After publication, Android Soong/Kati image-generation and module load behavior still require integration validation; divergent stock vendor module vermagic and stock vendor_boot `mi_ext` fstab reference remain open boot blockers.
