@@ -1640,3 +1640,10 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 - Added [scripts/build_mist_sepolicy_real.sh](https://github.com/nobodyAtall-code/copilot_project/commit/bf5460076d7d826c1f136dafd1301243fa059667). It uses the user's existing `~/android/lineage` checkout, verifies the newly committed production device policy is present, runs the actual Lineage product lunch and `m -j2 selinux_policy` (including neverallow diagnostics), and captures an error-focused `mist-selinux-compile-report.txt`.
 - **No SELinux compilation result is available yet**. The GitHub-hosted source-only workflow cannot substitute for full Android Soong policy compilation without a complete LineageOS checkout, and there is no access here to the user's local Linux shell. Do not claim SELinux complete or infer compile success from source checks.
 - Keep policy enforcing; resolve actual errors from the produced report rather than guessed allow or neverallow exceptions. GitHub workflows remain only in copilot_project.
+
+
+### 2026-11-14 — local SELinux harness startup defects fixed
+
+- User's local `git -C device/xiaomi/mist pull --ff-only origin main` failed because local checkout has no working `origin` remote. This is checkout configuration, not a reported SELinux compiler error. Recommended restoring `origin` to existing production `nobodyAtall-code/android_device_xiaomi_mist.git` and fetching/fast-forward merging safely, without reset/force.
+- `scripts/build_mist_sepolicy_real.sh` aborted with `line 5: $1: unbound variable` due to `set -u` when run without arguments. Fixed in [commit d9dedf3](https://github.com/nobodyAtall-code/copilot_project/commit/d9dedf39539a3322ef11d874600a186e68b83c88) using `${1:-}`.
+- No real SELinux compile output obtained yet; do not mark policy compiled or valid. User can rerun corrected script and send `mist-selinux-compile-report.txt` for direct error correction.
