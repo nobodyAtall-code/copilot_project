@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/mist-publish-odm-vintf.yml'
+      - 'scripts/publish_mist_stock_odm_vintf.py'
 
 permissions:
   contents: read
