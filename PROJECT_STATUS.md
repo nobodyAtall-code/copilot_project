@@ -1674,3 +1674,10 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 - User supplied `mist-vintf-build-report.txt` for actual LineageOS 23.2 mist checkout (device HEAD `d566b5b`, vendor HEAD `2482ace`). Actual build stopped at Ninja command dispatch: `FAILED: ninja: unknown target 'check_vintf_all', did you mean 'check-vintf-all'?` (exit 1). **This is NOT a VINTF incompatibility or manifest compiler error**; the target itself never ran.
 - Corrected `scripts/build_mist_vintf_real.sh` to use `m -j2 check-vintf-all` instead of underscore variant, [commit a94ddac](https://github.com/nobodyAtall-code/copilot_project/commit/a94ddacf10507d881d0480585aac8cede4ff8bc5). No VINTF source or boot images changed, no flash.
 - Actual VINTF checks are still PENDING an execution of the corrected target. Do not claim success until the new output is inspected.
+
+
+### 2026-11-14 — stop oversized check-vintf-all build; use focused offline source parsing
+
+- User observed `m -j2 check-vintf-all` scheduling approximately 118,639 Ninja actions (large unsatisfied system build dependencies), and explicitly stopped it. This is not an indication of 118,639 VINTF errors; no VINTF compatibility conclusion can be made from an interrupted build.
+- Added lightweight `scripts/check_mist_vintf_offline.py` ([commit c612641](https://github.com/nobodyAtall-code/copilot_project/commit/c612641d4dcee194c41b4a9ad85765f488136367)). It reads current production device/vendor source trees, identifies selected proprietary VINTF manifest fragments from `mist-vendor.mk` and `Android.bp`, parses XML, reports duplicate selected HAL instances, selected radio declarations, source-visible ODM SKU selection and locally available framework matrix candidates. Uses Python stdlib only, no Ninja/Soong/ROM build. Output is `mist-vintf-offline-report.json`.
+- **Limitation:** a VINTF source parser is *not* Android's merged device/framework compatibility check, and does not validate runtime HALs, AVB or actual OTA/boot. No auto-selection of ODM radio variant; await stock SKU evidence.
