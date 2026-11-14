@@ -16,7 +16,7 @@ from inspect_mist_boot_chain import android_boot, vendor_boot
 
 MAX_RAMDISK = 160 * 1024 * 1024
 MAX_FILES = 30000
-MAX_FILE = 4 * 1024 * 1024
+MAX_FILE = MAX_RAMDISK  # Members can be much larger than 4 MiB; still bounded by decoded archive.
 WATCH = re.compile(r"(^|/)(fstab[^/]*|modules\.(load|options|blocklist)[^/]*|[^/]*\.rc|[^/]*\.avbpubkey)$")
 SAFE_LINES = re.compile(r"(first_stage_mount|fileencryption|metadata_encryption|avb=|avb_keys=|slotselect|logical|overlay|mount_all|insmod|modprobe|modules\.load|vendor\.power|keymint|qsee|ueventd)", re.I)
 
@@ -63,7 +63,7 @@ def parse_cpio(data):
             raise ValueError("invalid CPIO header") from e
         mode=fields[1]; size=fields[6]; namesize=fields[11]
         if namesize<1 or namesize>8192 or size>MAX_FILE:
-            raise ValueError("CPIO member bounds exceeded")
+            raise ValueError(f"CPIO member bounds exceeded: offset={off}, namesize={namesize}, filesize={size}, limit={MAX_FILE}")
         name_start=off+110
         name_end=name_start+namesize
         if name_end>len(data) or data[name_end-1]!=0:
@@ -81,7 +81,7 @@ def parse_cpio(data):
         count+=1
         if count>MAX_FILES:
             raise ValueError("CPIO entry count exceeded")
-        content=data[data_start:data_end] if (mode & 0o170000)==0o100000 else b""
+        content=(data[data_start:data_end] if WATCH.search(name) and (mode & 0o170000)==0o100000 else b"")
         yield name,mode,content
         off=(data_end+3)&~3
 
