@@ -1,0 +1,80 @@
+name: Mist stock DLKM extraction and verification
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/mist-stock-dlkm.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mist-stock-dlkm
+  cancel-in-progress: false
+
+jobs:
+  extract-stock-dlkm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - name: Checkout research repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Prepare tools and available disk
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk /opt/hostedtoolcache
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends pigz zstd android-sdk-libsparse-utils erofs-utils golang-go
+          python3 -m py_compile scripts/multicdn.py scripts/stage_mist_dlkm.py
+          df -h .
+      - name: Download and verify exact Global stock firmware
+        run: |
+          set -euo pipefail
+          mkdir -p work reports
+          python3 -u scripts/multicdn.py
+          grep -q 'c4450c4e168052ca9de1211306d3beff' reports/firmware.md5
+      - name: Unpack stock super logical partitions
+        run: |
+          set -euo pipefail
+          mkdir -p work/unpacked
+          pigz -dc work/*.tgz | tar -xf - -C work/unpacked
+          rm -f work/*.tgz
+          git clone -q https://github.com/soe1hom-arch/lpunpack-go.git work/lpunpack-src
+          git -C work/lpunpack-src checkout --detach -q 073a3302a3c3ffae01633989e6dd1e60b6de15b7
+          (cd work/lpunpack-src && CGO_ENABLED=0 go build -o "$GITHUB_WORKSPACE/work/lpunpack" .)
+          chmod +x work/lpunpack
+          bash scripts/extract_partitions.sh
+      - name: Stage both original DLKM payloads and validate load lists
+        run: |
+          set -euo pipefail
+          python3 scripts/stage_mist_dlkm.py
+          (cd reports && sha256sum -c mist-stock-dlkm.sha256)
+          ls -lh reports/mist-stock-dlkm.tar.zst reports/mist-dlkm-manifest.json
+      - name: Upload stock DLKM module payload and manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-dlkm-payload
+          path: |
+            reports/mist-stock-dlkm.tar.zst
+            reports/mist-stock-dlkm.sha256
+            reports/mist-dlkm-manifest.json
+            reports/firmware.md5
+            reports/logical-partitions.tsv
+            reports/mounted-partitions.tsv
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-dlkm-failure-report
+          path: |
+            reports/*.txt
+            reports/*.tsv
+            reports/*.md5
+            reports/*.json
+          if-no-files-found: ignore
+          retention-days: 14
