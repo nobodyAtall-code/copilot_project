@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/mist-complete-firmware-research.yml'
       - 'scripts/summarize_mist_full_firmware_gates.py'
+      - 'scripts/check_mist_vintf_offline.py'
 permissions:
   contents: read
   actions: read
@@ -147,7 +148,17 @@ jobs:
               if (dest/name).exists():continue
               os.symlink(os.path.relpath(candidate.resolve(),dest.resolve()),dest/name)
               count+=1
+          # These AVB top-level hash descriptor inputs are physical firmware
+          # partitions, not liblp logical volumes. Stage original untouched
+          # files from the already MD5-verified archive.
+          physical=("countrycode.img","pvmfw.img")
+          for name in physical:
+              matches=list(Path("work/unpacked").rglob(name))
+              if len(matches)!=1:raise SystemExit(f"Expected exactly one original {name}, got {len(matches)}")
+              if (dest/name).exists():raise SystemExit(f"Duplicate AVB input {name}")
+              os.symlink(os.path.relpath(matches[0].resolve(),dest.resolve()),dest/name)
           print("Stock logical partition links staged:",count)
+          print("Original physical AVB partitions staged:",", ".join(physical))
           PY
           python3 scripts/verify_mist_avb_stock.py \
             --root work/android --images-dir reports/boot-images \
