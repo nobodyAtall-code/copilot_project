@@ -345,3 +345,21 @@ T. DYNAMIC PARTITIONS OFFLINE CONFIGURATION PROTOTYPE
 - Before any flash or final BoardConfig enablement: deliberate stock mi_ext
   preservation/removal plan, correct A/B payload lists, snapshot/COW sizing,
   first-stage fstab and AVB signature chain, actual build-system test.
+
+
+U. RESEARCH CORRECTION — MODERN XIAOMI LINEAGEOS mi_ext (2026-11-14)
+- Prior BoardConfig userdebug experiment MIST_ENABLE_OFFLINE_SUPER_LAYOUT
+  was an assumption and was WITHDRAWN, device tree commit 34a0e05.
+  Default was never enabled; no OTA/super integration has been validated.
+- Modern unofficial LineageOS 24.0 Xiaomi madrid tree uses normal generated
+  seven image list but offline build_super.sh explicitly INCLUDES original
+  mi_ext stock image. Its author has not booted the ROM: use as strategy
+  reference only. Official LineageOS 24.0 sm8450-common BoardConfig omits
+  mi_ext generated image, which does not prove how stock mi_ext is treated.
+- Device repo research/MIST_MI_EXT_LINEAGE_COMPARISON_2026-11-14.md now
+  captures exact source URLs, comparisons, evidence and limits. Do not
+  assume preserving space = preserving stock mi_ext, or copy other models'
+  original liblp group sizes into Mist.
+- Next engineering action requires reviewing original Mist mi_ext content
+  and its stock first-stage fstab/overlays, choosing stock-preserving offline
+  super assembly vs new OTA-managed images with explicit AVB/slot plan.
