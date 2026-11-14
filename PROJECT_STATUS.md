@@ -1005,3 +1005,11 @@ This file is the durable canonical continuation record. **Update after meaningfu
 - Root cause: the test script applied `set -euo pipefail` prior to sourcing Android's envsetup; LineageOS environment functions rely on potentially unset variables.
 - Fixed in [commit 9e7bdea](https://github.com/nobodyAtall-code/copilot_project/commit/9e7bdeaa3950a088a2fdb12bc906878d745b1977) by using `set -eo pipefail`, keeping failure/pipe status handling without Bash `nounset`. No device/vendor trees changed; no compilation has yet been attempted by this script.
 - User can re-download and rerun the script. Do not claim it passed HAL compilation until completed logs are supplied.
+
+
+### 14 November 2026 — repeated targeted test envsetup nounset: inherited SHELLOPTS fixed
+
+- User reran targeted `test_mist_selected_hal_modules.sh` after first `set -euo pipefail` -> `set -eo pipefail` change, but still got `build/envsetup.sh: line 21: TOP: unbound variable`; targeted HAL compilation had not started.
+- Read actual `LineageOS/android_build` branch `lineage-23.2` `build/envsetup.sh` lines 18–21: `_gettop_once` reads `$TOP` before it necessarily exists.
+- Second fix [commit a95e1ae](https://github.com/nobodyAtall-code/copilot_project/commit/a95e1aed819c2f4abd8f9eddfb1062af61b1ad4b) explicitly executes `set +u` at the start of the subprocess, then `set -eo pipefail`, since inherited/exported `SHELLOPTS` can enable `nounset` in child `bash` even if script never declares it. A standalone Bash simulation exporting `SHELLOPTS` with `set -u` confirmed that `set +u` allows a probe to read unset `TOP` without error; this was NOT a real LineageOS execution.
+- This shell invocation fix is separate from OEM device/vendor source; no source changes or build triggered. Re-download script and confirm `grep -n 'set +u' /tmp/test_mist_hal.sh` before running. If error persists, obtain initial options and trace instead of speculatively rerunning costly builds.
