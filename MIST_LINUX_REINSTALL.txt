@@ -307,3 +307,26 @@ R. COMPLETE STOCK FIRMWARE FORENSICS
 - GitHub Actions completion has not been verified. The user sends the
   completed run; do not monitor by default. Fix first failing step in the
   existing workflow and preserve partial artifact evidence.
+
+
+S. FULL STOCK ROM FORENSICS — COMPLETED SUCCESSFULLY (2026-11-14)
+- Verified entire stock firmware workflow, run 43579076486/job 132399705358:
+  all download, boot metadata, independent liblp, mounts, ELF/module and
+  SELinux label steps passed. Artifact 14107138565 contains 22 reports.
+- Read full canonical write-up:
+  copilot_project/research/mist-full-stock-firmware-findings-2026-11-14.md
+- Stock 8 active EROFS partition sizes/group maxima and original `mi_ext_a`
+  retained in the write-up. Do not invent BoardConfig/OTA group settings.
+- ELF records: 3,911, partition .ko modules: 460, VINTF XML: 136,
+  init RC: 269, stock firmware .img files: 15. Unmatched 19 SONAME names are
+  not automatically missing under Android platform/APEX linker namespaces.
+- ABI caution: 192 system_dlkm modules use one android15-8 6.6.118 GKI
+  vermagic; 208 vendor_dlkm modules use 6.6.118-maybe-dirty, 53 vendor_dlkm
+  modules use 6.6.118-4k-g57a2451a9bcf, and seven vendor modules report
+  6.6.98 (binder_gki.ko and six millet_*). Confirm actual load/CRC/ABI
+  before changing production kernel. Stock camera.ko is in 53-module family.
+- Five camera/KeyMint/QSEE labels exactly match original stock file_contexts
+  regexes and both stock and curated executable paths. This is NOT
+  compiled Lineage SELinux policy or neverallow validation.
+- User local kernel header edits must remain untouched. No flash and no
+  full ROM compilation has been proven by the completed research.
