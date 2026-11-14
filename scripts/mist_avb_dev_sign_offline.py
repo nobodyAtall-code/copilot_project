@@ -25,6 +25,7 @@ def main():
     a=ap.parse_args()
     for p in (a.avbtool,a.candidate,a.developer_rsa2048_key):
         if not p.is_file():ap.error("Missing input "+str(p))
+    if a.output.name!="vendor_boot.img":ap.error("Verification requires output basename vendor_boot.img; use a separate dedicated directory")
     if a.output.exists():ap.error("Refusing overwrite")
     if a.candidate.stat().st_size!=STOCK_SIZE:ap.error("Unexpected v4 candidate container size")
     original_digest=sha(a.candidate)
