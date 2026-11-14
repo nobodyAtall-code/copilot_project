@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/mist-stock-avb-verify.yml'
+      - 'scripts/verify_mist_avb_stock.py'
 
 permissions:
   contents: read
@@ -62,12 +63,16 @@ jobs:
           p=Path("reports/mist-avb-stock-verification.json")
           d=json.loads(p.read_text())
           assert d["custom_rom_flash_safe"] is False
+          assert d["original_vbmeta_rsa_signatures_verified"] is True, "RSA signatures did not authenticate"
+          print("Entire original AVB descriptor chain verified:",d["entire_stock_chain_verified"])
+          for name,classification in d["classification"].items():
+              print(name,classification["verification_scope"])
           assert all(d["stock_images"][s]["status"]=="STOCK_MATCH" for s in
                      ("boot.img","init_boot.img","vendor_boot.img","dtbo.img","vbmeta.img","vbmeta_system.img"))
           for name,record in d["avbtool_results"].items():
               print(name, "info_exit:",record.get("info_exit"),"verify_exit:",record.get("verify_exit","not run"))
           PY
-          echo "Read-only original stock AVB inspection. NOT a custom boot verification." >> "$GITHUB_STEP_SUMMARY"
+          echo "Read-only original stock AVB inspection. RSA signature verification is separate from complete descriptor-chain verification. NOT a custom boot verification." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload compact AVB evidence (never original images)
         if: always()
