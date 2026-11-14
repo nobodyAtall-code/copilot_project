@@ -1,0 +1,57 @@
+name: Mist publish verified stock RIL and audio bring-up
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Download existing SHA256-verified nine-file staging artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p output/staged
+          gh run download 43551709015 --repo nobodyAtall-code/copilot_project \
+            --name mist-three-entrypoint-staged --dir output/staged
+          python3 -m py_compile scripts/publish_mist_radio_audio_entrypoints.py
+          test -s output/staged/checksums.json
+      - name: Prepare original Mist radio and audio in both production trees
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo "GH_PAT is missing"; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist output/device -- --quiet
+          gh repo clone nobodyAtall-code/proprietary_vendor_xiaomi_mist output/vendor -- --quiet
+          for dir in output/device output/vendor; do
+            git -C "$dir" checkout main
+            git -C "$dir" config user.name nobodyAtall-code
+            git -C "$dir" config user.email hashyofficial@gmail.com
+          done
+          python3 scripts/publish_mist_radio_audio_entrypoints.py \
+            --staged output/staged --device output/device --vendor output/vendor
+          git -C output/device add proprietary-files.txt
+          git -C output/vendor add Android.bp mist-vendor.mk proprietary/vendor
+          git -C output/device diff --cached --check
+          git -C output/vendor -c core.whitespace=-blank-at-eof diff --cached --check
+          test "$(git -C output/device diff --cached --name-only | wc -l)" -eq 1
+          test "$(git -C output/vendor diff --cached --name-only | wc -l)" -eq 8
+      - name: Commit and publish source-backed production changes
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          git -C output/device commit -m "mist: track original RIL audio service extraction paths"
+          git -C output/vendor commit -m "mist: integrate original RIL audio service entrypoints for build graph"
+          git -C output/device push origin HEAD:main
+          git -C output/vendor push origin HEAD:main
+          echo "Original stock RIL/audio source files published."
+          echo "Important: NOT a bootable or linker-complete ROM. Fingerprint withheld."
