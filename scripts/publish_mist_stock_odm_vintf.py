@@ -69,7 +69,7 @@ def main():
         lines=["",marker,"// Exact stock XML variants. libvintf selects by ro.boot.product.hardware.sku.","// device_specific installs to /odm/etc/vintf. No default/forced SKU.",""]
         for variant,filename in source_files:
             lines += ["prebuilt_etc {",f'    name: "mist_odm_vintf_{variant}",',f'    src: "proprietary/odm/etc/vintf/{filename}",',f'    filename: "{filename}",',"    device_specific: true,",'    sub_dir: "vintf",',"}",""]
-        bp.write_text(b.rstrip()+"\n"+"\n".join(lines)+"\n")
+        bp.write_text((b.rstrip()+"\n"+"\n".join(lines)).rstrip()+"\n")
     elif not all(f'mist_odm_vintf_{v}' in b for v in VARIANTS):fail("Partial existing ODM Soong section")
     make=mk.read_text()
     if "MIST_STOCK_ODM_SKU_VINTF_BATCH" not in make:
