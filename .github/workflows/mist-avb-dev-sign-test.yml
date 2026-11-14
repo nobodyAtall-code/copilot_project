@@ -1,0 +1,72 @@
+name: Mist offline developer AVB signing integration test
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-avb-dev-sign-test.yml'
+      - 'scripts/mist_avb_dev_sign_offline.py'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tools and production staged fstab
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends lz4
+          git clone -q --depth 1 https://android.googlesource.com/platform/external/avb work/avb
+          git clone -q --depth 1 https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git work/device
+          python3 -m py_compile scripts/mist_avb_dev_sign_offline.py scripts/prepare_mist_clean_vendor_ramdisk.py scripts/assemble_mist_vendor_boot_research.py
+      - name: Retrieve and hash-check exact original boot artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p work/input
+          gh run download 43174896778 --repo "${{ github.repository }}" --name mist-global-OS3.0.304.0-boot-images --dir work/input
+          (cd work/input/boot-images && sha256sum -c ../boot-images.sha256)
+      - name: Prepare validated review-only ramdisk and v4 container
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_mist_clean_vendor_ramdisk.py \
+            --vendor-boot work/input/boot-images/vendor_boot.img \
+            --fstab work/device/rootdir/etc/fstab.mist --output-dir work/review
+          python3 scripts/assemble_mist_vendor_boot_research.py \
+            --stock-vendor-boot work/input/boot-images/vendor_boot.img \
+            --review-fragment work/review/mist-vendor-ramdisk-REVIEW-ONLY.cpio.lz4 \
+            --review-json work/review/mist-vendor-ramdisk-review.json \
+            --staged-fstab work/device/rootdir/etc/fstab.mist \
+            --output-dir work/candidate
+      - name: Ephemeral test signing and standalone AVB verification
+        run: |
+          set -euo pipefail
+          mkdir -p reports
+          openssl genrsa -out "$RUNNER_TEMP/mist-throwaway-key.pem" 2048 2>/dev/null
+          python3 scripts/mist_avb_dev_sign_offline.py \
+            --avbtool work/avb/avbtool.py \
+            --candidate work/candidate/MIST-VENDOR-BOOT-RESEARCH-DO-NOT-FLASH.img \
+            --developer-rsa2048-key "$RUNNER_TEMP/mist-throwaway-key.pem" \
+            --output work/DEVELOPER-TEST-DO-NOT-FLASH.img \
+            --report reports/mist-dev-sign-audit.json
+          python3 - <<'PY'
+          import json
+          r=json.load(open("reports/mist-dev-sign-audit.json"))
+          assert r["standalone_footer_verified"] is True
+          assert r["flash_permitted"] is False
+          assert r["stock_top_level_chain_accepts_output"] is False
+          PY
+          rm -f "$RUNNER_TEMP/mist-throwaway-key.pem" work/DEVELOPER-TEST-DO-NOT-FLASH.img
+      - name: Upload JSON proof only, never binary or key
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-offline-dev-avb-signing-evidence
+          path: reports/mist-dev-sign-audit.json
+          retention-days: 14
+          if-no-files-found: warn
