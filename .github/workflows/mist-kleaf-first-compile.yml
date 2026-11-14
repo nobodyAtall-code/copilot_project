@@ -125,6 +125,7 @@ jobs:
           # arbitrary options. This is solely a non-flashable compiler probe.
           diagnostic_disabled={
             'CONFIG_MIHW':'y',
+            'CONFIG_MI_SCHED_WALT':'y',
             'CONFIG_MI_SCHED':'m',
             'CONFIG_METIS':'m',
             'CONFIG_METIS_WALT':'y',
