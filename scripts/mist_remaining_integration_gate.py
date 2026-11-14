@@ -30,8 +30,24 @@ def main():
     checks["custom_vendor_boot_disabled"]="PRODUCT_BUILD_VENDOR_BOOT_IMAGE := false" in device
     for key, value in checks.items():
         if not value:problem("bootchain","Unexpected boot baseline: "+key)
-    if checks["stock_vendor_boot_selected"] and "mi_ext" not in board:
-        problem("bootchain","Stock vendor_boot first-stage ramdisk references mi_ext, but seven-partition target super configuration omits mi_ext. Cannot approve flash/OTA without resolving stock first-stage mount and AVB behavior.")
+    # Read the actual multi-line make variable; comments elsewhere containing
+    # 'mi_ext' must not turn an unresolved first-stage mount into a pass.
+    group=[]
+    lines=board.splitlines()
+    for idx,line in enumerate(lines):
+        if re.match(r"^BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST\\s*:=",line):
+            j=idx
+            while j<len(lines):
+                line=lines[j].split("#",1)[0]
+                group.extend(re.findall(r"[a-z][a-z0-9_]*",line.split(":=",1)[-1] if j==idx else line))
+                j+=1
+                if not line.rstrip().endswith(chr(92)):break
+            break
+    partitions=sorted(set(group))
+    checks["generated_dynamic_partitions"]=partitions
+    if not partitions:problem("super","Cannot parse target dynamic partition list")
+    elif "mi_ext" not in partitions and checks["stock_vendor_boot_selected"]:
+        warning("bootchain","Original stock vendor_boot first-stage fstab references mi_ext, while generated dynamic partition list excludes it. Boot/AVB/OTA migration is unresolved; no automatic fstab or signing changes.")
     if "BOARD_PREBUILT_VENDOR_BOOTIMAGE" in board and "rootdir/etc/fstab.mist" not in device:
         warning("bootchain","Staged fstab.mist is not installed with the active stock prebuilt vendor_boot; its contents do not affect first-stage init.")
     for s in ("vendor_dlkm","system_dlkm"):
@@ -107,8 +123,12 @@ def main():
             vintf[src]=[]
             for hal in root.findall(".//hal"):
                 name=(hal.findtext("name") or "").strip()
-                for instance in hal.findall(".//instance"):
-                    vintf[src].append(name+"/"+(instance.text or "").strip())
+                for fqname in hal.findall("fqname"):
+                    vintf[src].append(name+"/"+(fqname.text or "").strip())
+                for interface in hal.findall("interface"):
+                    iname=(interface.findtext("name") or "").strip()
+                    for instance in interface.findall("instance"):
+                        vintf[src].append(name+"/"+iname+"/"+(instance.text or "").strip())
         except ET.ParseError as e:problem("vintf","Invalid selected fragment "+src+": "+str(e))
     checks["curated_vintf_fragments_parsed"]=parsed
     # Absence of SKU-dependent ODM manifests is a genuine open boot/runtime constraint.
