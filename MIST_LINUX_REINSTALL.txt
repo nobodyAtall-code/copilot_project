@@ -1,0 +1,148 @@
+MIST / LINEAGEOS 23.2 / ANDROID 16 — LINUX REINSTALL & SOURCE FIX RECOVERY
+As documented 2026-11-14 (Malaysia time)
+Main repository: https://github.com/nobodyAtall-code/copilot_project
+Live handover: https://github.com/nobodyAtall-code/copilot_project/blob/main/PROJECT_STATUS.md
+PURPOSE: Preserve reproducible, evidence-checked local fixes for a fresh Debian/Linux install.
+STATUS: LOCAL Radio, Audio, Thermal compilation PASS; Display UAPI generator PASS;
+        COMPLETE Display composer compile, Camera/Lights, ROM build, boot NOT proven.
+IMPORTANT: This file is a recovery recipe, NOT a device-boot validation or one-click ROM build.
+
+A. FRESH SYSTEM PREPARATION
+- Restore the same verified Android 16 / LineageOS 23.2 manifest and source checkout
+  at $HOME/android/lineage. Do not invent a manifest URL or replace a working checkout.
+- Restore enough disk space and the Android build prerequisites for your distro;
+  verify "repo" and "git" work before syncing. Previously successful local build:
+  Debian 12, 15.4 GiB RAM, -j2 (memory warning under LineageOS's recommended 16 GiB).
+- Use the original repository manifest / local.xml you backed up, NOT unverified repos
+  or different platform branches. After repo sync, confirm:
+    test -f ~/android/lineage/build/envsetup.sh
+    test -f ~/android/lineage/hardware/qcom-caf/common/Android.bp
+- If restoring a saved checkout, back up local edits and review git status before any pull.
+- Git identity for manual commits/pushes:
+    git config user.name "nobodyAtall-code"
+    git config user.email "hashyofficial@gmail.com"
+  Configure it in each repository where needed. GitHub API commits created by a
+  connector may use the connected GitHub identity, not a configurable local git author.
+
+B. REPOSITORIES ALREADY USED / VERIFIED
+- Kernel source: https://github.com/nobodyAtall-code/android_kernel_xiaomi_mist
+  Checkout path: kernel/xiaomi/mist
+  Existing source already has sched_param relocation committed on main:
+  https://github.com/nobodyAtall-code/android_kernel_xiaomi_mist/commit/6290f465cc492f18b44d7d3dcefc2f0024cc857a
+  https://github.com/nobodyAtall-code/android_kernel_xiaomi_mist/commit/1b8ad698ae7d6efc4efad3e617e476a063c7df88
+  Do NOT reapply that patch on fresh HEAD if already present.
+- Device: https://github.com/nobodyAtall-code/android_device_xiaomi_mist
+  Checkout path: device/xiaomi/mist
+- Vendor: https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist
+  Checkout path: vendor/xiaomi/mist
+- Stock-prebuilt kernel/boot artifacts:
+  https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel
+  Checkout path: device/xiaomi/mist-kernel
+  Keep TARGET_FORCE_PREBUILT_KERNEL := true until a source kernel is independently
+  validated. This is a TEMPORARY, unofficial configuration, warned unsupported by LineageOS.
+- Coordination/replay: https://github.com/nobodyAtall-code/copilot_project
+  Contains scripts/setup_mist_display_uapi.sh and PROJECT_STATUS.md.
+
+C. ADDITIONAL MIST-SPECIFIC QUALCOMM SOURCE REPOSITORIES
+These six user-owned repos are available on main, but their kernel modules and
+device-tree inputs have NOT been approved for automatic inclusion in the ROM.
+Do not copy them into production trees or add BOARD_*_KERNEL_MODULES just because
+their repositories exist. Inspect the stock-module / DTB inventory and MiCode
+'mist-w-oss' source compatibility first:
+  https://github.com/nobodyAtall-code/vendor_qcom_proprietary_display-devicetree
+  https://github.com/nobodyAtall-code/vendor_qcom_opensource_data-kernel
+  https://github.com/nobodyAtall-code/vendor_qcom_opensource_audio-kernel
+  https://github.com/nobodyAtall-code/vendor_qcom_proprietary_camera-devicetree
+  https://github.com/nobodyAtall-code/vendor_qcom_opensource_camera-kernel
+  https://github.com/nobodyAtall-code/vendor_qcom_opensource_wlan
+NOTE: These are NOT the userspace "qti_display_kernel_headers" provider.
+
+D. RECOVER MIST DISPLAY UAPI HEADERS (LOCAL, TESTED)
+Problem observed in local Display composer target:
+    hardware/qcom-caf/sm8450-6.6/display/hal/libdrmutils/drm_master.cpp
+    fatal error: display/drm/sde_drm.h not found
+MiCode source with EXACT Mist branch:
+    https://github.com/MiCode/vendor_opensource_display-drivers/tree/mist-w-oss
+Pinned source commit: 310b76de47b1a4d0c3e1e373ef1b52039f2140fd
+The upstream Android.bp generator uses qti_generate_display_kernel_headers
+and outputs:
+    display/drm/sde_drm.h
+    display/drm/msm_drm_pp.h
+    display/drm/mi_disp.h
+    display/hdcp/msm_hdmi_hdcp_mgr.h
+    display/media/mmm_color_fmt.h
+    display/media/msm_sde_rotator.h
+The LineageOS hardware/qcom-caf/common/Android.bp already defines
+qti_display_kernel_headers using generated_kernel_header_defaults.
+Blindly importing MiCode's additional library of the same name can create
+duplicate modules. Preserve exactly one provider, attach MiCode's generated
+headers to the existing common library and retain the MiCode generator.
+The script below replays this verified local wiring (idempotent, preflight-
+checked, no shell nounset imposed on Android envsetup).
+
+    cd ~/android/lineage
+    curl -fL \
+      https://raw.githubusercontent.com/nobodyAtall-code/copilot_project/main/scripts/setup_mist_display_uapi.sh \
+      -o /tmp/setup_mist_display_uapi.sh
+    bash /tmp/setup_mist_display_uapi.sh "$PWD"
+
+The script clones the source into vendor/qcom/opensource/mist-display-uapi,
+pins the upstream commit, removes the duplicate qti_display_kernel_headers
+library definition only from that local checkout, and connects its generator
+to the existing hardware/qcom-caf/common library. It fails on unexpected
+files rather than silently overwriting. Review git diffs before proceeding.
+This is a local build integration; the changes in external CAF common and the
+third-party driver checkout must be replayed after a fresh repo sync.
+
+E. TEST JUST THE GENERATED HEADERS
+    cd ~/android/lineage
+    source build/envsetup.sh
+    lunch lineage_mist-bp4a-userdebug
+    set -o pipefail
+    m -j2 qti_generate_display_kernel_headers \
+      2>&1 | tee "$HOME/mist-display-headers-build.log"
+    echo "exit: ${PIPESTATUS[0]}"
+
+Evidence from the prior local test:
+    [100% 49/49] target Prebuilt: qti_generate_display_kernel_headers
+    #### build completed successfully (17:59 (mm:ss)) ####
+The generator emitted all SIX declared header output paths. This verifies
+local generation only; not that the full display service compiles or boots.
+
+F. NEXT GATE — DISPLAY HAL TARGET (NOT YET VERIFIED)
+After header generation passes and generated files are inspected:
+    cd ~/android/lineage
+    source build/envsetup.sh
+    lunch lineage_mist-bp4a-userdebug
+    set -o pipefail
+    m -j2 vendor.qti.hardware.display.composer-service \
+      2>&1 | tee "$HOME/mist-display-composer-test.log"
+    echo "exit: ${PIPESTATUS[0]}"
+Do not label Display PASS without a completed executable link/install.
+The last attempt failed at missing sde_drm.h. A new error may follow.
+Then test only the remaining Camera/Lights targets from the existing
+copilot_project scripts/test_mist_selected_hal_modules.sh after reviewing
+actual module names and current build graph.
+
+G. REMAINING VALIDATION GATES
+- Validate source-built kernel vs stock Image, module ABI, panel/display DTBs,
+  dtbo, vendor_boot, dynamic group sizes, VINTF/SELinux and missing vendor ELF.
+- Never assume successful header generation equals kernel-driver compatibility.
+- Never flash based only on smoke tests. Full ROM build/boot is NOT proven.
+- Keep all GitHub Actions, research, recovery scripts and experimental workflows
+  in copilot_project only. Device/vendor/kernel production repos should contain
+  only reviewed device-specific source and production config.
+- For each verified milestone, append PROJECT_STATUS.md.
+- When a GitHub Actions run is triggered, do NOT monitor it continuously;
+  user will provide completed run links and logs.
+- For an explicit HANDOVER, read PROJECT_STATUS.md and prepare a fresh PDF.
+
+H. RECOVERY CHECKS / SAFE STATUS
+    git -C ~/android/lineage/kernel/xiaomi/mist status --short
+    git -C ~/android/lineage/hardware/qcom-caf/common diff --check
+    git -C ~/android/lineage/hardware/qcom-caf/common diff -- Android.bp
+    git -C ~/android/lineage/vendor/qcom/opensource/mist-display-uapi status --short
+    git -C ~/android/lineage/vendor/qcom/opensource/mist-display-uapi rev-parse HEAD
+The pinned display driver revision is 310b76de47b1a4d0c3e1e373ef1b52039f2140fd.
+If anything differs from this manifest, STOP and investigate; do not reset
+or force overwrite uncommitted user work.
