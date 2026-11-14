@@ -2,10 +2,6 @@ name: Mist integrate stock core hardware HAL batch
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/mist-integrate-core-hals.yml'
 
 permissions:
   contents: read
