@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/mist-complete-firmware-research.yml'
+      - 'scripts/summarize_mist_full_firmware_gates.py'
 permissions:
   contents: read
   actions: read
@@ -128,6 +129,82 @@ jobs:
           for name,record in d['service_file_labels'].items():
               print(name,record['status'])
           PY
+      - name: Validate original stock AVB hashtrees against extracted logical images
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          mkdir -p work/android/external/avb
+          git clone --quiet --depth 1 https://android.googlesource.com/platform/external/avb work/avb-source
+          mkdir -p work/android/external
+          mv work/avb-source work/android/external/avbtool-source
+          ln -s avbtool-source work/android/external/avb
+          git -C work/android/external/avb rev-parse HEAD > reports/aosp-avbtool-commit.txt
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          source=Path("work/partitions")
+          dest=Path("reports/boot-images")
+          count=0
+          for candidate in sorted(source.glob("*_a.img")):
+              name=candidate.name[:-6]+".img"
+              if (dest/name).exists():continue
+              os.symlink(os.path.relpath(candidate.resolve(),dest.resolve()),dest/name)
+              count+=1
+          print("Stock logical partition links staged:",count)
+          PY
+          python3 scripts/verify_mist_avb_stock.py \
+            --root work/android --images-dir reports/boot-images \
+            --out reports/mist-avb-stock-verification.json
+          python3 - <<'PY'
+          import json
+          r=json.load(open("reports/mist-avb-stock-verification.json"))
+          assert r["original_vbmeta_rsa_signatures_verified"]
+          print("Entire original stock descriptor chain verified:",r["entire_stock_chain_verified"])
+          for name,record in r["avbtool_results"].items():
+              print(name,"verify exit:",record.get("verify_exit"))
+              if record.get("verify_exit"):print(record.get("verify_output","")[-1200:])
+          PY
+      - name: Validate clean first-stage vendor ramdisk and review-only v4 container
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          test -s reports/boot-images/vendor_boot.img
+          test -s "$RUNNER_TEMP/mist-device/rootdir/etc/fstab.mist"
+          python3 scripts/prepare_mist_clean_vendor_ramdisk.py \
+            --vendor-boot reports/boot-images/vendor_boot.img \
+            --fstab "$RUNNER_TEMP/mist-device/rootdir/etc/fstab.mist" \
+            --output-dir work/vendor-ramdisk-review
+          cp work/vendor-ramdisk-review/mist-vendor-ramdisk-review.json reports/mist-vendor-ramdisk-review.json
+          mkdir -p work/vendor-boot-review
+          python3 scripts/assemble_mist_vendor_boot_research.py \
+            --stock-vendor-boot reports/boot-images/vendor_boot.img \
+            --review-fragment work/vendor-ramdisk-review/mist-vendor-ramdisk-REVIEW-ONLY.cpio.lz4 \
+            --review-json reports/mist-vendor-ramdisk-review.json \
+            --staged-fstab "$RUNNER_TEMP/mist-device/rootdir/etc/fstab.mist" \
+            --output-dir work/vendor-boot-review
+          cp work/vendor-boot-review/MIST-VENDOR-BOOT-RESEARCH-REPORT.json reports/MIST-VENDOR-BOOT-RESEARCH-REPORT.json
+          # No candidate image is published; its untrusted original AVB signature is stale.
+          test "$(python3 -c 'import json; x=json.load(open("reports/MIST-VENDOR-BOOT-RESEARCH-REPORT.json")); print(x["flash_permitted"])')" = False
+      - name: Validate Lineage target source super geometry and source VINTF against production trees
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          python3 scripts/validate_mist_lineage_super_layout.py \
+            --device-tree "$RUNNER_TEMP/mist-device" \
+            --stock-super-report reports/full-super-metadata.json \
+            --out reports/lineage-super-layout.json
+          mkdir -p work/source-tree/device/xiaomi work/source-tree/vendor/xiaomi
+          ln -s "$RUNNER_TEMP/mist-device" work/source-tree/device/xiaomi/mist
+          ln -s "$RUNNER_TEMP/mist-vendor" work/source-tree/vendor/xiaomi/mist
+          python3 scripts/check_mist_vintf_offline.py \
+            --root work/source-tree --output reports/mist-vintf-offline-report.json
+          echo "Full merged VINTF requires actual built framework matrices/check-vintf-all; not claimed here." >> "$GITHUB_STEP_SUMMARY"
+      - name: Consolidate full firmware evidence and unresolved release gates
+        if: always()
+        run: |
+          python3 scripts/summarize_mist_full_firmware_gates.py \
+            --reports reports --out reports/mist-full-release-gates.json
+          echo "Original stock and source checks are NOT a flashable or boot-proven LineageOS release." >> "$GITHUB_STEP_SUMMARY"
       - name: Research status summary
         if: always()
         run: |
@@ -162,5 +239,12 @@ jobs:
             reports/full-firmware-elf-ko-inventory.md
             reports/full-stock-ramdisks.json
             reports/full-stock-selinux-integration.json
+            reports/mist-avb-stock-verification.json
+            reports/aosp-avbtool-commit.txt
+            reports/mist-vendor-ramdisk-review.json
+            reports/MIST-VENDOR-BOOT-RESEARCH-REPORT.json
+            reports/lineage-super-layout.json
+            reports/mist-vintf-offline-report.json
+            reports/mist-full-release-gates.json
           if-no-files-found: warn
           retention-days: 14
