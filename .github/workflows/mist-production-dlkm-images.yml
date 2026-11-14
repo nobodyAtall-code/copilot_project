@@ -80,7 +80,7 @@ jobs:
             else
               expected="u:object_r:vendor_file:s0"
             fi
-            actual="$(sudo getfattr --only-values -n security.selinux "work/image-mounts/${partition}/lib" 2>/dev/null | tr -d '\\000')"
+            actual="$(sudo getfattr --only-values -n security.selinux "work/image-mounts/${partition}/lib" 2>/dev/null | tr -d '\000')"
             test "$actual" = "$expected" || { echo "SELinux mismatch in ${partition}: '$actual' != '$expected'"; exit 1; }
             sudo umount "work/image-mounts/${partition}"
             echo "PASS: ${partition} /lib SELinux label $actual"
