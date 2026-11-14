@@ -1508,3 +1508,13 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 
 - Added `scripts/audit_mist_stock_dlkm.py` at [b060207](https://github.com/nobodyAtall-code/copilot_project/commit/b06020730f303aa41395971f09ef4299dd1113cd): checks expected 268+192 stock `.ko` count, ELF signatures, `modinfo -F vermagic`, duplicate basenames and `modules.dep` references. Emits JSON report, without claiming module runtime compatibility or modifying production trees.
 - Added [`.github/workflows/mist-dlkm-abi-audit.yml`](https://github.com/nobodyAtall-code/copilot_project/blob/main/.github/workflows/mist-dlkm-abi-audit.yml) at commit [de21376](https://github.com/nobodyAtall-code/copilot_project/commit/de2137623cb9233d553b872498ce1b60892a04bc). Uses GitHub Actions artifact from verified run `43587815827`, verifies its SHA256 and audits modules without re-downloading the 8 GB original firmware. Workflow configured with push and manual triggers; **success not yet verified**. Existing 14-day artifact expires Nov 28; run audit before expiry.
+
+
+### 2026-11-14 — verified stock DLKM ABI audit run 43588611567 (SUCCESS with caveat)
+
+- [Run 43588611567/job 132428359149](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43588611567/job/132428359149): workflow steps and logs inspected; audit succeeded and artifact [14112001016](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43588611567/artifacts/14112001016) published.
+- Verified extracted source checksum again; 268 vendor and 192 system modules validated as ELF. Audit found zero missing modules.dep dependency basenames (268 vendor and 192 system records). Basename resolution does NOT prove symbol or runtime compatibility.
+- Vendor vermagic distribution: 208 modules: 6.6.118-android15-8-maybe-dirty-4k; 53 modules: 6.6.118-4k-g57a2451a9bcf; 7 modules: 6.6.98 (all SMP preempt mod_unload modversions aarch64).
+- System vermagic: all 192 modules: 6.6.118-android15-8-g666ad52b8230-ab15657065-4k SMP preempt mod_unload modversions aarch64, matching recorded stock boot kernel release.
+- Vendor vermagic differences are a compatibility risk, not proof of failure. Next: audit __versions CRCs/exported symbols, module dependency/load order and stock kernel release before packaging, plus ensure original module metadata is preserved.
+- No production tree modifications, flash or full ROM build from this audit.
