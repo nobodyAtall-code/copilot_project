@@ -53,14 +53,49 @@ def main():
         cmd=[sys.executable,str(avb),"info_image","--image",str(files/name)]
         cp=subprocess.run(cmd,capture_output=True,text=True,timeout=90)
         executions[name]={"info_exit":cp.returncode,"info":(cp.stdout+cp.stderr)[-12000:]}
-    for name in ("vbmeta.img","vbmeta_system.img","vendor_boot.img"):
+    for name in ("vbmeta.img","vbmeta_system.img","vendor_boot.img","dtbo.img"):
         if checked[name]["status"]!="STOCK_MATCH":continue
         cmd=[sys.executable,str(avb),"verify_image","--image",str(files/name)]
         cp=subprocess.run(cmd,capture_output=True,text=True,timeout=120)
         executions.setdefault(name,{})["verify_exit"]=cp.returncode
         executions[name]["verify_output"]=(cp.stdout+cp.stderr)[-12000:]
+    # Do not mistake a green CI run for complete AVB verification.
+    # AOSP avbtool validates the RSA vbmeta structure before it processes
+    # chained partitions or hashtree descriptors.
+    classifications={}
+    for name,entry in executions.items():
+        out=entry.get("verify_output","")
+        info=entry.get("info","")
+        signed="Successfully verified SHA256_RSA2048 vbmeta struct" in out
+        is_none="Algorithm:                NONE" in info
+        exitcode=entry.get("verify_exit")
+        missing_chain="No expected chain partition" in out
+        missing_image="FileNotFoundError" in out or "No such file or directory" in out
+        if exitcode==0:
+            state="ALL_AVAILABLE_DESCRIPTORS_VERIFIED"
+        elif signed and (missing_chain or missing_image):
+            state="RSA_SIGNATURE_VALID_DESCRIPTOR_INPUTS_INCOMPLETE"
+        elif signed:
+            state="RSA_SIGNATURE_VALID_DESCRIPTOR_VALIDATION_FAILED"
+        else:
+            state="VERIFICATION_FAILED_OR_NOT_EXECUTED"
+        classifications[name]={
+            "signature_authenticated":signed,
+            "algorithm_none":is_none,
+            "missing_chain_expectations":missing_chain,
+            "missing_partition_image":missing_image,
+            "verification_scope":state,
+        }
+    # Require two real RSA signatures; inspecting header data is insufficient.
+    rsa_ok=all(classifications.get(name,{}).get("signature_authenticated",False)
+               for name in ("vbmeta.img","vbmeta_system.img"))
+    report_complete=all(classifications.get(name,{}).get("verification_scope")=="ALL_AVAILABLE_DESCRIPTORS_VERIFIED"
+                        for name in ("vbmeta.img","vbmeta_system.img"))
     result={"mode":"READ_ONLY_STOCK_AVBTOOL_VERIFICATION","stock_images":checked,
             "avbtool_results":executions,
+            "classification":classifications,
+            "original_vbmeta_rsa_signatures_verified":rsa_ok,
+            "entire_stock_chain_verified":report_complete,
             "caveats":["Stock AVB verify_image is not proof that a LineageOS init_boot, custom super, or modified vendor_boot is signed/accepted by bootloader.",
                        "Missing images for chained descriptors may prevent whole-chain verification.",
                        "Bootloader state, trusted public keys and rollback counters cannot be verified from image files alone."],
@@ -70,5 +105,8 @@ def main():
     print("Saved:",out)
     for name,entry in executions.items():
         print(name, "info=",entry.get("info_exit"),"verify=",entry.get("verify_exit","not run"))
+    for name,entry in classifications.items():
+        print(name,entry["verification_scope"],"RSA signature:",entry["signature_authenticated"])
     print("Only original stock images checked; no custom ROM signing/boot readiness claim.")
+    if not rsa_ok: raise SystemExit("Real signed vbmeta verification did not succeed; see report")
 if __name__=="__main__":main()
