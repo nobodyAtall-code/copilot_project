@@ -1,0 +1,75 @@
+name: Mist current first-stage vendor ramdisk integration gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-current-first-stage.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mist-current-first-stage
+  cancel-in-progress: false
+
+jobs:
+  validate-staged-first-stage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout bring-up tooling
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install compression tools and verify sources
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends lz4
+          python3 -m py_compile scripts/inspect_mist_boot_chain.py scripts/prepare_mist_clean_vendor_ramdisk.py scripts/assemble_mist_vendor_boot_research.py
+          mkdir -p work/review work/assembly reports
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git work/device
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel.git work/prebuilts
+          git -C work/device rev-parse HEAD | tee reports/device-head.txt
+          git -C work/prebuilts rev-parse HEAD | tee reports/kernel-prebuilts-head.txt
+          (cd work/prebuilts && sha256sum -c vendor_boot.img.sha256)
+      - name: Reconstruct current first-stage ramdisk without altering stock
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare_mist_clean_vendor_ramdisk.py \
+            --vendor-boot work/prebuilts/vendor_boot.img \
+            --fstab work/device/rootdir/etc/fstab.mist \
+            --output-dir work/review
+          test -s work/review/mist-vendor-ramdisk-REVIEW-ONLY.cpio.lz4
+          cp work/review/mist-vendor-ramdisk-review.json reports/
+      - name: Verify v4 boot container preserved except ramdisk and sizes
+        run: |
+          set -euo pipefail
+          python3 scripts/assemble_mist_vendor_boot_research.py \
+            --stock-vendor-boot work/prebuilts/vendor_boot.img \
+            --review-fragment work/review/mist-vendor-ramdisk-REVIEW-ONLY.cpio.lz4 \
+            --review-json work/review/mist-vendor-ramdisk-review.json \
+            --staged-fstab work/device/rootdir/etc/fstab.mist \
+            --output-dir work/assembly
+          cp work/assembly/MIST-VENDOR-BOOT-RESEARCH-REPORT.json reports/
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("reports/MIST-VENDOR-BOOT-RESEARCH-REPORT.json").read_text())
+          assert r["flash_permitted"] is False and r["avb_signed_or_verified"] is False
+          assert all(r["checks"].values())
+          assert r["source_sha256"] != r["candidate_sha256"]
+          print("PASS: structural review only; modified image not authorized for flash")
+          PY
+      - name: Upload reports only (no unsigned images)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-current-first-stage-reports
+          path: |
+            reports/*.json
+            reports/*-head.txt
+          retention-days: 14
+          if-no-files-found: warn
