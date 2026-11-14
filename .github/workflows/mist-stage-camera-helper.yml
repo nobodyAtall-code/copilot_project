@@ -1,0 +1,123 @@
+name: Mist verified stock camera helper integration
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-stage-camera-helper.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  stage-camera-helper:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install stock archive decoder
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+      - name: Retrieve and verify original Mist firmware
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/stock-vendor
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir evidence/stock-vendor
+          (cd evidence/stock-vendor && sha256sum -c stock-vendor-source.sha256)
+      - name: Import exact stock camera helper to vendor source and wire Soong
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_PAT" || { echo "Missing GH_PAT" >&2; exit 1; }
+          git clone --depth 1 --branch main \
+            https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist.git \
+            "$RUNNER_TEMP/mist-vendor"
+          python3 - "$RUNNER_TEMP/mist-vendor" <<'PY'
+          import hashlib
+          import pathlib
+          import subprocess
+          import sys
+          import tarfile
+
+          vendor = pathlib.Path(sys.argv[1])
+          stock = pathlib.Path("evidence/stock-vendor/stock-vendor-source.tar.zst")
+          target = "vendor_a/bin/init.qti.cam.perfopt.sh"
+          expected = "afbff16da5cbeaffbd6c53ded9f0b6bfed4cfc11e8da822cddb0ce357dce6399"
+          proc = subprocess.Popen(["zstd", "-dc", "--", str(stock)], stdout=subprocess.PIPE)
+          payload = None
+          try:
+              with tarfile.open(fileobj=proc.stdout, mode="r|") as tar:
+                  for entry in tar:
+                      if entry.name.removeprefix("./") != target:
+                          continue
+                      if not entry.isfile() or entry.size != 1145:
+                          raise RuntimeError("Exact stock camera helper type/size mismatch")
+                      payload = tar.extractfile(entry).read()
+                      break
+          finally:
+              if proc.stdout:
+                  proc.stdout.close()
+              code = proc.wait()
+              # When the archive stream stops after the target entry, zstd may
+              # receive SIGPIPE; exact extracted bytes are still SHA-checked.
+              if code not in (0, -13, 141):
+                  raise RuntimeError("Stock archive decoder exited: " + str(code))
+          if payload is None or hashlib.sha256(payload).hexdigest() != expected:
+              raise RuntimeError("Stock camera helper missing or SHA256 mismatch")
+          relative = pathlib.Path("proprietary/vendor/bin/init.qti.cam.perfopt.sh")
+          destination = vendor / relative
+          if destination.exists() and destination.read_bytes() != payload:
+              raise RuntimeError("Conflicting camera helper already exists in vendor tree")
+          destination.parent.mkdir(parents=True, exist_ok=True)
+          destination.write_bytes(payload)
+          destination.chmod(0o755)
+
+          bpfile = vendor / "Android.bp"
+          bp = bpfile.read_text()
+          marker = 'cc_prebuilt_binary {\n    name: "mist_stock_core_camera",'
+          module = '''// Exact Mist stock camera perfopt helper (SHA256 verified OS3.0.304.0).
+          // Referenced by vendor.qti.camera.provider-service_64.rc.
+          sh_binary {
+              name: "mist_stock_camera_perfopt",
+              src: "proprietary/vendor/bin/init.qti.cam.perfopt.sh",
+              filename: "init.qti.cam.perfopt.sh",
+              vendor: true,
+          }
+
+          '''
+          if 'name: "mist_stock_camera_perfopt"' not in bp:
+              if bp.count(marker) != 1:
+                  raise RuntimeError("Unexpected camera module declaration; refusing speculative edit")
+              bp = bp.replace(marker, module + marker, 1)
+              bpfile.write_text(bp)
+
+          mkfile = vendor / "mist-vendor.mk"
+          mk = mkfile.read_text()
+          pkg_marker = "PRODUCT_PACKAGES += \\\n    mist_stock_core_camera \\\n"
+          if "mist_stock_camera_perfopt" not in mk:
+              if mk.count(pkg_marker) != 1:
+                  raise RuntimeError("Unexpected camera package block; refusing speculative edit")
+              mk = mk.replace(pkg_marker,
+                  "PRODUCT_PACKAGES += \\\n    mist_stock_camera_perfopt \\\n    mist_stock_core_camera \\\n", 1)
+              mkfile.write_text(mk)
+          print("Verified camera helper:", relative, expected)
+          print("Updated Android.bp and mist-vendor.mk for vendor/bin executable")
+          PY
+          git -C "$RUNNER_TEMP/mist-vendor" diff --check
+          git -C "$RUNNER_TEMP/mist-vendor" config user.name 'nobodyAtall-code'
+          git -C "$RUNNER_TEMP/mist-vendor" config user.email 'hashyofficial@gmail.com'
+          git -C "$RUNNER_TEMP/mist-vendor" add \
+            proprietary/vendor/bin/init.qti.cam.perfopt.sh Android.bp mist-vendor.mk
+          if ! git -C "$RUNNER_TEMP/mist-vendor" diff --cached --quiet; then
+            git -C "$RUNNER_TEMP/mist-vendor" commit -m \
+              "mist: install exact stock camera perfopt helper for provider init"
+            AUTH="$(printf 'x-access-token:%s' "$GH_PAT" | base64 -w0)"
+            git -C "$RUNNER_TEMP/mist-vendor" \
+              -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" \
+              push origin HEAD:main
+          fi
+          echo 'Stock camera helper imported and vendor tree pushed' >> "$GITHUB_STEP_SUMMARY"
