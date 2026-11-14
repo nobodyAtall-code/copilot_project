@@ -17,7 +17,7 @@ concurrency:
 jobs:
   lineage-first-soong:
     runs-on: ubuntu-24.04
-    timeout-minutes: 330
+    timeout-minutes: 95
     env:
       DEBIAN_FRONTEND: noninteractive
       USE_CCACHE: "0"
@@ -83,6 +83,14 @@ jobs:
           test -s device/xiaomi/mist-kernel/kernel
           test -f device/xiaomi/mist/BoardConfig.mk
           test -f vendor/xiaomi/mist/Android.bp
+          # Exact minimum landed-production commits; avoid stale cached trees.
+          git -C vendor/xiaomi/mist merge-base --is-ancestor 2d2f1be HEAD
+          git -C device/xiaomi/mist merge-base --is-ancestor adc7a1a HEAD
+          for module in mist_hal_keymint_service_qti mist_hal_qseecomd mist_stock_core_camera mist_stock_core_sensors mist_stock_core_composer mist_stock_core_lights mist_stock_core_vibrator; do
+            grep -q "$module" vendor/xiaomi/mist/mist-vendor.mk || { echo "Missing new HAL module: $module"; exit 1; }
+          done
+          test -s device/xiaomi/mist-kernel/vendor_boot.img
+          test -s device/xiaomi/mist-kernel/dtbo.img
       - name: Execute first real LineageOS 23.2 lunch and Soong configuration
         shell: bash
         run: |
@@ -91,5 +99,23 @@ jobs:
           source build/envsetup.sh
           lunch lineage_mist-bp4a-userdebug
           # Builds the build-system configuration and Soong graph, NOT a flashable ROM.
-          m -j2 nothing
-          echo "First Soong configuration completed; full ROM, VINTF and boot still unverified" >> "$GITHUB_STEP_SUMMARY"
+          set +e
+          m -j2 nothing 2>&1 | tee "$RUNNER_TEMP/mist-latest-soong.log"
+          build_rc=${PIPESTATUS[0]}
+          set -e
+          echo "Latest device/vendor configuration build exit: $build_rc" >> "$GITHUB_STEP_SUMMARY"
+          if (( build_rc != 0 )); then
+            echo "Last 150 configuration lines:"
+            tail -n 150 "$RUNNER_TEMP/mist-latest-soong.log"
+            exit "$build_rc"
+          fi
+          echo "Latest production HAL Soong/Kati graph passed; full ROM, VINTF and boot still unverified" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload bounded Soong build log for error triage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-current-production-soong-log
+          path: ${{ runner.temp }}/mist-latest-soong.log
+          retention-days: 7
+          if-no-files-found: warn
+
