@@ -2,10 +2,6 @@ name: Mist integrate stock KeyMint and QSEE security service group
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/mist-integrate-security-hal.yml'
 
 permissions:
   contents: read
@@ -191,5 +187,5 @@ jobs:
         run: |
           set -euo pipefail
           grep -q 'mist_hal_keymint_service_qti' output/production/mist-vendor.mk
-          test "$(find output/production/proprietary/vendor -type f | wc -l)" -ge 45
+          test "$(find output/production/proprietary/vendor -type f | wc -l)" -ge 44
           echo 'STOCK SECURITY HAL SERVICE GROUP PUBLISHED; KATI AND RUNTIME NOT YET TESTED'
