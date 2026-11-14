@@ -1,0 +1,97 @@
+name: Mist integrate verified stock dtbo into production device
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-integrate-stock-dtbo.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-integrate-stock-dtbo-main
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout validation scripts
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Download and verify exact Xiaomi stock DTBO
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/stock
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-boot-images --dir input/stock
+          test -s input/stock/boot-images.sha256
+          (cd input/stock/boot-images && sha256sum -c ../boot-images.sha256)
+          python3 - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from inspect_mist_boot_chain import dtbo
+          p=Path('input/stock/boot-images/dtbo.img')
+          rec=dtbo(p,p.stat().st_size)
+          assert rec['entry_count']==22, rec
+          assert p.stat().st_size==25165824, p.stat().st_size
+          print('Verified stock dtbo image',p.stat().st_size,'bytes',rec['entry_count'],'entries')
+          PY
+      - name: Publish unchanged DTBO image to kernel prebuilt repository
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo 'GH_PAT unset'; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist-kernel output/kernel -- --quiet
+          cd output/kernel
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          test -s vendor_boot.img
+          test ! -e dtbo.img || { echo 'dtbo.img exists: refusing overwrite'; exit 1; }
+          cp ../../input/stock/boot-images/dtbo.img dtbo.img
+          sha256sum dtbo.img > dtbo.img.sha256
+          git add dtbo.img dtbo.img.sha256
+          git diff --cached --check
+          git commit -m "mist: publish SHA256-verified stock 22-entry dtbo for initial bring-up"
+          git push origin HEAD:main
+      - name: Wire actual Lineage BoardConfig to stock DTBO
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist output/device -- --quiet
+          cd output/device
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          grep -q '^BOARD_PREBUILT_VENDOR_BOOTIMAGE := device/xiaomi/mist-kernel/vendor_boot.img$' BoardConfig.mk
+          grep -q '^BOARD_DTBOIMG_PARTITION_SIZE := 25165824$' BoardConfig.mk
+          ! grep -q '^BOARD_PREBUILT_DTBOIMAGE' BoardConfig.mk
+          cat >> BoardConfig.mk <<'EOF'
+
+          # Stock OS3.0.304.0.WPUMIXM DTBO, SHA256-verified.
+          # Use original 22-entry overlay table with stock vendor_boot DTBs.
+          # No custom overlay assembly or device boot compatibility claim.
+          BOARD_PREBUILT_DTBOIMAGE := device/xiaomi/mist-kernel/dtbo.img
+          EOF
+          git add BoardConfig.mk
+          git diff --cached --check
+          git commit -m "mist: select exact stock dtbo prebuilt alongside stock vendor_boot"
+          git push origin HEAD:main
+      - name: Verify published stock DTBO and configuration
+        run: |
+          set -euo pipefail
+          (cd output/kernel && sha256sum -c dtbo.img.sha256)
+          git -C output/device grep -n '^BOARD_PREBUILT_DTBOIMAGE' BoardConfig.mk
+          echo 'DTBO PUBLISHED AND SELECTED; BUILD OUTPUT AND BOOT NOT TESTED'
