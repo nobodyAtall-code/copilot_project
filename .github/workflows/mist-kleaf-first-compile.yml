@@ -37,6 +37,18 @@ jobs:
           git -C .repo/manifests reset --hard 1863b57ae47bf254a3a08d21ba6c8c2ac13ff239
           echo "Using pinned Google kernel manifest $(git -C .repo/manifests rev-parse HEAD)"
           repo sync -c -j 12 --no-tags --fail-fast --optimized-fetch
+          # DIAGNOSTIC ONLY: the pinned generic common manifest resolves a
+          # 6.6.144 GKI, whereas Xiaomi mist source reports 6.6.118.
+          # Match the documented Android15 6.6.118 GKI release commit;
+          # never bypass the subsequent Kleaf KMI/sublevel check.
+          COMMON_66118=f9c84f40b6ba6152b6f51daba0193c9564af4172
+          git -C common fetch --no-tags https://android.googlesource.com/kernel/common "$COMMON_66118"
+          git -C common checkout --detach "$COMMON_66118"
+          test "$(git -C common rev-parse HEAD)" = "$COMMON_66118"
+          test "$(sed -n 's/^VERSION = //p' common/Makefile | head -1)" = 6
+          test "$(sed -n 's/^PATCHLEVEL = //p' common/Makefile | head -1)" = 6
+          test "$(sed -n 's/^SUBLEVEL = //p' common/Makefile | head -1)" = 118
+          echo "DIAGNOSTIC-ONLY: pinned common GKI to verified 6.6.118 release source $COMMON_66118"
           test -d build/kernel
           test -d common
           test -d prebuilts/clang/host/linux-x86
@@ -162,6 +174,14 @@ jobs:
             needle='"'+module+'",'
             assert bzl.count(needle)==1, 'Unexpected MIHW module entry: '+module
             bzl=bzl.replace(needle, '', 1)
+          # The last diagnostic module packaging report found TLS built as
+          # net/tls/tls.ko without a corresponding module_outs entry.
+          # Account for the exact observed output, never silence the audit.
+          tls_entry='"net/tls/tls.ko",'
+          assert tls_entry not in bzl, 'TLS module already declared'
+          tls_anchor='"net/wireless/cfg80211.ko",'
+          assert bzl.count(tls_anchor)==1, 'Unexpected TLS insertion anchor'
+          bzl=bzl.replace(tls_anchor, tls_entry+'\\n        '+tls_anchor,1)
           mist_bzl.write_text(bzl)
           assert not any('drivers/mihw/' in line and '.ko' in line for line in bzl.splitlines()), 'Unhandled MIHW module target'
           print('DIAGNOSTIC ONLY: stripped three MIHW module outputs from disposable mist.bzl; NEVER FLASH',flush=True)
