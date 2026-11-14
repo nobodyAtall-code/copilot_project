@@ -1,0 +1,77 @@
+name: Mist publish verified stock DLKM to production trees
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/mist-publish-stock-dlkm.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-publish-stock-dlkm
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout research tools
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install module packaging tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          python3 -m py_compile scripts/integrate_mist_dlkm.py
+      - name: Download and verify extracted stock DLKM payload
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p work/staged-dlkm reports
+          gh run download 43587815827 --repo nobodyAtall-code/copilot_project --name mist-stock-dlkm-payload --dir reports
+          (cd reports && sha256sum -c mist-stock-dlkm.sha256)
+          tar -I zstd -xf reports/mist-stock-dlkm.tar.zst -C work/staged-dlkm --no-same-owner --no-same-permissions
+      - name: Clone production main branches
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo 'GH_PAT required'; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist-kernel work/production-kernel -- --branch main --single-branch --quiet
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist work/production-device -- --branch main --single-branch --quiet
+          for dir in work/production-kernel work/production-device; do
+            git -C "$dir" config user.name "nobodyAtall-code"
+            git -C "$dir" config user.email "hashyofficial@gmail.com"
+            test -z "$(git -C "$dir" status --porcelain)"
+          done
+      - name: Integrate source-backed stock DLKM files
+        run: |
+          set -euo pipefail
+          python3 scripts/integrate_mist_dlkm.py --source work/staged-dlkm --manifest reports/mist-dlkm-manifest.json --kernel-repo work/production-kernel --device-repo work/production-device
+          git -C work/production-kernel add -- vendor_dlkm system_dlkm
+          git -C work/production-device add -- device.mk
+          git -C work/production-kernel diff --cached --check
+          git -C work/production-device diff --cached --check
+          git -C work/production-kernel diff --cached --stat | tail -12
+          git -C work/production-device diff --cached --stat | tail -12
+      - name: Push actual source integration to production main
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          git -C work/production-kernel commit -m "mist: include verified stock vendor and system DLKM payloads"
+          git -C work/production-kernel push origin HEAD:main
+          git -C work/production-device commit -m "mist: install stock kernel module payloads in both DLKM images"
+          git -C work/production-device push origin HEAD:main
+      - name: Record published revisions
+        run: |
+          echo "Kernel prebuilt repository commit: $(git -C work/production-kernel rev-parse HEAD)"
+          echo "Device repository commit: $(git -C work/production-device rev-parse HEAD)"
