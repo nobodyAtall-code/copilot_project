@@ -1,6 +1,10 @@
 name: Mist publish verified stock RIL and audio bring-up
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-publish-radio-audio.yml'
 permissions:
   contents: read
   actions: read
