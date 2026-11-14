@@ -1139,3 +1139,12 @@ grep -RInE 'generated_kernel_includes|generated_kernel_headers|TARGET_KERNEL_HEA
 - Report explicitly warns this is not runtime ELF/VINTF/SELinux/kernel ABI or boot verification, and did not build full ROM/flash.
 - This batch is distinct from the previous failed Display composer compile at \`libdrmutils/drm_master.cpp\` due to missing \`display/drm/sde_drm.h\`. Successful Mist MiCode header generation is verified in prior \`mist-display-headers-build.log\` 49/49, but the new composer no-op needs careful checking before treating the failure fully closed.
 - Immediate next priority: obtain read-only output/provider audit + targeted Display fresh compile evidence, followed by offline dynamic-ELF/VINTF/SELinux and boot configuration gates, before a resource-heavy full ROM build. Never auto-monitor GitHub Actions; user runs commands and sends completed report.
+
+
+### 14 November 2026 — display composer binaries confirmed in local output (post-batch audit)
+
+- User ran read-only \`find\` audit locally after six-stage 6/6 PASS. **Installed Display composer executable is present** at \`out/target/product/mist/vendor/bin/hw/vendor.qti.hardware.display.composer-service\` alongside \`vendor.qti.hardware.display.composer3-V3-ndk.so\`, \`android.hardware.graphics.composer3-V3-ndk.so\`, composer init RC and VINTF manifest XML.
+- Both unstripped and final composer executable were found under \`out/soong/.intermediates/hardware/qcom-caf/sm8450-6.6/display/hal/composer/vendor.qti.hardware.display.composer-service/android_vendor_arm64_armv8-a/\`.
+- **Generated Mist UAPI headers present** under \`out/soong/.intermediates/vendor/qcom/opensource/mist-display-uapi/qti_generate_display_kernel_headers/gen/display/drm/\`: \`sde_drm.h\`, \`msm_drm_pp.h\`.
+- Together with prior generator success (49/49) and incremental composer target exit 0, this validates **presence of Display composer build artifacts**, but cannot establish the executable was newly rebuilt after the header change (batch said Ninja "no work to do"), nor runtime/ABI/boot correctness.
+- Next major gates should focus on offline vendor ELF dependency mapping, VINTF and SELinux cross-checks, kernel/module ABI and boot integration, with consolidated read-only reports rather than repeated short one-off tests. No flashing/full ROM boot validated.
