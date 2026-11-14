@@ -226,3 +226,19 @@ M. FOCUSED BOOT-CRITICAL SERVICE CLOSURE (2026-11-14)
   currently reviewed curated vendor repository; inspect exact stock firmware
   source or installed output before adding a declaration. The SELinux
   domain u:r:vendor_qti_init_shell:s0 also needs stock/policy verification.
+
+
+N. CAMERA OSS INPUTS / FOCUSED 2026-11-14 RESULT
+- Preserve links to the user's Qualcomm camera sources for future kernel bring-up:
+    https://github.com/nobodyAtall-code/vendor_qcom_proprietary_camera-devicetree
+    https://github.com/nobodyAtall-code/vendor_qcom_opensource_camera-kernel
+- The generic parrot-camera-sensor-idp.dts is NOT verified as the Mist DTBO
+  overlay. Reuse only after matching exact stock DTB/DTBO board and sensor IDs.
+- Focused local script reported 5 PASS / 0 FAIL / 3 WARN / 3 UNVERIFIED.
+  /vendor/bin/init.qti.cam.perfopt.sh was not found in current staged vendor
+  or existing output (the tool reports this same issue twice). It may still
+  exist in original firmware or a non-staged platform source path.
+- Recheck this filename against the complete stock vendor archive and local
+  output before declaring it missing or adding a proprietary-files entry.
+  Keep current stock kernel, DTBO and vendor_boot; no new camera module ABI
+  has been proven.
