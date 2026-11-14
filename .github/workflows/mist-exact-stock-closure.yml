@@ -1,0 +1,67 @@
+name: Mist exact stock firmware closure
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-exact-stock-closure.yml'
+permissions:
+  contents: write
+  actions: read
+jobs:
+  stock-closure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install stock archive decoder
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+      - name: Download original, checksum-locked Mist vendor artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/stock-vendor reports
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir evidence/stock-vendor
+          test -s evidence/stock-vendor/stock-vendor-source.tar.zst
+          test -s evidence/stock-vendor/stock-vendor-source.sha256
+          (cd evidence/stock-vendor && sha256sum -c stock-vendor-source.sha256)
+      - name: Inspect exact stock inputs (no binaries exported)
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/inspect_mist_exact_stock_inputs.py
+          python3 scripts/inspect_mist_exact_stock_inputs.py \
+            --archive evidence/stock-vendor/stock-vendor-source.tar.zst \
+            --sha256 evidence/stock-vendor/stock-vendor-source.sha256 \
+            --json reports/mist-exact-stock-closure.json \
+            --markdown reports/mist-exact-stock-closure.md
+          cat reports/mist-exact-stock-closure.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish compact verified provenance to copilot_project only
+        if: success()
+        run: |
+          set -euo pipefail
+          mkdir -p research/generated
+          cp reports/mist-exact-stock-closure.json research/generated/mist-exact-stock-closure.json
+          cp reports/mist-exact-stock-closure.md research/generated/mist-exact-stock-closure.md
+          git config user.name 'nobodyAtall-code'
+          git config user.email 'hashyofficial@gmail.com'
+          git add research/generated/mist-exact-stock-closure.json research/generated/mist-exact-stock-closure.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: publish verified exact Mist stock closure"
+            git push origin HEAD:main
+          fi
+      - name: Upload inspection output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-exact-stock-firmware-closure
+          path: |
+            reports/mist-exact-stock-closure.json
+            reports/mist-exact-stock-closure.md
+          retention-days: 14
+          if-no-files-found: warn
