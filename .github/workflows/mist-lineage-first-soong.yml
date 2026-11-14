@@ -1,10 +1,8 @@
 name: Mist LineageOS 23.2 first Soong configuration attempt
 
+# Disabled by default: this hosted-runner workflow re-downloads full LineageOS.
+# Prefer the existing user's local ~/android/lineage source for m -j2 nothing.
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/mist-lineage-first-soong.yml"
   workflow_dispatch:
 
 permissions:
