@@ -1209,3 +1209,10 @@ grep -RInE 'generated_kernel_includes|generated_kernel_headers|TARGET_KERNEL_HEA
 ### 2026-11-14 07:55:06 UTC — user local postchange check received
 
 Uploaded local read-only check: **13 PASS / 1 FAIL / 1 WARN / 2 UNVERIFIED**. All 8 required tree/prebuilt files exist; 40 requested Mist Soong module names are declared; 12 staged VINTF XMLs parse. The sole FAIL was required vendor inheritance. Remote device `lineage_mist.mk` does contain the exact required `inherit-product` line at commit `9d15bca0ffc7bdacc8f928b5343a4de04e2aa9a6`, so likely local checkout skew; report did **not** capture HEAD and this remains to be confirmed locally. Local device and vendor checkouts were clean; kernel still has user modifications to `include/linux/sched.h` and `include/uapi/linux/sched/types.h` (preserve both). Added richer validator failure/revision diagnostics in copilot commit [b2c43aa](https://github.com/nobodyAtall-code/copilot_project/commit/b2c43aa04cd9b300134aa5926c59e135260c5689). No on-device checks or build conducted. Next: fetch and fast-forward local device `main` without resets and rerun narrow validator; pursue SELinux/vendor only with reviewed stock evidence.
+
+
+### 2026-11-14 07:58:20 UTC — local postchange gate passed
+
+User-provided `mist-postchange-integration-20261114T075820Z.txt` reports **14 PASS / 0 FAIL / 1 WARN / 2 UNVERIFIED**. Mandatory vendor inheritance passes after local device tree synchronisation. All eight required device/vendor/stock-prebuilt presence checks pass; stock prebuilt kernel fallback remains set; all 40 requested Mist modules have Soong name declarations; 12 staged VINTF XML fragments are well-formed. Device and vendor working trees are clean. **Preserve** two existing kernel working tree edits: `include/linux/sched.h`, `include/uapi/linux/sched/types.h`.
+
+The remaining WARN is unvalidated device-specific SELinux; runtime HAL/VINTF and full ROM/flash remain UNVERIFIED. These are structural results only, not proof that services link or device boots. No new source-built kernel or ROM build was initiated.
