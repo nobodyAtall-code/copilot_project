@@ -293,3 +293,17 @@ Q. KEYMINT/SEPOLICY PROVENANCE GATE
   original label evidence and local sepolicy compiler/neverallow success.
 - Vendor README updated to record all stock-backed findings and to eliminate
   old incorrect statement about missing KeyMint stock XML.
+
+
+R. COMPLETE STOCK FIRMWARE FORENSICS
+- Copilot research workflow: .github/workflows/mist-complete-firmware-research.yml
+- Inventory script: scripts/mist_full_firmware_inventory.py
+- Exact firmware version: OS3.0.304.0.WPUMIXM
+- Original archive MD5: c4450c4e168052ca9de1211306d3beff
+- Full archive reacquisition, SHA image inventories, super LP group/size
+  independent Python+Go comparisons, all mounted logical partition ELF
+  and kernel module metadata, original ramdisks, AVB/DTBO/DTB evidence.
+- Research only. No raw firmware upload, no flashing or finished ROM.
+- GitHub Actions completion has not been verified. The user sends the
+  completed run; do not monitor by default. Fix first failing step in the
+  existing workflow and preserve partial artifact evidence.
