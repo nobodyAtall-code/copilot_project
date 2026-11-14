@@ -1378,3 +1378,17 @@ The user requested full Mist firmware research, not another shallow readiness au
 - User **executed** `scripts/inspect_mist_vendor_boot_bootconfig.py` locally against `device/xiaomi/mist-kernel/vendor_boot.img`; actual image SHA256 `f0d692792cacff3026876edbd68aed5d23be7e1acef3e6028ccd5fff21ae5acb` matches original exactly. Android vendor_boot header v4, bootconfig 204 bytes at offset 15,392,768; one 10,992,661-byte legacy-LZ4 ramdisk fragment, type 1. This is verified input, not just static header conjecture.
 - Actual bootconfig hints shown: `androidboot.hardware=qcom`, `androidboot.memcg=1`, `androidboot.usbcontroller=a600000.dwc3`, `androidboot.load_modules_parallel=true`, `androidboot.vendor.qspa=true`, `androidboot.hypervisor.protected_vm.supported=true`. **No explicit `androidboot.fstab_suffix`**. `fstab_selected_confirmed=false` remains correct; do not claim selector known. Determine selection from first-stage ramdisk init/fs_mgr, other bootloader-supplied kernel cmdline or on-device `ro.boot.*` properties when available.
 - Stock all-EROFS logical partitions strongly disfavor the stock EXT4-only `fstab.emmc` alternative as the successfully booted choice, but this is an inference. Do NOT replace stock vendor_boot until init/fs_mgr, bootconfig and AVB constraints are addressed. No workflow required.
+
+
+### 2026-11-14 — LIVE MIST STOCK DEVICE CONFIRMS fstab.default
+
+The user connected the **physical stock Mist** by ADB and ran read-only runtime commands. Device was listed as `device`. Runtime facts (not guesses):
+- `adb shell getprop ro.boot.fstab_suffix` printed **`default`**.
+- `adb shell getprop ro.boot.hardware` printed **`qcom`**.
+- `mount` confirmed `/dev/block/dm-15` EROFS mounted at **both `/mnt/vendor/mi_ext` and `/mi_ext`**; `/product` EROFS `dm-10`, `/vendor` EROFS `dm-11`.
+- `/proc/cmdline` and `/proc/bootconfig` read attempts were **Permission denied** on non-root ADB. Do not describe these as inspected.
+- The runtime `fstab_suffix=default` resolves the prior *selection* uncertainty: stock uses its **`fstab.default` selection**, consistent with EROFS logical partitions. It doesn't establish where every runtime mount entry came from or prove customized ramdisk compatibility.
+
+IMPLICATION: The currently reused stock `BOARD_PREBUILT_VENDOR_BOOTIMAGE` carries original `fstab.default` with **24 mi_ext-related entries** (22 overlays) and actively mounts `mi_ext` on stock. Clean Lineage BoardConfig excludes `mi_ext` image, but **that alone doesn't remove first-stage mounts in stock vendor_boot**. Need *complete* replacement vendor_boot ramdisk plan preserving first-stage modules/firmware, verified encryption/AVB/SEPolicy and runtime selection; do not flash or silently assume `nofail` makes downstream overlays safe. The staged `rootdir/etc/fstab.mist` remains uninstalled.
+
+Evidence: output pasted by user directly into conversation; no new GitHub Action, build, image edit or flash conducted.
