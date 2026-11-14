@@ -1,0 +1,81 @@
+name: Mist stock AVB cryptographic verification (read-only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-stock-avb-verify.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-stock-avb-verification
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout research tool
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Retrieve original SHA256-audited stock boot-chain images
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input reports
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-boot-images --dir input
+          test -s input/boot-images.sha256
+          (cd input/boot-images && sha256sum -c ../boot-images.sha256)
+          for img in boot init_boot vendor_boot dtbo vbmeta vbmeta_system; do
+            test -s "input/boot-images/$img.img"
+          done
+
+      - name: Obtain official AOSP avbtool (no Android build)
+        run: |
+          set -euo pipefail
+          mkdir -p work/android/external
+          git clone --quiet --depth 1 \
+            https://android.googlesource.com/platform/external/avb \
+            work/android/external/avb
+          git -C work/android/external/avb rev-parse HEAD | tee reports/aosp-avbtool-commit.txt
+          python3 -m py_compile scripts/verify_mist_avb_stock.py work/android/external/avb/avbtool.py
+
+      - name: Run real avbtool on original images only
+        run: |
+          set -euo pipefail
+          python3 scripts/verify_mist_avb_stock.py \
+            --root work/android \
+            --images-dir input/boot-images \
+            --out reports/mist-avb-stock-verification.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("reports/mist-avb-stock-verification.json")
+          d=json.loads(p.read_text())
+          assert d["custom_rom_flash_safe"] is False
+          assert all(d["stock_images"][s]["status"]=="STOCK_MATCH" for s in
+                     ("boot.img","init_boot.img","vendor_boot.img","dtbo.img","vbmeta.img","vbmeta_system.img"))
+          for name,record in d["avbtool_results"].items():
+              print(name, "info_exit:",record.get("info_exit"),"verify_exit:",record.get("verify_exit","not run"))
+          PY
+          echo "Read-only original stock AVB inspection. NOT a custom boot verification." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload compact AVB evidence (never original images)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-avbtool-validation
+          path: |
+            reports/mist-avb-stock-verification.json
+            reports/aosp-avbtool-commit.txt
+          retention-days: 14
+          if-no-files-found: warn
