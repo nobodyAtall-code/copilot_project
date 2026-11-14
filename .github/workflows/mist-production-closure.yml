@@ -32,10 +32,30 @@ jobs:
           git -C work/device rev-parse HEAD > reports/device-head.txt
           git -C work/vendor rev-parse HEAD > reports/vendor-head.txt
           git -C work/prebuilts rev-parse HEAD > reports/prebuilts-head.txt
+      - name: Validate checker and BoardConfig parser
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/mist_remaining_integration_gate.py
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          board=Path("work/device/BoardConfig.mk").read_text()
+          assert re.search(r"(?m)^BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST\s*:=", board), "partition list not parsed"
+          print("PASS: partition-list assignment is present")
+          PY
       - name: Test production source and identify remaining blockers
         run: |
           set -euo pipefail
           python3 scripts/mist_remaining_integration_gate.py --device work/device --vendor work/vendor --prebuilts work/prebuilts --output reports/mist-production-closure.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("reports/mist-production-closure.json").read_text())
+          expected={"odm","product","system","system_dlkm","system_ext","vendor","vendor_dlkm"}
+          found=set(r["checks"]["generated_dynamic_partitions"])
+          assert found==expected, f"unexpected dynamic partitions: {sorted(found)}"
+          print("PASS: seven generated Android partitions parsed without mi_ext")
+          PY
       - name: Upload consolidated blocker report
         if: always()
         uses: actions/upload-artifact@v4
