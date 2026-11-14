@@ -1,0 +1,146 @@
+name: Mist complete stock firmware research
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-complete-firmware-research.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: mist-complete-firmware-research
+  cancel-in-progress: false
+jobs:
+  analyze:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install firmware and ELF analysis tools
+        run: |
+          set -euo pipefail
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk /opt/hostedtoolcache
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends pigz zstd erofs-utils android-sdk-libsparse-utils golang-go kmod lz4 python3-venv
+          python3 -m venv .firmware-venv
+          .firmware-venv/bin/pip install --disable-pip-version-check pyelftools==0.32
+          python3 -m py_compile scripts/multicdn.py scripts/mist_full_firmware_inventory.py scripts/inspect_mist_super_metadata.py scripts/inspect_mist_boot_chain.py scripts/mist_verify_boot_metadata.py scripts/audit_mist_stock_ramdisks.py
+          df -h .
+      - name: Redownload exact Xiaomi Global stock firmware and verify original MD5
+        run: |
+          set -euo pipefail
+          mkdir -p work reports
+          python3 -u scripts/multicdn.py
+          grep -q '^c4450c4e168052ca9de1211306d3beff ' reports/firmware.md5
+          sha256sum work/*.tgz > reports/firmware.sha256
+      - name: Inventory complete physical firmware image files and stage verified boot images
+        run: |
+          set -euo pipefail
+          mkdir -p work/unpacked
+          pigz -dc work/*.tgz | tar -xf - -C work/unpacked
+          find work/unpacked -type f -printf '%P\t%s\n' | sort > reports/full-fastboot-members.tsv
+          find work/unpacked -type f -name '*.img*' -printf '%P\t%s\n' | sort > reports/firmware-image-sizes.tsv
+          find work/unpacked -type f -name '*.img' -print0 | xargs -0 -r sha256sum > reports/firmware-images.sha256
+          bash scripts/stage_boot_images.sh
+          rm -f work/*.tgz
+          df -h .
+      - name: Decode boot recovery init_boot vendor_boot DTBO and AVB metadata
+        run: |
+          set -euo pipefail
+          (cd reports/boot-images && sha256sum -c ../boot-images.sha256)
+          python3 scripts/inspect_mist_boot_chain.py --images-dir reports/boot-images --sha256-file reports/boot-images.sha256 --output reports/full-boot-structures.json
+          python3 scripts/mist_verify_boot_metadata.py --images-dir reports/boot-images --sha256-file reports/boot-images.sha256 --output reports/full-avb-dtbo-dtb.json
+      - name: Convert super to raw and verify liblp metadata from stock
+        run: |
+          set -euo pipefail
+          mapfile -d '' superpieces < <(find work/unpacked -type f \( -name 'super.img' -o -name 'super.img.[0-9]*' \) -print0 | sort -zV)
+          test -n "\${superpieces[0]:-}"
+          magic="$(head -c 4 "\${superpieces[0]}" | od -An -tx1 | tr -d ' \n')"
+          if [[ "$magic" == "3aff26ed" ]]; then
+            simg2img "\${superpieces[@]}" work/super.raw.img
+          elif [[ "\${#superpieces[@]}" -eq 1 ]]; then
+            cp "\${superpieces[0]}" work/super.raw.img
+          else
+            cat "\${superpieces[@]}" > work/super.raw.img
+          fi
+          python3 scripts/inspect_mist_super_metadata.py work/super.raw.img --output reports/full-super-metadata.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('reports/full-super-metadata.json'))
+          assert d['integrity_checks_passed']
+          print('Verified liblp metadata slots:',len(d['slots']))
+          PY
+      - name: Independent pinned Go liblp group and partition validation
+        run: |
+          set -euo pipefail
+          git clone -q https://github.com/soe1hom-arch/lpunpack-go.git work/lpunpack-src
+          git -C work/lpunpack-src checkout --detach -q 073a3302a3c3ffae01633989e6dd1e60b6de15b7
+          cp scripts/mist_independent_lp_sizes.go work/lpunpack-src/mist_independent_lp_sizes.go
+          cp scripts/mist_independent_lp_groups.go work/lpunpack-src/mist_independent_lp_groups.go
+          (cd work/lpunpack-src && CGO_ENABLED=0 go build -o "$GITHUB_WORKSPACE/work/lpunpack" .)
+          ROOT="$PWD"
+          (cd work/lpunpack-src && go run super.go mist_independent_lp_sizes.go "$ROOT/work/super.raw.img" > "$ROOT/reports/full-go-partitions.json")
+          (cd work/lpunpack-src && go run super.go mist_independent_lp_groups.go "$ROOT/work/super.raw.img" > "$ROOT/reports/full-go-groups.json")
+          python3 scripts/compare_mist_super_sizes.py --python-report reports/full-super-metadata.json --go-report reports/full-go-partitions.json --output reports/full-sizes-comparison.json
+          python3 scripts/compare_mist_super_groups.py --python-report reports/full-super-metadata.json --go-report reports/full-go-groups.json --output reports/full-groups-comparison.json
+      - name: Extract all supported super partitions and mount filesystems read-only
+        run: |
+          set -euo pipefail
+          bash scripts/extract_partitions.sh
+          df -h .
+      - name: Inspect all mounted ELF .so .ko module metadata VINTF init and images
+        run: |
+          set -euo pipefail
+          sudo "$PWD/.firmware-venv/bin/python" scripts/mist_full_firmware_inventory.py \
+            --mounts work/mounts --images work/unpacked \
+            --json reports/full-firmware-elf-ko-inventory.json \
+            --markdown reports/full-firmware-elf-ko-inventory.md
+          python3 - <<'PY'
+          import json
+          d=json.load(open('reports/full-firmware-elf-ko-inventory.json'))
+          assert d['summary']['mounts']>=4, d['summary']
+          assert d['summary']['elfs']>=100, d['summary']
+          print('Mount and ELF evidence',d['summary'])
+          PY
+          cat reports/full-firmware-elf-ko-inventory.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Compare stock first-stage ramdisks and modules against production device tree
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git "$RUNNER_TEMP/mist-device"
+          python3 scripts/audit_mist_stock_ramdisks.py --images-dir reports/boot-images --device-dir "$RUNNER_TEMP/mist-device" --output reports/full-stock-ramdisks.json
+      - name: Research status summary
+        if: always()
+        run: |
+          echo 'Stock firmware research only; not validated for flashing or device boot.' >> "$GITHUB_STEP_SUMMARY"
+          df -h .
+      - name: Upload comprehensive metadata only (no firmware binaries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-complete-stock-firmware-img-so-ko-partitions
+          path: |
+            reports/firmware.md5
+            reports/firmware.sha256
+            reports/firmware-image-sizes.tsv
+            reports/firmware-images.sha256
+            reports/full-fastboot-members.tsv
+            reports/boot-images.sha256
+            reports/full-boot-structures.json
+            reports/full-avb-dtbo-dtb.json
+            reports/full-super-metadata.json
+            reports/full-go-partitions.json
+            reports/full-go-groups.json
+            reports/full-sizes-comparison.json
+            reports/full-groups-comparison.json
+            reports/super-metadata.txt
+            reports/logical-partitions.tsv
+            reports/mounted-partitions.tsv
+            reports/skipped-images.tsv
+            reports/all-files.tsv
+            reports/all-shared-libraries.tsv
+            reports/full-firmware-elf-ko-inventory.json
+            reports/full-firmware-elf-ko-inventory.md
+            reports/full-stock-ramdisks.json
+          if-no-files-found: warn
+          retention-days: 14
