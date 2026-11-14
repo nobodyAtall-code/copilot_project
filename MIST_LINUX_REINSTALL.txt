@@ -277,3 +277,19 @@ P. CAMERA SCRIPT EXACT STOCK SOURCE RECOVERY
 - Stock vendor/ODM SELinux contexts/CIL are evidence sources, not directly
   installable replacement policy for Lineage; compile policy from reviewed
   source and verify neverallows / init labels separately.
+
+
+Q. KEYMINT/SEPOLICY PROVENANCE GATE
+- Original firmware direct evidence confirms KeyMint XML and RC at stock paths;
+  current vendor staged copies have same sizes (810/456 bytes) but their SHA256
+  matches have not yet been verified. Do not call them identical until tested.
+- Repo check tool scripts/inspect_mist_keymint_selinux.py and workflow
+  .github/workflows/mist-keymint-selinux-closure.yml compare original firmware
+  hash to vendor copy and extract targeted original SELinux service/file labels.
+- Expected output after successful CI execution:
+    research/generated/mist-keymint-selinux-stock-evidence.json
+  Compiled vendor/ODM CIL are provenance evidence, not substitute Lineage
+  policy source. Do not add permissive guessed camera/KeyMint policy without
+  original label evidence and local sepolicy compiler/neverallow success.
+- Vendor README updated to record all stock-backed findings and to eliminate
+  old incorrect statement about missing KeyMint stock XML.
