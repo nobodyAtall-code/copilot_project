@@ -76,11 +76,15 @@ jobs:
           set -euo pipefail
           git clone -q https://github.com/soe1hom-arch/lpunpack-go.git work/lpunpack-src
           git -C work/lpunpack-src checkout --detach -q 073a3302a3c3ffae01633989e6dd1e60b6de15b7
-          cp scripts/mist_independent_lp_sizes.go work/lpunpack-src/mist_independent_lp_sizes.go
-          cp scripts/mist_independent_lp_groups.go work/lpunpack-src/mist_independent_lp_groups.go
+          # Build the upstream extractor BEFORE staging independent programs.
+          # Each helper has its own main(); compiling the entire directory
+          # with both helpers would produce a duplicate-main compiler error.
           (cd work/lpunpack-src && CGO_ENABLED=0 go build -o "$GITHUB_WORKSPACE/work/lpunpack" .)
+          cp scripts/mist_independent_lp_sizes.go work/lpunpack-src/mist_independent_lp_sizes.go
           ROOT="$PWD"
           (cd work/lpunpack-src && go run super.go mist_independent_lp_sizes.go "$ROOT/work/super.raw.img" > "$ROOT/reports/full-go-partitions.json")
+          rm work/lpunpack-src/mist_independent_lp_sizes.go
+          cp scripts/mist_independent_lp_groups.go work/lpunpack-src/mist_independent_lp_groups.go
           (cd work/lpunpack-src && go run super.go mist_independent_lp_groups.go "$ROOT/work/super.raw.img" > "$ROOT/reports/full-go-groups.json")
           python3 scripts/compare_mist_super_sizes.py --python-report reports/full-super-metadata.json --go-report reports/full-go-partitions.json --output reports/full-sizes-comparison.json
           python3 scripts/compare_mist_super_groups.py --python-report reports/full-super-metadata.json --go-report reports/full-go-groups.json --output reports/full-groups-comparison.json
