@@ -1,0 +1,195 @@
+name: Mist integrate stock KeyMint and QSEE security service group
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-integrate-security-hal.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-security-hal-integration-main
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout orchestration
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Obtain SHA256-verified stock vendor archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          mkdir -p input/vendor output
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input/vendor
+          (cd input/vendor && sha256sum -c stock-vendor-source.sha256)
+      - name: Extract bounded exact original KeyMint/QSEE service files
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import subprocess,tarfile
+          from pathlib import Path
+          archive=Path('input/vendor/stock-vendor-source.tar.zst')
+          wanted={
+            'vendor_a/bin/hw/android.hardware.security.keymint-service-qti',
+            'vendor_a/etc/init/android.hardware.security.keymint-service-qti.rc',
+            'vendor_a/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml',
+            'vendor_a/bin/qseecomd',
+            'vendor_a/etc/init/qseecomd.rc',
+            'vendor_a/bin/hw/vendor.qti.hardware.qseecom@1.0-service',
+            'vendor_a/etc/init/vendor.qti.hardware.qseecom@1.0-service.rc',
+          }
+          found=set()
+          proc=subprocess.Popen(['zstd','-dc','--',str(archive)],stdout=subprocess.PIPE)
+          try:
+            with tarfile.open(fileobj=proc.stdout,mode='r|') as t:
+              for m in t:
+                path=m.name.removeprefix('./')
+                if path not in wanted: continue
+                if path in found or not m.isfile() or m.size <= 0 or m.size > 40_000_000:
+                  raise SystemExit('unsafe or repeated source member: '+path)
+                f=t.extractfile(m)
+                if f is None: raise SystemExit('unreadable '+path)
+                data=f.read(m.size+1)
+                if len(data)!=m.size: raise SystemExit('truncated '+path)
+                dest=Path('output/staged/proprietary/vendor')/path.removeprefix('vendor_a/')
+                dest.parent.mkdir(parents=True,exist_ok=True)
+                dest.write_bytes(data)
+                found.add(path)
+          finally:
+            if proc.stdout: proc.stdout.close()
+            code=proc.wait()
+          if code: raise SystemExit('zstd decompression failed')
+          missing=wanted-found
+          if missing: raise SystemExit('stock source absent: '+', '.join(sorted(missing)))
+          print('Extracted',len(found),'verified stock service files')
+          PY
+      - name: Publish security service modules directly to production vendor main
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo 'GH_PAT missing'; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/proprietary_vendor_xiaomi_mist output/production -- --quiet
+          cd output/production
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          test -s Android.bp && test -s mist-vendor.mk
+          for f in \
+            bin/hw/android.hardware.security.keymint-service-qti \
+            etc/init/android.hardware.security.keymint-service-qti.rc \
+            etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml \
+            bin/qseecomd etc/init/qseecomd.rc \
+            bin/hw/vendor.qti.hardware.qseecom@1.0-service \
+            etc/init/vendor.qti.hardware.qseecom@1.0-service.rc
+          do
+            test ! -e "proprietary/vendor/$f" || { echo "Refusing duplicate: $f"; exit 1; }
+          done
+          ! grep -q 'mist_hal_keymint_service_qti' Android.bp
+          ! grep -q 'mist_hal_keymint_service_qti' mist-vendor.mk
+          cp -a ../staged/proprietary/vendor/. proprietary/vendor/
+          cat >> Android.bp <<'EOF'
+
+          // MIST_SECURITY_HAL_BATCH_4 — extracted from SHA256 verified OS3.0.304.0 stock.
+          // Selected in mist-vendor.mk; linker closure and runtime SELinux pending.
+          cc_prebuilt_binary {
+              name: "mist_hal_keymint_service_qti",
+              srcs: ["proprietary/vendor/bin/hw/android.hardware.security.keymint-service-qti"],
+              stem: "android.hardware.security.keymint-service-qti",
+              vendor: true,
+              relative_install_path: "hw",
+              compile_multilib: "64",
+              strip: { none: true },
+              check_elf_files: false,
+          }
+
+          prebuilt_etc {
+              name: "mist_hal_keymint_service_qti_rc",
+              src: "proprietary/vendor/etc/init/android.hardware.security.keymint-service-qti.rc",
+              filename: "android.hardware.security.keymint-service-qti.rc",
+              vendor: true,
+              sub_dir: "init",
+          }
+
+          prebuilt_etc {
+              name: "mist_hal_keymint_service_qti_vintf",
+              src: "proprietary/vendor/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml",
+              filename: "android.hardware.security.keymint-service-qti.xml",
+              vendor: true,
+              sub_dir: "vintf/manifest",
+          }
+
+          cc_prebuilt_binary {
+              name: "mist_hal_qseecomd",
+              srcs: ["proprietary/vendor/bin/qseecomd"],
+              stem: "qseecomd",
+              vendor: true,
+              compile_multilib: "64",
+              strip: { none: true },
+              check_elf_files: false,
+          }
+
+          prebuilt_etc {
+              name: "mist_hal_qseecomd_rc",
+              src: "proprietary/vendor/etc/init/qseecomd.rc",
+              filename: "qseecomd.rc",
+              vendor: true,
+              sub_dir: "init",
+          }
+
+          cc_prebuilt_binary {
+              name: "mist_hal_qseecom_1_0_service",
+              srcs: ["proprietary/vendor/bin/hw/vendor.qti.hardware.qseecom@1.0-service"],
+              stem: "vendor.qti.hardware.qseecom@1.0-service",
+              vendor: true,
+              relative_install_path: "hw",
+              compile_multilib: "64",
+              strip: { none: true },
+              check_elf_files: false,
+          }
+
+          prebuilt_etc {
+              name: "mist_hal_qseecom_1_0_service_rc",
+              src: "proprietary/vendor/etc/init/vendor.qti.hardware.qseecom@1.0-service.rc",
+              filename: "vendor.qti.hardware.qseecom@1.0-service.rc",
+              vendor: true,
+              sub_dir: "init",
+          }
+          EOF
+          cat >> mist-vendor.mk <<'EOF'
+
+          # MIST_SECURITY_HAL_BATCH_4 — verified-stock KeyMint v3 and QSEE services.
+          # Runtime linker, VINTF registration, SEPolicy and TEE compatibility pending.
+          PRODUCT_PACKAGES += \
+              mist_hal_keymint_service_qti \
+              mist_hal_keymint_service_qti_rc \
+              mist_hal_keymint_service_qti_vintf \
+              mist_hal_qseecomd \
+              mist_hal_qseecomd_rc \
+              mist_hal_qseecom_1_0_service \
+              mist_hal_qseecom_1_0_service_rc
+          EOF
+          git add Android.bp mist-vendor.mk proprietary/vendor/
+          git diff --cached --check
+          git commit -m "mist: integrate verified stock KeyMint v3 and Qualcomm QSEE services"
+          git push origin HEAD:main
+      - name: Verify production commit and seven files
+        run: |
+          set -euo pipefail
+          grep -q 'mist_hal_keymint_service_qti' output/production/mist-vendor.mk
+          test "$(find output/production/proprietary/vendor -type f | wc -l)" -ge 45
+          echo 'STOCK SECURITY HAL SERVICE GROUP PUBLISHED; KATI AND RUNTIME NOT YET TESTED'
