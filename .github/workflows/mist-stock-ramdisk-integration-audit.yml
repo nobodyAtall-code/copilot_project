@@ -1,0 +1,61 @@
+name: Mist stock ramdisk and boot integration audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-stock-ramdisk-integration-audit.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-stock-ramdisk-integration-audit
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout audit scripts
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Obtain verified Xiaomi stock boot images
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends lz4
+          mkdir -p input/boot output
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-boot-images --dir input/boot
+          test -s input/boot/boot-images.sha256
+          (cd input/boot/boot-images && sha256sum -c ../boot-images.sha256)
+      - name: Inspect current production device tree
+        run: |
+          set -euo pipefail
+          git clone --quiet --depth=1 --branch main \
+            https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git input/device
+          git clone --quiet --depth=1 --branch main \
+            https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist.git input/vendor
+          python3 -m py_compile scripts/inspect_mist_boot_chain.py scripts/audit_mist_stock_ramdisks.py
+          python3 scripts/audit_mist_stock_ramdisks.py \
+            --images-dir input/boot/boot-images \
+            --device-dir input/device \
+            --output output/mist-stock-ramdisk-integration-audit.json
+          python3 -m json.tool output/mist-stock-ramdisk-integration-audit.json >/dev/null
+          echo "Device production head: $(git -C input/device rev-parse HEAD)"
+          echo "Vendor production head: $(git -C input/vendor rev-parse HEAD)"
+      - name: Upload sanitized inventory report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-ramdisk-integration-audit
+          path: output/mist-stock-ramdisk-integration-audit.json
+          retention-days: 14
+          if-no-files-found: warn
