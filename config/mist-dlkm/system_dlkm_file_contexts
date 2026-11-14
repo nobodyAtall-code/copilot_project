@@ -1,0 +1,1 @@
+/system_dlkm(/.*)? u:object_r:system_dlkm_file:s0
