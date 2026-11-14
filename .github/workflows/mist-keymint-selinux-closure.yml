@@ -1,0 +1,70 @@
+name: Mist KeyMint and SELinux stock closure
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-keymint-selinux-closure.yml'
+permissions:
+  contents: write
+  actions: read
+jobs:
+  stock-label-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install archive decoder
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+      - name: Verify and load original stock archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/stock-vendor research/generated
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir evidence/stock-vendor
+          (cd evidence/stock-vendor && sha256sum -c stock-vendor-source.sha256)
+      - name: Fetch current vendor source read-only
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch main \
+            https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist.git \
+            "$RUNNER_TEMP/vendor"
+      - name: Inspect KeyMint exact SHA256 and stock SELinux contexts
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/inspect_mist_keymint_selinux.py
+          python3 scripts/inspect_mist_keymint_selinux.py \
+            --archive evidence/stock-vendor/stock-vendor-source.tar.zst \
+            --sha256 evidence/stock-vendor/stock-vendor-source.sha256 \
+            --vendor-tree "$RUNNER_TEMP/vendor" \
+            --out research/generated/mist-keymint-selinux-stock-evidence.json
+          python3 - <<'PY'
+          import json
+          f='research/generated/mist-keymint-selinux-stock-evidence.json'
+          data=json.load(open(f))
+          print('Evidence entries:',len(data['stock_files']))
+          for entry in data['keymint_vendor_source_comparison']:
+              print(entry['status'],entry['source'])
+          PY
+      - name: Commit nonbinary evidence to coordination repo only
+        run: |
+          set -euo pipefail
+          git config user.name 'nobodyAtall-code'
+          git config user.email 'hashyofficial@gmail.com'
+          git add research/generated/mist-keymint-selinux-stock-evidence.json
+          if ! git diff --cached --quiet; then
+            git commit -m "research: publish verified Mist KeyMint and SELinux evidence"
+            git push origin HEAD:main
+          fi
+      - name: Upload compact evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-keymint-selinux-stock-evidence
+          path: research/generated/mist-keymint-selinux-stock-evidence.json
+          retention-days: 14
+          if-no-files-found: warn
