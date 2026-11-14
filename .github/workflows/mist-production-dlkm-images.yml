@@ -49,7 +49,7 @@ jobs:
           set -euo pipefail
           mkdir -p reports/images
           for partition in system_dlkm vendor_dlkm; do
-            mkfs.erofs -T 0 "reports/images/${partition}.img" "work/staged/${partition}"
+            mkfs.erofs -T 0 --all-root --mount-point="/${partition}" --file-contexts="config/mist-dlkm/${partition}_file_contexts" "reports/images/${partition}.img" "work/staged/${partition}"
             dump.erofs -s "reports/images/${partition}.img" | tee "reports/${partition}-erofs-info.txt"
             test -s "reports/images/${partition}.img"
           done
