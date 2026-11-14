@@ -191,3 +191,21 @@ HALs, disabled ELF checks, SELinux wiring, stock boot sha256 presence/hash,
 VINTF/init files and kernel modules. No network/build/flash or file edits.
 Do not call either tree 'complete' until stock source, ABI, VINTF, policy,
 partition and hardware validation gates have passing evidence.
+
+
+L. 2026-11-14 REPLAY / VALIDATE REQUIRED VENDOR INHERITANCE
+- Device tree main `lineage_mist.mk` now requires the existing
+  `vendor/xiaomi/mist/mist-vendor.mk` rather than silently ignoring a missing
+  vendor checkout. Commit:
+  https://github.com/nobodyAtall-code/android_device_xiaomi_mist/commit/9d15bca0ffc7bdacc8f928b5343a4de04e2aa9a6
+- After restoring both repositories, run ONE combined, read-only check:
+    cd ~/android/lineage
+    curl -fL https://raw.githubusercontent.com/nobodyAtall-code/copilot_project/main/scripts/check_mist_postchange_integration.py -o /tmp/check_mist_postchange_integration.py
+    python3 /tmp/check_mist_postchange_integration.py "$PWD"
+  Upload the resulting ~/mist-postchange-integration-<UTC>.txt.
+  Nonzero exit means at least one checked required source file/module failed;
+  the TXT report is written even when a check fails.
+- No overwrites or reset of local kernel header modifications. The validator
+  does not build, alter files under the source checkout, or flash.
+- Existing stock KeyMint VINTF fragment has unresolved stock archive provenance;
+  do not regenerate it or treat it as stock verified before exact source review.
