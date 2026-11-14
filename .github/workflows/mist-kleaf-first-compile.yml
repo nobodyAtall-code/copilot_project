@@ -164,6 +164,17 @@ jobs:
           mist_bzl.write_text(bzl)
           assert not any('drivers/mihw/' in line and '.ko' in line for line in bzl.splitlines()), 'Unhandled MIHW module target'
           print('DIAGNOSTIC ONLY: stripped three MIHW module outputs from disposable mist.bzl; NEVER FLASH',flush=True)
+          # DIAGNOSTIC SOURCE FIX: the radio cable status proc read returns a
+          # small GPIO integer, but the Xiaomi source reserves PAGE_SIZE on
+          # the stack (4176-byte frame; limit 2048; run 43556693565).
+          # Preserve all other behavior and fail closed on source changes.
+          rf_driver=pathlib.Path('msm-kernel/drivers/misc/radio_cable_det/radio_cable_det.c')
+          rf_source=rf_driver.read_text()
+          old='char out_buf[PAGE_SIZE];'
+          new='char out_buf[16];'
+          assert rf_source.count(old)==1, 'Unexpected radio cable stack buffer source'
+          rf_driver.write_text(rf_source.replace(old,new,1))
+          print('DIAGNOSTIC ONLY: radio cable status stack buffer PAGE_SIZE -> 16; source kernel repo unchanged',flush=True)
           print('Pinned Xiaomi sources and //build extension assembled',flush=True)
           PY
       - name: Query and attempt real Mist Bazel compilation
