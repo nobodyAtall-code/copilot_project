@@ -1,0 +1,48 @@
+name: Mist consolidated production boot HAL integration gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/mist-production-closure.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mist-production-closure
+  cancel-in-progress: false
+
+jobs:
+  inspect-production:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout integration tools
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Clone current production trees
+        run: |
+          set -euo pipefail
+          mkdir -p work reports
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git work/device
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist.git work/vendor
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel.git work/prebuilts
+          git -C work/device rev-parse HEAD > reports/device-head.txt
+          git -C work/vendor rev-parse HEAD > reports/vendor-head.txt
+          git -C work/prebuilts rev-parse HEAD > reports/prebuilts-head.txt
+      - name: Test production source and identify remaining blockers
+        run: |
+          set -euo pipefail
+          python3 scripts/mist_remaining_integration_gate.py --device work/device --vendor work/vendor --prebuilts work/prebuilts --output reports/mist-production-closure.json
+      - name: Upload consolidated blocker report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-production-closure
+          path: |
+            reports/mist-production-closure.json
+            reports/*-head.txt
+          retention-days: 14
+          if-no-files-found: warn
