@@ -160,3 +160,16 @@ stage results and failure excerpts, with detailed logs in an adjacent folder.
 SEND JUST THE SINGLE TXT REPORT to the next chat. No full ROM, no flashing.
 This script assumes the display UAPI integration is already installed (see D).
 All-pass only means targeted compile/copy checks, not on-device runtime success.
+
+
+J. ONE-SHOT BROAD OFFLINE READINESS AUDIT (NO BUILD / NO FLASH)
+After source restoration and HAL stage checks, run locally:
+    cd ~/android/lineage
+    curl -fL https://raw.githubusercontent.com/nobodyAtall-code/copilot_project/main/scripts/audit_mist_offline_readiness.py -o /tmp/audit_mist_offline_readiness.py
+    python3 /tmp/audit_mist_offline_readiness.py "$PWD"
+One TXT: $HOME/mist-offline-readiness-<UTC>.txt.
+Scans local trees, kernel/stock boot image presence, partitions/config,
+display UAPI/artifacts, ELF DT_NEEDED names, VINTF XML parsing, sepolicy/init
+inventory, vendor_dlkm modules and optional modinfo. Static, read-only.
+WARN/UNVERIFIED are NOT proof of build or boot failure; use findings to choose
+next validated engineering gates. Full ROM and hardware boot remain unproven.
