@@ -137,7 +137,7 @@ sample("Present blobs not included in extraction manifest",
        [str(p.relative_to(root/vendor/"proprietary")) for p in presentfiles
         if str(p.relative_to(root/vendor/"proprietary")) not in declared],25)
 # Capture Soong blocks one block per top-level declaration; this tree uses standard stanza syntax.
-blocks=re.findall(r"(?ms)^(cc_prebuilt_library_shared|cc_prebuilt_binary|prebuilt_etc)\s*\{(.*?)^\}",vbp)
+blocks=re.findall(r"(?ms)^(cc_prebuilt_library_shared|cc_prebuilt_binary|prebuilt_etc|sh_binary)\s*\{(.*?)^\}",vbp)
 modules={}
 sources=[]
 for typ,body in blocks:
