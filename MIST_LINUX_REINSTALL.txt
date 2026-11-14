@@ -400,3 +400,16 @@ W. CLEAN LINEAGE BOOT CONTRACT — STOCK RAMDISK RECONCILIATION
 - Next: actual bootconfig fstab selection, preserve vendor_boot's 291
   modules, first stage init, encryption and firmware mounts; then build
   validated custom vendor_boot and test AVB/SELinux before flash.
+
+
+X. STAGED CLEAN FSTAB AUXILIARY MOUNTS (2026-11-14)
+- Device repo rootdir/etc/fstab.mist main now stages eight extra
+  stock-exact mounts: persist, misc, external SD, USB OTG, modem firmware,
+  DSP, Bluetooth firmware, qmcs. Last source commit aeb65a3.
+- Live source-to-source comparison PASS: 8/8 exact original stock matches,
+  all 7 first-stage EROFS dynamic mounts, zero mi_ext entries; BoardConfig
+  dynamic group size remains 10190061568.
+- The staged file is NOT INSTALLED in the original stock vendor_boot.
+  Original fstab.default has 24 mi_ext refs including overlays. Real
+  vendor_boot selection, init, module loader, AVB, SELinux and OTA checks
+  must be solved before swapping/flash.
