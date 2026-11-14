@@ -461,3 +461,24 @@ AA. VENDOR VINTF SERVICES ACTUALLY INTEGRATED — 2026-11-14
 - Recheck source in vendor/xiaomi/mist and commit status. No local m nothing
   after these VINTF module additions, no full build or boot proof.
 - Latest copilot_project/PROJECT_STATUS.md commit f242e8c.
+
+
+AB. CONTINUED DEVICE/VENDOR SOURCE INTEGRATION — NO AVB LOOP
+- device/xiaomi/mist/rootdir/etc/fstab.mist commit 088189d now restores
+  5 exact stock AVB first-stage physical mounts: boot, init_boot,
+  vendor_boot, dtbo, recovery. Other 8 stock auxiliary mounts remain.
+  Source validation PASS: 13/13 exact stock source line matches,
+  7 EROFS dynamic mounts, 0 mi_ext entries. File STAGED ONLY.
+- proprietary_vendor_xiaomi_mist gained stock-backed QSEECom AIDL VINTF
+  vendor.qti.hardware.qseecom.IQSEECom/default, XML commit 6a6fb88,
+  Android.bp module commit 08a6bc8, active product commit 8e8d8e2.
+  Build and runtime VINTF still untested.
+- IMPORTANT: older /tmp/mist-vendor-ramdisk-review fragment and
+  /tmp/mist-vendor-boot-research-v3 candidate were generated from an
+  OLDER staged fstab. They are obsolete and nonflashable.
+- Original firmware has 268 vendor_dlkm and 192 system_dlkm .ko files
+  (stock inventory). Current kernel prebuilt repo only has kernel,
+  dtbo.img and vendor_boot.img, not the dlkm payloads. Do NOT claim
+  seven dynamic partitions contain working stock module payloads.
+  Next gap: actual module extraction and system/vendor dlkm packaging.
+- PROJECT_STATUS.md commit 8165a71 records the full source details.
