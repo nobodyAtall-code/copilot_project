@@ -11,6 +11,7 @@ import hashlib
 import os
 import re
 import subprocess
+import shutil
 import sys
 import xml.etree.ElementTree as ET
 
