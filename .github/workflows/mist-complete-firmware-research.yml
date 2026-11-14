@@ -133,11 +133,8 @@ jobs:
         continue-on-error: true
         run: |
           set -euo pipefail
-          mkdir -p work/android/external/avb
-          git clone --quiet --depth 1 https://android.googlesource.com/platform/external/avb work/avb-source
           mkdir -p work/android/external
-          mv work/avb-source work/android/external/avbtool-source
-          ln -s avbtool-source work/android/external/avb
+          git clone --quiet --depth 1 https://android.googlesource.com/platform/external/avb work/android/external/avb
           git -C work/android/external/avb rev-parse HEAD > reports/aosp-avbtool-commit.txt
           python3 - <<'PY'
           import os
