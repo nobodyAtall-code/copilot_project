@@ -2,7 +2,9 @@
 # Targeted mist HAL compile/link smoke test; no ROM/OTA/image target.
 # Run from ~/android/lineage. Stops immediately on the first failed stage.
 # LineageOS envsetup and its m/lunch functions use variables that may be unset.
-# Keep errexit and pipefail, but do not enable nounset for Android build scripts.
+# Explicitly DISABLE nounset: Bash can inherit -u via exported SHELLOPTS
+# even when this script does not enable it. Preserve errexit and pipefail.
+set +u
 set -eo pipefail
 
 if [[ ! -f build/envsetup.sh || ! -f device/xiaomi/mist/BoardConfig.mk ]]; then
