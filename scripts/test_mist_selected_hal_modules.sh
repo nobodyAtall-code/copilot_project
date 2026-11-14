@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Targeted mist HAL compile/link smoke test; no ROM/OTA/image target.
 # Run from ~/android/lineage. Stops immediately on the first failed stage.
-set -euo pipefail
+# LineageOS envsetup and its m/lunch functions use variables that may be unset.
+# Keep errexit and pipefail, but do not enable nounset for Android build scripts.
+set -eo pipefail
 
 if [[ ! -f build/envsetup.sh || ! -f device/xiaomi/mist/BoardConfig.mk ]]; then
   echo "ERROR: run from your LineageOS root with mist device tree synced." >&2
