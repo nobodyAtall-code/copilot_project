@@ -28,7 +28,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends zstd
-          python3 -m py_compile scripts/integrate_mist_dlkm.py
+          python3 -m py_compile scripts/publish_mist_dlkm_prebuilts.py
       - name: Download and verify extracted stock DLKM payload
         env:
           GH_TOKEN: ${{ github.token }}
@@ -55,23 +55,22 @@ jobs:
       - name: Integrate source-backed stock DLKM files
         run: |
           set -euo pipefail
-          python3 scripts/integrate_mist_dlkm.py --source work/staged-dlkm --manifest reports/mist-dlkm-manifest.json --kernel-repo work/production-kernel --device-repo work/production-device
-          git -C work/production-kernel add -- vendor_dlkm system_dlkm
-          git -C work/production-device add -- device.mk
+          python3 scripts/publish_mist_dlkm_prebuilts.py --source work/staged-dlkm --manifest reports/mist-dlkm-manifest.json --kernel-repo work/production-kernel --device-repo work/production-device
+          git -C work/production-kernel add -f -- vendor_dlkm system_dlkm
           git -C work/production-kernel diff --cached --check
-          git -C work/production-device diff --cached --check
           git -C work/production-kernel diff --cached --stat | tail -12
-          git -C work/production-device diff --cached --stat | tail -12
       - name: Push actual source integration to production main
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           set -euo pipefail
-          git -C work/production-kernel commit -m "mist: include verified stock vendor and system DLKM payloads"
-          git -C work/production-kernel push origin HEAD:main
-          git -C work/production-device commit -m "mist: install stock kernel module payloads in both DLKM images"
-          git -C work/production-device push origin HEAD:main
+          if git -C work/production-kernel diff --cached --quiet; then
+            echo 'Stock DLKM files already present; nothing to publish'
+          else
+            git -C work/production-kernel commit -m "mist: include verified stock vendor and system DLKM payloads"
+            git -C work/production-kernel push origin HEAD:main
+          fi
       - name: Record published revisions
         run: |
           echo "Kernel prebuilt repository commit: $(git -C work/production-kernel rev-parse HEAD)"
-          echo "Device repository commit: $(git -C work/production-device rev-parse HEAD)"
+          echo "Device copy rules remain unchanged at $(git -C work/production-device rev-parse HEAD)"
