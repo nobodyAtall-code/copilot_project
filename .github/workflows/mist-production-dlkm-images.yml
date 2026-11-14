@@ -1,0 +1,80 @@
+name: Mist production DLKM EROFS image integration gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/mist-production-dlkm-images.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mist-production-dlkm-images
+  cancel-in-progress: false
+
+jobs:
+  build-dlkm-images:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout integration script
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install EROFS build utilities
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends erofs-utils
+          python3 -m py_compile scripts/stage_production_dlkm_images.py
+          mkfs.erofs -V
+      - name: Clone current production device and kernel prebuilt trees
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git work/device
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist-kernel.git work/prebuilts
+          echo "Device SHA: $(git -C work/device rev-parse HEAD)"
+          echo "Prebuilts SHA: $(git -C work/prebuilts rev-parse HEAD)"
+      - name: Stage exact production PRODUCT_COPY_FILES paths
+        run: |
+          set -euo pipefail
+          python3 scripts/stage_production_dlkm_images.py --device work/device --prebuilts work/prebuilts --out work/staged
+          mkdir -p reports
+          cp work/staged/staging-manifest.json reports/
+      - name: Produce actual standalone EROFS DLKM images
+        run: |
+          set -euo pipefail
+          mkdir -p reports/images
+          for partition in system_dlkm vendor_dlkm; do
+            mkfs.erofs -T 0 "reports/images/${partition}.img" "work/staged/${partition}"
+            dump.erofs -s "reports/images/${partition}.img" | tee "reports/${partition}-erofs-info.txt"
+            test -s "reports/images/${partition}.img"
+          done
+          (cd reports/images && sha256sum *.img > ../images.sha256)
+      - name: Check production image contents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          summary=json.loads(Path("reports/staging-manifest.json").read_text())["summary"]
+          for name,count in (("vendor_dlkm",268),("system_dlkm",192)):
+              assert summary[name]["modules"]==count
+              assert summary[name]["load_lists"]
+              assert Path("reports/images/"+name+".img").stat().st_size>4096
+          print("PASS: standalone EROFS images built with all published DLKM source mappings")
+          PY
+          (cd reports/images && sha256sum -c ../images.sha256)
+      - name: Upload generated research-only partition images and manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-production-dlkm-erofs-images
+          path: |
+            reports/images/*.img
+            reports/images.sha256
+            reports/staging-manifest.json
+            reports/*-erofs-info.txt
+          retention-days: 14
+          if-no-files-found: error
