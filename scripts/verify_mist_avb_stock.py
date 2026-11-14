@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -75,6 +76,14 @@ def main():
         exitcode=entry.get("verify_exit")
         missing_chain="No expected chain partition" in out
         missing_image="FileNotFoundError" in out or "No such file or directory" in out
+        # Explicitly record chain sub-images that avbtool *actually* verified.
+        # Never conflate their successful descriptors with full-tree success.
+        verified_chained_hashes=sorted(set(re.findall(
+            r"(?m)^([A-Za-z0-9_]+): Successfully verified sha256 hash of .* for image of [0-9]+ bytes",
+            out)))
+        missing_partition_images=sorted(set(re.findall(
+            r"FileNotFoundError: .*?No such file or directory: ['\\\"]([^'\\\"]+\\.img)['\\\"]",
+            out)))
         if exitcode==0:
             state="ALL_AVAILABLE_DESCRIPTORS_VERIFIED"
         elif signed and (missing_chain or missing_image):
@@ -88,6 +97,8 @@ def main():
             "algorithm_none":is_none,
             "missing_chain_expectations":missing_chain,
             "missing_partition_image":missing_image,
+            "verified_chained_hash_partitions":verified_chained_hashes,
+            "missing_partition_images":missing_partition_images,
             "verification_scope":state,
         }
     # Require two real RSA signatures; inspecting header data is insufficient.
