@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Real product VINTF build validation on an existing synced Mist LineageOS 23.2 tree.
-# check_vintf_all checks generated manifests/matrices, not just XML syntax.
+# check-vintf-all checks generated manifests/matrices, not just XML syntax.
 set -Eeo pipefail
 ROOT="${1:-$HOME/android/lineage}"
 ROOT="$(cd "$ROOT" && pwd)"
@@ -24,10 +24,10 @@ if ! lunch lineage_mist-bp4a-userdebug; then
 fi
 echo '===== ACTUAL VINTF METADATA/COMPATIBILITY BUILD ====='
 set +e
-m -j2 check_vintf_all
+m -j2 check-vintf-all
 result=$?
 set -e
-echo "===== CHECK_VINTF_ALL EXIT STATUS: $result ====="
+echo "===== CHECK-VINTF-ALL EXIT STATUS: $result ====="
 if [ "$result" -ne 0 ]; then
   echo '===== VINTF ERROR EXCERPTS ====='
   grep -nEi -C 4 'error:|FAILED:|incompatib|checkvintf|duplicate|could not|cannot fetch|missing|not declared' "$REPORT" | tail -n 220 || :
