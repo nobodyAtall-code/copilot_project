@@ -5,6 +5,7 @@ import json
 import re
 from pathlib import Path
 from collections import defaultdict
+import subprocess
 from xml.etree import ElementTree as ET
 
 def hal_instances(path):
@@ -48,6 +49,22 @@ def main():
     sources=sorted({declarations[n] for n in selected if n in declarations and "/vintf/" in declarations[n] and declarations[n].endswith(".xml")})
     entries=defaultdict(list)
     errors=[]
+    def git_head(directory):
+        run=subprocess.run(["git","-C",str(directory),"rev-parse","HEAD"],capture_output=True,text=True)
+        return run.stdout.strip() if run.returncode==0 else None
+    device_head=git_head(device)
+    vendor_head=git_head(vendor)
+    required_selected={
+        "mist_hal_android_hardware_gatekeeper_service_qti_xml",
+        "mist_hal_qseecom_1_0_service_vintf",
+        "mist_stock_radio_config_vintf",
+    }
+    missing_selected=sorted(required_selected-selected)
+    for name in missing_selected:
+        errors.append("Missing required VINTF PRODUCT_PACKAGES entry: "+name+"; synchronize vendor tree before treating absent HALs as a platform bug.")
+    missing_declared=sorted(name for name in selected if name not in declarations)
+    if missing_declared:
+        errors.append("Selected modules missing parsed source declaration: "+", ".join(missing_declared))
     for src in sources:
         file=vendor/src
         try:
@@ -62,6 +79,9 @@ def main():
     matrix_paths=sorted(str(p.relative_to(root)) for base in ("hardware/interfaces","device/xiaomi/mist","vendor/xiaomi/mist") if (root/base).exists() for p in (root/base).rglob("*compatibility_matrix*.xml") if p.is_file())
     result={
       "mode":"source_only_no_build",
+      "device_tree_head":device_head,
+      "vendor_tree_head":vendor_head,
+      "required_selected_vintf_modules_missing":missing_selected,
       "device_tree_present":(device/"BoardConfig.mk").is_file(),
       "selected_vintf_fragments":sources,
       "selected_vintf_fragment_count":len(sources),
@@ -75,7 +95,7 @@ def main():
     }
     out=a.output or root/"mist-vintf-offline-report.json"
     out.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
-    print(json.dumps({k:result[k] for k in ("mode","selected_vintf_fragment_count","duplicate_instances_within_selected_vendor_fragments","radio_instances","odm_sku_variant_selected","errors")},indent=2))
+    print(json.dumps({k:result[k] for k in ("mode","vendor_tree_head","required_selected_vintf_modules_missing","selected_vintf_fragment_count","duplicate_instances_within_selected_vendor_fragments","radio_instances","odm_sku_variant_selected","errors")},indent=2))
     print("Report:",out)
     if errors or duplicates:raise SystemExit(1)
 
