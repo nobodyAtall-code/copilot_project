@@ -1,36 +1,76 @@
 #!/usr/bin/env bash
-# Real product VINTF build validation on an existing synced Mist LineageOS 23.2 tree.
-# check-vintf-all checks generated manifests/matrices, not just XML syntax.
-set -Eeo pipefail
+# Real Mist LineageOS 23.2 VINTF build gate against an EXISTING synced workspace.
+# No full ROM build, firmware download, upload of blobs, AVB changes or flash.
+set -Eeuo pipefail
 ROOT="${1:-$HOME/android/lineage}"
 ROOT="$(cd "$ROOT" && pwd)"
-REPORT="$ROOT/mist-vintf-build-report.txt"
-exec > >(tee "$REPORT") 2>&1
-echo '===== MIST VINTF BUILD VALIDATION ====='
-echo "Workspace: $ROOT"
+OUT="$ROOT/mist-vintf-build-report.txt"
+JSON="$ROOT/mist-vintf-build-result.json"
+TRACE="$ROOT/mist-vintf-build-ninja-log.txt"
+mkdir -p "$(dirname "$OUT")"
+: > "$OUT"
+: > "$TRACE"
+record() {
+  local status="$1" lunch_name="$2" fail_stage="$3"
+  RESULT_JSON="$JSON" RESULT_STATUS="$status" RESULT_LUNCH="$lunch_name" RESULT_STAGE="$fail_stage" \
+  DEVICE_SHA="${DEVICE_SHA:-}" VENDOR_SHA="${VENDOR_SHA:-}" \
+  python3 - <<'PY'
+import json, os
+from pathlib import Path
+p=Path(os.environ["RESULT_JSON"])
+p.write_text(json.dumps({
+ "mode":"REAL_LINEAGE_BUILD_TARGET",
+ "target":"check-vintf-all",
+ "status":os.environ["RESULT_STATUS"],
+ "failure_stage":os.environ["RESULT_STAGE"],
+ "lunch":os.environ["RESULT_LUNCH"],
+ "device_sha":os.environ["DEVICE_SHA"],
+ "vendor_sha":os.environ["VENDOR_SHA"],
+ "full_rom_build_performed":False,
+ "on_device_hal_registration_verified":False,
+ "virtual_ab_ota_verified":False,
+ "custom_avb_signed_or_flashable":False,
+ "notes":"A successful check-vintf-all only validates the generated build-time VINTF target. SKU-specific runtime property selection still requires device evidence."
+},indent=2)+"\n")
+PY
+}
+echo "===== REAL MIST VINTF GATE (no ROM build) =====" | tee -a "$OUT"
+echo "Workspace: $ROOT" | tee -a "$OUT"
 cd "$ROOT"
-test -f build/envsetup.sh || { echo 'ERROR: missing Lineage source'; exit 1; }
-test -f device/xiaomi/mist/BoardConfig.mk || { echo 'ERROR: missing Mist device tree'; exit 1; }
-test -f vendor/xiaomi/mist/mist-vendor.mk || { echo 'ERROR: missing Mist vendor tree'; exit 1; }
-echo '===== PRODUCTION CHECKOUT REVISIONS ====='
-for d in device/xiaomi/mist vendor/xiaomi/mist; do
-  git -C "$d" rev-parse --short HEAD || :
-  git -C "$d" status --short || :
-done
-echo '===== SELECT PRODUCT ====='
-source build/envsetup.sh
-if ! lunch lineage_mist-bp4a-userdebug; then
-  lunch lineage_mist-userdebug
+if [[ ! -f build/envsetup.sh || ! -f device/xiaomi/mist/BoardConfig.mk || ! -f vendor/xiaomi/mist/mist-vendor.mk ]]; then
+  echo "ERROR: local Lineage/device/vendor source missing" | tee -a "$OUT"
+  record BLOCKED "" missing_checkout
+  exit 2
 fi
-echo '===== ACTUAL VINTF METADATA/COMPATIBILITY BUILD ====='
+DEVICE_SHA="$(git -C device/xiaomi/mist rev-parse HEAD 2>/dev/null || true)"
+VENDOR_SHA="$(git -C vendor/xiaomi/mist rev-parse HEAD 2>/dev/null || true)"
+printf 'device %s\nvendor %s\n' "$DEVICE_SHA" "$VENDOR_SHA" | tee -a "$OUT"
+echo "===== PRODUCT SELECTION =====" | tee -a "$OUT"
+source build/envsetup.sh >> "$OUT" 2>&1
+LUNCH_NAME="lineage_mist-bp4a-userdebug"
+if lunch "$LUNCH_NAME" >> "$OUT" 2>&1; then
+  :
+else
+  echo "ERROR: expected LineageOS 23.2 lunch unavailable: $LUNCH_NAME" | tee -a "$OUT"
+  record BLOCKED "$LUNCH_NAME" lunch
+  exit 2
+fi
+echo "===== BUILD TARGET: check-vintf-all =====" | tee -a "$OUT"
 set +e
-m -j2 check-vintf-all
-result=$?
+m -j2 check-vintf-all > "$TRACE" 2>&1
+RC=$?
 set -e
-echo "===== CHECK-VINTF-ALL EXIT STATUS: $result ====="
-if [ "$result" -ne 0 ]; then
-  echo '===== VINTF ERROR EXCERPTS ====='
-  grep -nEi -C 4 'error:|FAILED:|incompatib|checkvintf|duplicate|could not|cannot fetch|missing|not declared' "$REPORT" | tail -n 220 || :
+cat "$TRACE" >> "$OUT"
+printf '\ncheck-vintf-all exit: %s\n' "$RC" | tee -a "$OUT"
+if (( RC != 0 )); then
+  echo "===== FIRST ERRORS AND BUILD CONTEXT =====" | tee -a "$OUT"
+  grep -nEi -C 3 'FAILED:|error:|incompatib|checkvintf|duplicate|could not|cannot fetch|missing|not declared|ninja: build stopped' "$TRACE" | head -n 240 | tee -a "$OUT" || :
+  record FAILED "$LUNCH_NAME" check_vintf_all
+  echo "Report: $OUT"
+  echo "JSON:   $JSON"
+  exit "$RC"
 fi
-echo "===== REPORT PATH: $REPORT ====="
-exit "$result"
+record PASS "$LUNCH_NAME" ""
+echo "PASS: actual check-vintf-all build target completed. Runtime device/OTA not validated." | tee -a "$OUT"
+echo "Report: $OUT"
+echo "JSON:   $JSON"
