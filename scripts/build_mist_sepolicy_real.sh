@@ -2,7 +2,7 @@
 # Real Android policy compile and neverallow validation; run in Lineage checkout.
 set -Eeuo pipefail
 ROOT="$HOME/android/lineage"
-if [ -n "$1" ]; then ROOT="$1"; fi
+if [ -n "${1:-}" ]; then ROOT="$1"; fi
 OUT="$ROOT/mist-selinux-compile-report.txt"
 mkdir -p "$ROOT"
 exec > >(tee "$OUT") 2>&1
