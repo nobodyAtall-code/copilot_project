@@ -1,0 +1,81 @@
+name: Mist device SELinux source verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-selinux-source.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check-selinux-sources:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout integration project
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Checkout production policy and exact Lineage 23.2 source
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git work/device
+          git clone --depth 1 --branch lineage-23.2 https://github.com/LineageOS/android_system_sepolicy.git work/system-sepolicy
+          mkdir -p reports
+      - name: Check selected file labels and known upstream definitions
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,re
+          d=Path("work/device")
+          b=(d/"BoardConfig.mk").read_text()
+          assert "BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor" in b
+          policy=d/"sepolicy/vendor"
+          fc=(policy/"file_contexts").read_text()
+          sc=(policy/"service_contexts").read_text()
+          te=(policy/"mist_qseecom.te").read_text()
+          definitions={
+            "hal_camera_default_exec": "vendor/hal_camera_default.te",
+            "hal_keymint_default_exec": "vendor/hal_keymint_default.te",
+            "tee_exec": "vendor/tee.te",
+          }
+          report={"lineage_branch":"lineage-23.2","definitions":{},"device_contexts":{},"full_policy_compiled":False}
+          for symbol,src in definitions.items():
+            code=(Path("work/system-sepolicy")/src).read_text()
+            assert re.search(r"\btype\s+"+symbol+r"\s*,",code), f"upstream type absent: {symbol}"
+            assert "u:object_r:"+symbol+":s0" in fc
+            report["definitions"][symbol]=src
+          for path in (
+            "/vendor/bin/hw/vendor.qti.camera.provider-service_64",
+            "/vendor/bin/hw/android.hardware.security.keymint-service-qti",
+            "/vendor/bin/qseecomd",
+            "/vendor/bin/hw/vendor.qti.hardware.qseecom@1.0-service",
+          ):
+            matches=[]
+            for line in fc.splitlines():
+              s=line.strip()
+              if not s or s.startswith("#"):continue
+              pattern=s.split()[0]
+              if re.fullmatch(pattern,path):matches.append(s.split()[1])
+            assert len(matches)==1, (path,matches)
+            report["device_contexts"][path]=matches[0]
+          assert "type mist_qseecom, domain;" in te
+          assert "init_daemon_domain(mist_qseecom)" in te
+          assert "add_service(mist_qseecom, mist_qseecom_service)" in te
+          assert "vendor.qti.hardware.qseecom.IQSEECom/default u:object_r:mist_qseecom_service:s0" in sc
+          Path("reports/mist-selinux-source.json").write_text(json.dumps(report,indent=2)+"\n")
+          print("PASS: device SELinux source references exist in LineageOS 23.2")
+          print("NOT TESTED: full sepolicy/neverallow build and device runtime")
+          PY
+      - name: Upload SELinux source report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-selinux-source
+          path: reports/mist-selinux-source.json
+          retention-days: 14
+          if-no-files-found: warn
