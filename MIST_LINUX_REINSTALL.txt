@@ -363,3 +363,20 @@ U. RESEARCH CORRECTION — MODERN XIAOMI LINEAGEOS mi_ext (2026-11-14)
 - Next engineering action requires reviewing original Mist mi_ext content
   and its stock first-stage fstab/overlays, choosing stock-preserving offline
   super assembly vs new OTA-managed images with explicit AVB/slot plan.
+
+
+V. ACTIVE CLEAN SEVEN-PARTITION BOARD CONFIG
+- device/xiaomi/mist/BoardConfig.mk main, commit dac744c, now defines the
+  full stock-verified 10190061568-byte qti_dynamic_partitions group and
+  exactly: odm product system system_dlkm system_ext vendor vendor_dlkm.
+  mi_ext is absent from Lineage generated images. Previous reduced-size
+  opt-in prototype was removed and is NOT active.
+- Production device.mk comments updated commit a6dba5d; README updated
+  commit c872d6e. No full ROM build or OTA/boot check done yet.
+- Offline layout check script copilot_project/scripts/
+  validate_mist_lineage_super_layout.py (final commit f18d041) requires
+  device-tree path and existing artifact's full-super-metadata.json.
+- The check is SOURCE-GEOMETRY ONLY, and not yet executed locally. Original
+  stock vendor_boot still has mi_ext nofail/bind/overlay fstab references.
+  Must validate custom first-stage init, AVB, OTA target metadata and real
+  snapshot/slot semantics before attempting flashing.
