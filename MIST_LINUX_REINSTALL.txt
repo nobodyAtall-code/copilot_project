@@ -209,3 +209,20 @@ L. 2026-11-14 REPLAY / VALIDATE REQUIRED VENDOR INHERITANCE
   does not build, alter files under the source checkout, or flash.
 - Existing stock KeyMint VINTF fragment has unresolved stock archive provenance;
   do not regenerate it or treat it as stock verified before exact source review.
+
+
+M. FOCUSED BOOT-CRITICAL SERVICE CLOSURE (2026-11-14)
+- After restoring the verified source checkout, run the targeted read-only checker:
+    cd ~/android/lineage
+    curl -fL https://raw.githubusercontent.com/nobodyAtall-code/copilot_project/main/scripts/check_mist_boot_critical_gates.py -o /tmp/check_mist_boot_critical_gates.py
+    python3 /tmp/check_mist_boot_critical_gates.py "$PWD"
+- Upload ONE ~/mist-boot-critical-gates-<UTC>.txt. It checks selected stock
+  service RC exec paths versus local staged and vendor install output; it also
+  checks current package and first-stage prebuilt intent. It does not alter
+  repositories or compile/flash anything. WARN on an unresolved helper is a
+  candidate missing source, not proof a HAL will fail at runtime.
+- Camera stock RC uses /vendor/bin/init.qti.cam.perfopt.sh under the
+  vendor.camera.vm.status property trigger. This file is absent from the
+  currently reviewed curated vendor repository; inspect exact stock firmware
+  source or installed output before adding a declaration. The SELinux
+  domain u:r:vendor_qti_init_shell:s0 also needs stock/policy verification.
