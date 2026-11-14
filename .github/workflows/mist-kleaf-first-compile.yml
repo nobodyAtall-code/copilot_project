@@ -145,6 +145,8 @@ jobs:
             'CONFIG_MIGT_WALT':'y',
             'CONFIG_MI_SCHED_2_CLUSTER':'y',
             'CONFIG_MI_MID_DEVICE_OPT':'y',
+            # Diagnostic-only: missing exported Android hook in 6.6.118 GKI.
+            'CONFIG_MI_DYNAMIC_READAHEAD':'m',
           }
           lines=perf_text.splitlines(keepends=True)
           for symbol,value in diagnostic_disabled.items():
@@ -153,7 +155,7 @@ jobs:
             assert sum(line.strip().startswith(symbol+'=') for line in lines)==1, 'Multiple source config assignments: '+symbol
             lines=[line for line in lines if line.strip()!=exact]
           perf.write_text(''.join(lines))
-          print('DIAGNOSTIC-ONLY: removed exact unavailable MIHW-related config assignments '+','.join(diagnostic_disabled)+' from runner-only fragment; NEVER FLASH',flush=True)
+          print('DIAGNOSTIC-ONLY: removed unavailable MIHW and dynamic-readahead diagnostic config assignments '+','.join(diagnostic_disabled)+' from runner-only fragment; NEVER FLASH',flush=True)
           assert pathlib.Path('msm-kernel/drivers/mihw').is_symlink(), 'Unexpected MIHW layout'
           assert not pathlib.Path('vendor/xiaomi/proprietary/mihw/Kconfig').exists(), 'MIHW source now available; remove diagnostic workaround'
           content=kconfig.read_text()
@@ -170,6 +172,10 @@ jobs:
             'drivers/mihw/mi_sched/mi_schedule.ko',
             'drivers/mihw/game/migt.ko',
           ]
+          # The optional Xiaomi readahead module references a tracepoint
+          # unavailable to this pinned common GKI (run 43566680856).
+          # Exclude only in this non-flashable diagnostic target.
+          missing_modules.append('mm/dynamic_readahead/dynamic_readahead.ko')
           for module in missing_modules:
             needle='"'+module+'",'
             assert bzl.count(needle)==1, 'Unexpected MIHW module entry: '+module
