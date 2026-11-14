@@ -14,7 +14,7 @@ test -f "$COMMON" || { echo "ERROR: missing common Android.bp: $COMMON" >&2; exi
 
 if [ ! -e "$DRIVER" ]; then
     mkdir -p "$(dirname "$DRIVER")"
-    git clone --no-checkout --filter=blob:none "$URL" "$DRIVER"
+    git clone --no-checkout --filter=blob:none --single-branch --branch mist-w-oss "$URL" "$DRIVER"
     git -C "$DRIVER" checkout --detach "$PIN"
 elif [ -d "$DRIVER/.git" ]; then
     actual="$(git -C "$DRIVER" rev-parse HEAD)"
