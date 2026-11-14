@@ -1,0 +1,56 @@
+name: Mist stock DLKM ABI and dependency audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/mist-dlkm-abi-audit.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-dlkm-abi-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout research tools
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install module inspection tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends kmod zstd
+          python3 -m py_compile scripts/audit_mist_stock_dlkm.py
+      - name: Fetch verified DLKM payload from successful extraction run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p reports work/stock-dlkm
+          gh run download 43587815827 --repo nobodyAtall-code/copilot_project --name mist-stock-dlkm-payload --dir reports
+          (cd reports && sha256sum -c mist-stock-dlkm.sha256)
+          tar -I zstd -xf reports/mist-stock-dlkm.tar.zst -C work/stock-dlkm --no-same-owner --no-same-permissions
+          test -f reports/mist-dlkm-manifest.json
+      - name: Verify stock module ELF metadata and dependency coverage
+        run: |
+          set -euo pipefail
+          python3 scripts/audit_mist_stock_dlkm.py
+      - name: Upload ABI audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-dlkm-abi-audit
+          path: |
+            reports/mist-stock-dlkm-abi-audit.json
+            reports/mist-dlkm-manifest.json
+            reports/mist-stock-dlkm.sha256
+          retention-days: 14
+          if-no-files-found: warn
