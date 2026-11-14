@@ -173,3 +173,21 @@ display UAPI/artifacts, ELF DT_NEEDED names, VINTF XML parsing, sepolicy/init
 inventory, vendor_dlkm modules and optional modinfo. Static, read-only.
 WARN/UNVERIFIED are NOT proof of build or boot failure; use findings to choose
 next validated engineering gates. Full ROM and hardware boot remain unproven.
+
+
+K. FULL DEVICE/VENDOR TREE INTEGRATION GAP AUDIT (2026-11-14)
+IMPORTANT: source trees are still INCOMPLETE, even if targeted HAL checks pass.
+Device tree has no reviewed device-specific sepolicy/recovery/hardware config
+integration; vendor repository remains a selected subset of stock blobs.
+Repo-grounded review: research/mist-device-vendor-integration-gap-2026-11-14.md
+
+Run ONCE in terminal:
+    cd ~/android/lineage
+    curl -fL https://raw.githubusercontent.com/nobodyAtall-code/copilot_project/main/scripts/audit_mist_tree_integration.py -o /tmp/audit_mist_tree_integration.py
+    python3 /tmp/audit_mist_tree_integration.py "$PWD"
+Send ONE $HOME/mist-tree-integration-<UTC>.txt after it finishes.
+It checks real device/vendor manifest parity, Soong packages, selected staged
+HALs, disabled ELF checks, SELinux wiring, stock boot sha256 presence/hash,
+VINTF/init files and kernel modules. No network/build/flash or file edits.
+Do not call either tree 'complete' until stock source, ABI, VINTF, policy,
+partition and hardware validation gates have passing evidence.
