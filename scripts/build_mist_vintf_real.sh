@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Real Mist LineageOS 23.2 VINTF build gate against an EXISTING synced workspace.
 # No full ROM build, firmware download, upload of blobs, AVB changes or flash.
-set -Eeuo pipefail
+set -Eeo pipefail
+# Android build/envsetup.sh and lunch use optional shell variables (e.g. TOP).
+# Do NOT enable nounset (-u) in this sourced Android build environment.
 ROOT="${1:-$HOME/android/lineage}"
 ROOT="$(cd "$ROOT" && pwd)"
 OUT="$ROOT/mist-vintf-build-report.txt"
@@ -46,7 +48,11 @@ DEVICE_SHA="$(git -C device/xiaomi/mist rev-parse HEAD 2>/dev/null || true)"
 VENDOR_SHA="$(git -C vendor/xiaomi/mist rev-parse HEAD 2>/dev/null || true)"
 printf 'device %s\nvendor %s\n' "$DEVICE_SHA" "$VENDOR_SHA" | tee -a "$OUT"
 echo "===== PRODUCT SELECTION =====" | tee -a "$OUT"
-source build/envsetup.sh >> "$OUT" 2>&1
+if ! source build/envsetup.sh >> "$OUT" 2>&1; then
+  echo "ERROR: Android envsetup.sh failed; review report" | tee -a "$OUT"
+  record BLOCKED "" envsetup
+  exit 2
+fi
 LUNCH_NAME="lineage_mist-bp4a-userdebug"
 if lunch "$LUNCH_NAME" >> "$OUT" 2>&1; then
   :
