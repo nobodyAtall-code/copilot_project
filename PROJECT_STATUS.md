@@ -1125,3 +1125,17 @@ grep -RInE 'generated_kernel_includes|generated_kernel_headers|TARGET_KERNEL_HEA
 - Runner source is committed but **has not yet been executed on user's machine**. Do not mark Display or Camera/Lights PASS absent its output. Camera/Lights stock module targets are packaging/compile smoke checks, NOT camera sensor or torch runtime validations.
 - Run: `cd ~/android/lineage && curl -fL https://raw.githubusercontent.com/nobodyAtall-code/copilot_project/main/scripts/test_mist_all_hal_modules.sh -o /tmp/test_mist_all_hal_modules.sh && bash /tmp/test_mist_all_hal_modules.sh`. Report at `$HOME/mist-hal-batch/mist-hal-all-tests-<UTC>.txt`. Requires previously applied MiCode display-UAPI integration.
 - No full ROM build, flash, or workflow monitoring triggered.
+
+
+### 14 November 2026 — batch HAL smoke test: 6/6 PASS, with incremental-build caveats
+
+- User supplied actual local report \`mist-hal-all-tests-20261114T072122Z.txt\` (run from \`/home/hashysingh/android/lineage\`, 07:21:31 to 07:25:43 UTC). Summary **6 PASS / 0 FAIL**:
+  1. \`qti_generate_display_kernel_headers\` exit 0 — Ninja "no work to do" (previous run generated six display UAPI headers successfully).
+  2. \`mist_stock_radio mist_stock_radio_script mist_stock_radio_rc\` exit 0 — Ninja "no work to do" (incremental).
+  3. \`audiohalservice.qti\` exit 0 — Ninja "no work to do" (incremental).
+  4. \`android.hardware.thermal-service.qti\` exit 0 — Ninja "no work to do" (incremental).
+  5. \`vendor.qti.hardware.display.composer-service\` exit 0 — Ninja "no work to do" (incremental): **not sufficient alone to assert Display composer recompiled/linked with newly integrated headers**. Check actual installed executable, source-to-output dependency and possibly force targeted rebuild, without cleaning complete out tree.
+  6. \`mist_stock_core_camera mist_stock_core_lights\` exit 0: 11 Ninja actions including install of stock vendor prebuilt \`vendor.qti.camera.provider-service_64\` and \`vendor.qti.hardware.lights.service\`. **Prebuilt packaging PASS**, NOT camera/lights runtime or source compilation.
+- Report explicitly warns this is not runtime ELF/VINTF/SELinux/kernel ABI or boot verification, and did not build full ROM/flash.
+- This batch is distinct from the previous failed Display composer compile at \`libdrmutils/drm_master.cpp\` due to missing \`display/drm/sde_drm.h\`. Successful Mist MiCode header generation is verified in prior \`mist-display-headers-build.log\` 49/49, but the new composer no-op needs careful checking before treating the failure fully closed.
+- Immediate next priority: obtain read-only output/provider audit + targeted Display fresh compile evidence, followed by offline dynamic-ELF/VINTF/SELinux and boot configuration gates, before a resource-heavy full ROM build. Never auto-monitor GitHub Actions; user runs commands and sends completed report.
