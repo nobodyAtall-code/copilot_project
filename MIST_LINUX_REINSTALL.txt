@@ -146,3 +146,17 @@ H. RECOVERY CHECKS / SAFE STATUS
 The pinned display driver revision is 310b76de47b1a4d0c3e1e373ef1b52039f2140fd.
 If anything differs from this manifest, STOP and investigate; do not reset
 or force overwrite uncommitted user work.
+
+I. SINGLE-COMMAND SEQUENTIAL HAL TEST (2026-11-14)
+The repo now includes scripts/test_mist_all_hal_modules.sh. Instead of
+running one stage per chat response, run once after restoring the source:
+    cd ~/android/lineage
+    curl -fL https://raw.githubusercontent.com/nobodyAtall-code/copilot_project/main/scripts/test_mist_all_hal_modules.sh -o /tmp/test_mist_all_hal_modules.sh
+    bash /tmp/test_mist_all_hal_modules.sh
+It checks display header generation, radio, audio, thermal, display composer,
+camera/lights sequentially with m -j2. It continues past individual failures.
+It writes $HOME/mist-hal-batch/mist-hal-all-tests-<UTC>.txt containing all
+stage results and failure excerpts, with detailed logs in an adjacent folder.
+SEND JUST THE SINGLE TXT REPORT to the next chat. No full ROM, no flashing.
+This script assumes the display UAPI integration is already installed (see D).
+All-pass only means targeted compile/copy checks, not on-device runtime success.
