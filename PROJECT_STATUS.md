@@ -1431,3 +1431,12 @@ User ran commit-pinned corrected `assemble_mist_vendor_boot_research.py` success
 **Next gate**: independently parse source/candidate AVB footers and embedded vbmeta region, then evaluate signing/verification and SELinux/init dependency before configuring a production vendor_boot. Retain original stock prebuilt.
 
 - New independent source/modified AVB footer/vbmeta byte audit `scripts/audit_mist_candidate_avb_footer.py` commit `f1aad3a` requires exact known stock and research SHA256, parses original-image-size/vbmeta offsets from 64-byte AVB footer and requires original embedded vbmeta bytes and footer unchanged. **Not executed** on user's local images yet; does not authenticate signatures, which remain invalid for modified ramdisk. No workflow, flash or device build performed.
+
+
+### 2026-11-14 — user-run independent AVB footer/vbmeta byte audit PASS
+
+User ran pinned `scripts/audit_mist_candidate_avb_footer.py` against exact stock `vendor_boot.img` and research-only candidate; returned status **`AVB_FOOTER_VBMETA_BYTES_PRESERVED_STRUCTURAL_ONLY`**.
+- Source SHA256 `f0d692792cacff3026876edbd68aed5d23be7e1acef3e6028ccd5fff21ae5acb`; candidate SHA256 `4723a7e0d8be708cd637d77fc45d6a27b8d4bff1ff36b49e9ab001b544a96d82`.
+- Original and research AVB footer v1.0 identical SHA256 **`095848d2f39efa43d5e48fc5be4f8d421366cb4106f25dddcd1d5a738013353f`**; `original_image_size=15396864`, `vbmeta_offset=15396864`, `vbmeta_size=640`; embedded vbmeta bytes match SHA256 **`4077f94001eb7ddd943178dcff1a9304a6729cdc5a80c633a47f529d18101d4c`**.
+- **Interpretation**: original footer/vbmeta preservation only; the content was modified and original AVB authentication is now stale, `signature_verification_executed=false`, `flash_permitted=false`. Do not flash; production `BoardConfig.mk` retains original stock vendor_boot prebuilt.
+- Next: independent AOSP `avbtool info_image` and `verify_image`/signing-chain review to establish exact descriptors, algorithm, hash data; audit stock bootchain `vbmeta.img` and `vbmeta_system.img` plus bootloader unlock state before any design for signed developer images. Also inspect remaining init/SELinux/VINTF compatibility. No new GitHub Actions workflow or image build requested.
