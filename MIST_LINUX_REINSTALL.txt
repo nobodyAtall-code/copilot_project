@@ -330,3 +330,18 @@ S. FULL STOCK ROM FORENSICS — COMPLETED SUCCESSFULLY (2026-11-14)
   compiled Lineage SELinux policy or neverallow validation.
 - User local kernel header edits must remain untouched. No flash and no
   full ROM compilation has been proven by the completed research.
+
+
+T. DYNAMIC PARTITIONS OFFLINE CONFIGURATION PROTOTYPE
+- Device main branch commit 5573208 adds BoardConfig.mk opt-in only:
+  MIST_ENABLE_OFFLINE_SUPER_LAYOUT=true, userdebug builds only.
+- This does NOT change normal build behavior or build a working super/OTA.
+- Stock per-slot group max 10190061568; stock mi_ext_a allocation
+  1108955136; offline 7-partition budget 9081106432. This reserves space
+  numerically but does NOT preserve the stock mi_ext partition or solve
+  slot switching and Xiaomi overlay mounting.
+- Device documentation research/STOCK_PARTITION_LAYOUT_2026-11-14.md and
+  README.md explain the risks and remaining OTA/AVB design decisions.
+- Before any flash or final BoardConfig enablement: deliberate stock mi_ext
+  preservation/removal plan, correct A/B payload lists, snapshot/COW sizing,
+  first-stage fstab and AVB signature chain, actual build-system test.
