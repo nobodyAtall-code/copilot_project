@@ -1,0 +1,154 @@
+{
+  "firmware": "OS3.0.304.0.WPUMIXM",
+  "keymint_vendor_source_comparison": [
+    {
+      "source": "proprietary/vendor/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml",
+      "status": "EXACT_MATCH",
+      "stock_sha256": "229835b6b669a1c69e4ccc6e7761065189e04d3f4607fcf3178197055746056f",
+      "vendor_sha256": "229835b6b669a1c69e4ccc6e7761065189e04d3f4607fcf3178197055746056f"
+    },
+    {
+      "source": "proprietary/vendor/etc/init/android.hardware.security.keymint-service-qti.rc",
+      "status": "EXACT_MATCH",
+      "stock_sha256": "4f2aea385713f86aa193a1cb3a24fc141b63fc54dec330f25a4f5a722d87c456",
+      "vendor_sha256": "4f2aea385713f86aa193a1cb3a24fc141b63fc54dec330f25a4f5a722d87c456"
+    }
+  ],
+  "limitations": [
+    "Stock policy context lines are reference evidence, not Lineage policy rules",
+    "No checkvintf, SELinux compile/neverallow, runtime service test or flash",
+    "CIL file SHA256 metadata only; compiled vendor CIL is not source policy"
+  ],
+  "source_sha256_verified": true,
+  "stock_files": [
+    {
+      "bytes": 810,
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml",
+      "sha256": "229835b6b669a1c69e4ccc6e7761065189e04d3f4607fcf3178197055746056f"
+    },
+    {
+      "bytes": 456,
+      "path": "vendor_a/etc/init/android.hardware.security.keymint-service-qti.rc",
+      "sha256": "4f2aea385713f86aa193a1cb3a24fc141b63fc54dec330f25a4f5a722d87c456"
+    },
+    {
+      "bytes": 131138,
+      "matching_context_lines": [
+        "/(vendor|system/vendor)/bin/init\\.mdm\\.sh               u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.crda\\.sh              u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.sh              u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcrild\\.sh        u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qti\\.qcv\\.sh          u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.usb\\.sh         u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.coex\\.sh        u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.sdio\\.sh        u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.wifi\\.sh        u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qti\\.write\\.sh       u:object_r:vendor_qti_init_shell_bg_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.class_main\\.sh        u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.debug\\.sh       u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/qca6234-service.sh          u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qti\\.kernel\\.sh       u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.efs\\.sync\\.sh   u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.post_boot\\.sh   u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.class_core\\.sh  u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.early_boot\\.sh  u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qti\\.cam\\.perfopt\\.sh       u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.kernel\\.post_boot\\.sh       u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.debug-sdm660\\.sh    u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.debug-sdm670\\.sh    u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/init\\.qcom\\.syspart_fixup\\.sh   u:object_r:vendor_qti_init_shell_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.keymaster@3\\.0-service      u:object_r:hal_keymaster_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.keymaster@4\\.0-service      u:object_r:hal_keymaster_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.keymaster@4\\.1-service      u:object_r:hal_keymaster_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.security\\.keymint-service   u:object_r:hal_keymint_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.camera\\.provider(@2\\.[0-9]+|-V[0-9]+)-service          u:object_r:hal_camera_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.camera\\.provider(@2\\.[0-9]+|-V[0-9]+)-service_64       u:object_r:hal_camera_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.camera\\.provider(@2\\.[0-9]+|-V[0-9]+)-service-lazy     u:object_r:hal_camera_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.camera\\.provider(@2\\.[0-9]+|-V[0-9]+)-service-lazy_64  u:object_r:hal_camera_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.camera\\.provider(@2\\.[0-9]+|-V[0-9]+)-external-service          u:object_r:hal_camera_default_exec:s0",
+        "/(vendor|system/vendor)/bin/hw/android\\.hardware\\.camera\\.provider(@2\\.[0-9]+|-V[0-9]+)-external-service-lazy     u:object_r:hal_camera_default_exec:s0",
+        "/sys/devices(/platform)?/soc/[a-f0-9]+.qcom,cci/[a-f0-9]+.qcom,cci:qcom,camera@[0-2]/video4linux/video[0-33]/name(/.*)?   u:object_r:vendor_sysfs_graphics:s0",
+        "/vendor/bin/init.qti.chg_policy.sh                                                 u:object_r:vendor_qti_init_shell_exec:s0",
+        "/data/vendor/camera(/.*)?              u:object_r:vendor_camera_data_file:s0",
+        "/data/vendor/misc/qsee(/.*)?           u:object_r:vendor_data_qsee_file:s0",
+        "/dev/block/platform/soc/7c4000.sdhci/by-name/keymaster_[ab]    u:object_r:vendor_custom_ab_block_device:s0",
+        "/dev/block/platform/soc/1d84000.ufshc/by-name/keymaster_[ab]        u:object_r:vendor_custom_ab_block_device:s0",
+        "/vendor/bin/hw/vendor\\.qti\\.camera\\.provider@2\\.[0-9]+-service u:object_r:hal_camera_default_exec:s0",
+        "/vendor/bin/hw/vendor\\.qti\\.camera\\.provider@2\\.[0-9]+-service_64 u:object_r:hal_camera_default_exec:s0",
+        "/dev/qseecom                                    u:object_r:tee_device:s0",
+        "/dev/sp_keymaster                     u:object_r:vendor_sp_keymaster_device:s0",
+        "/vendor/bin/qseecomd            u:object_r:tee_exec:s0",
+        "/dev/sp_keymaster_ssr                 u:object_r:vendor_sp_keymaster_ssr_device:s0",
+        "/dev/qsee_ipc_irq_spss                          u:object_r:vendor_qsee_ipc_irq_spss_device:s0",
+        "/vendor/bin/keymasterd          u:object_r:vendor_keymasterd_exec:s0",
+        "/dev/dma_heap/qcom,qseecom              u:object_r:vendor_dmabuf_qseecom_heap_device:s0",
+        "/dev/dma_heap/qcom,qseecom-ta           u:object_r:vendor_dmabuf_qseecom_ta_heap_device:s0",
+        "/dev/mem_buf_vm/qcom,cp_camera\t\t\tu:object_r:vendor_vm_cp_camera_device:s0",
+        "/vendor/bin/init\\.qti\\.keymaster\\.sh                                 u:object_r:vendor_init-qti-keymaster-sh_exec:s0",
+        "/dev/socket/qvrservice_vndr_camera              u:object_r:vendor_qvrd_vndr_socket:s0",
+        "/dev/mem_buf_vm/qcom,cp_camera_preview\t\tu:object_r:vendor_vm_cp_camera_preview_device:s0",
+        "/vendor/bin/hw/vendor\\.qti\\.camera\\.provider-service u:object_r:hal_camera_default_exec:s0",
+        "/vendor/bin/hw/vendor\\.qti\\.camera\\.provider-service_64 u:object_r:hal_camera_default_exec:s0",
+        "/vendor/bin/hw/vendor\\.qti\\.hardware\\.qseecom@1\\.0-service                         u:object_r:vendor_hal_qseecom_default_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.keymaster@4\\.1-javacard.service                  u:object_r:hal_keymaster_default_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.keymaster@3\\.0-service-qti         u:object_r:vendor_hal_keymaster_qti_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.keymaster@4\\.0-service-qti         u:object_r:vendor_hal_keymaster_qti_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.keymaster@4\\.1-service-qti         u:object_r:vendor_hal_keymaster_qti_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.security\\.keymint-service-qti\t\t     u:object_r:vendor_hal_keymint_qti_exec:s0",
+        "/vendor/bin/hw/vendor\\.qti\\.hardware\\.cryptfshw@1\\.0-service-qti                   u:object_r:vendor_hal_keymaster_qti_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.security\\.keymint-service-spu-qti                u:object_r:vendor_hal_keymint_spu_qti_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.keymaster@4\\.0-strongbox-service-qti             u:object_r:vendor_hal_keymaster_qti_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.keymaster@4\\.1-strongbox-service-qti             u:object_r:vendor_hal_keymaster_qti_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.security\\.keymint-service\\.strongbox-nxp         u:object_r:vendor_hal_keymint_strongbox_exec:s0",
+        "/vendor/bin/hw/android\\.hardware\\.security\\.keymint-service\\.strongbox-thales      u:object_r:vendor_hal_keymint_strongbox_exec:s0"
+      ],
+      "path": "vendor_a/etc/selinux/vendor_file_contexts",
+      "sha256": "f42262160ae2d8fa606230872a923f3c6ceb8c191c18d3fee63bce1aaad337cf",
+      "total_matching_context_lines": 67
+    },
+    {
+      "bytes": 17687,
+      "matching_context_lines": [
+        "android.hardware.camera.provider.ICameraProvider/vendor.qti/0         u:object_r:hal_camera_service:s0",
+        "android.hardware.camera.provider.ICameraProvider/vendor_qti/0         u:object_r:hal_camera_service:s0",
+        "vendor.qti.hardware.camera.offlinecamera.IOfflineCameraService/default    u:object_r:vendor_hal_offlinecamera_service:s0",
+        "vendor.qti.hardware.camera.aon.IAONService/default                    u:object_r:vendor_hal_camera_aon_service:s0",
+        "android.hardware.security.keymint.IKeyMintDevice/strongbox                u:object_r:hal_keymint_service:s0",
+        "android.hardware.security.keymint.IRemotelyProvisionedComponent/strongbox u:object_r:hal_keymint_service:s0",
+        "vendor.qti.hardware.qseecom.IQSEECom/default           u:object_r:vendor_hal_qseecom_service:s0",
+        "vendor.qti.hardware.camera.postproc.IPostProcService/camerapostprocservice    u:object_r:vendor_hal_postproc_service:s0"
+      ],
+      "path": "vendor_a/etc/selinux/vendor_service_contexts",
+      "sha256": "a75884a7e351223e365a3e5cb1cb16e6bcd4f74fcdc8a5f0c6333c40ce9aba5a",
+      "total_matching_context_lines": 8
+    },
+    {
+      "bytes": 8306,
+      "matching_context_lines": [
+        "vendor.qti.hardware.camera.postproc::IPostProcService        u:object_r:vendor_hal_camera_postproc_hwservice:s0",
+        "vendor.qti.hardware.camera.aon::IAONService                  u:object_r:vendor_hal_camera_aon_hwservice:s0",
+        "vendor.qti.hardware.cryptfshw::ICryptfsHw                    u:object_r:hal_keymaster_hwservice:s0"
+      ],
+      "path": "vendor_a/etc/selinux/vendor_hwservice_contexts",
+      "sha256": "e0ac85ebdbb113e9908d0afdb57a9b77ec280a4cef5386f121e9656cac444440",
+      "total_matching_context_lines": 3
+    },
+    {
+      "bytes": 1403650,
+      "path": "vendor_a/etc/selinux/vendor_sepolicy.cil",
+      "sha256": "959ef76be5aa958fed812cdb925fae48cde882551f4de4701445e8ec888ee46b"
+    },
+    {
+      "bytes": 91,
+      "matching_context_lines": [],
+      "path": "odm_a/etc/selinux/odm_file_contexts",
+      "sha256": "83cf304165f2f4e77f4400333df35ae005a4f564e633a5275048bad24e6231eb",
+      "total_matching_context_lines": 0
+    },
+    {
+      "bytes": 93848,
+      "path": "odm_a/etc/selinux/odm_sepolicy.cil",
+      "sha256": "51fb464b7e6668ab90d7c1506edf12e1e98a9d3ece3b1c499e182e4013f87cdc"
+    }
+  ]
+}
