@@ -1484,3 +1484,11 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 **Critical artifact invalidation:** old validated research-only vendor ramdisk fragment SHA256 `cdd71cdf...` and vendor_boot candidate SHA256 `4723a7e...` represent the **previous 24-entry** staged fstab; after source update they are **stale and must never be installed or flashed**. No regeneration/AVB testing necessary until device integration and policy dependencies are ready. The production `BOARD_PREBUILT_VENDOR_BOOTIMAGE` still points to the unchanged original stock fallback.
 
 **Remaining work**: original vendor VINTF fragments from platform vs curated; stock ODM SKU-specific radio slot registration, source-backed `vendor_dlkm` and `system_dlkm` staging, SELinux policy and file contexts, full HAL blob closure, generated OTA partition manifest, AVB chain and boot validation. No full ROM build/Actions monitoring/flash.
+
+
+### 2026-11-14 — stock DLKM extraction workflow staged
+
+- User's Linux readiness reports show no stock `vendor_dlkm` or `system_dlkm` images under searched locations and no module payloads in the reviewed local source trees; 690 GB free, two local kernel modifications must be preserved.
+- Added read-only staging script `scripts/stage_mist_dlkm.py` at commit `10b8e014`, recording stock module hashes, `modules.load*` presence and basename closure, preserving stock `modules.*` metadata, and creating a compressed standalone DLKM payload artifact. The research artifact is **not** automatically copied to production trees and **does not** establish kernel ABI compatibility.
+- Added `.github/workflows/mist-stock-dlkm.yml` at commit `05dae31a`; runs exact MD5-checked firmware acquisition with existing `multicdn.py`, reuses `extract_partitions.sh`, stages both stock module partitions and uploads a 14-day artifact. Workflow is configured for `push` of its own YAML and `workflow_dispatch` on `main`; **execution/run status not yet verified**. No production device/vendor/kernel repository changes, no flash or full ROM build.
+- Next: obtain successful Actions run result and inspect artifact/manifests, verify kernel release/vermagic and module dependency semantics, then design production integration.
