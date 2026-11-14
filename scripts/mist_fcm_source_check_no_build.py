@@ -4,7 +4,7 @@
 Uses installed assemble_vintf -c check path; check outcome is a focused source
 diagnostic, NOT full target-generated VINTF or runtime certification.
 """
-import argparse,json,os,subprocess,tempfile,xml.etree.ElementTree as ET
+import argparse,json,os,subprocess,tempfile,sys,xml.etree.ElementTree as ET
 from pathlib import Path
 
 def run(argv,env=None):
@@ -32,12 +32,20 @@ def main():
             if r.tag=="compatibility-matrix" and r.get("type")=="framework":fm.append(p)
         except ET.ParseError:pass
     if not fm:ap.error("No valid source framework FCM XML found")
-    common=sorted((vendor/"vendor/etc/vintf/manifest").glob("*.xml"))
-    # These are all stock fragments. They may include disabled platform-owned
-    # services, so do not turn this diagnostic into a 'production merged pass'.
-    skus=sorted((vendor/"odm/etc/vintf").glob("manifest_*.xml"))
+    # Only the production PRODUCT_PACKAGES-selected manifests, not disabled
+    # stock files or duplicate platform-owned service fragments.
+    selected_script=Path(__file__).resolve().parent/"check_mist_vintf_offline.py"
+    if not selected_script.is_file():ap.error("Missing sibling check_mist_vintf_offline.py")
     results={}
     with tempfile.TemporaryDirectory(prefix="mist-fcm-check-") as temp:
+        audit=Path(temp)/"selected.json"
+        checked=run([sys.executable,str(selected_script),"--root",str(root),"--output",str(audit)])
+        if checked["exit"]!=0 or not audit.is_file():ap.error("Selected source audit failed: "+checked["stderr"])
+        source=json.loads(audit.read_text())
+        selected=source["selected_vintf_fragments"]
+        sku_rel=sorted(x for x in selected if x.startswith("proprietary/odm/etc/vintf/manifest_"))
+        common=[root/"vendor/xiaomi/mist"/x for x in selected if x not in sku_rel]
+        skus=[root/"vendor/xiaomi/mist"/x for x in sku_rel]
         for sku in skus:
             merged=Path(temp)/(sku.stem+".xml")
             assembly=run([str(assembler),"-i",":".join(map(str,common+[sku])),"-o",str(merged)])
@@ -57,7 +65,7 @@ def main():
         "framework_matrix_candidates":[str(p.relative_to(root)) for p in fm],
         "sku_variants":results,"successful_compatibility_checks":success_count,
         "source_only":True,"complete_merged_target_vintf_compatible":False,
-        "warning":"Uses stock unselected fragments and individual source framework FCMs, not generated target framework matrices/manifests. A PASS here is only diagnostic."}
+        "warning":"Uses only production-selected vendor fragments and individual source framework FCMs, not generated target framework matrices/manifests. A PASS here is only diagnostic."}
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
     print("Source FCM candidates:",len(fm),"SKU cases:",len(results),"check exit zero:",success_count)
