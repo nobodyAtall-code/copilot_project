@@ -55,14 +55,14 @@ jobs:
         run: |
           set -euo pipefail
           mapfile -d '' superpieces < <(find work/unpacked -type f \( -name 'super.img' -o -name 'super.img.[0-9]*' \) -print0 | sort -zV)
-          test -n "\${superpieces[0]:-}"
-          magic="$(head -c 4 "\${superpieces[0]}" | od -An -tx1 | tr -d ' \n')"
+          test -n "${superpieces[0]:-}"
+          magic="$(head -c 4 "${superpieces[0]}" | od -An -tx1 | tr -d ' \n')"
           if [[ "$magic" == "3aff26ed" ]]; then
-            simg2img "\${superpieces[@]}" work/super.raw.img
-          elif [[ "\${#superpieces[@]}" -eq 1 ]]; then
-            cp "\${superpieces[0]}" work/super.raw.img
+            simg2img "${superpieces[@]}" work/super.raw.img
+          elif [[ "${#superpieces[@]}" -eq 1 ]]; then
+            cp "${superpieces[0]}" work/super.raw.img
           else
-            cat "\${superpieces[@]}" > work/super.raw.img
+            cat "${superpieces[@]}" > work/super.raw.img
           fi
           python3 scripts/inspect_mist_super_metadata.py work/super.raw.img --output reports/full-super-metadata.json
           python3 - <<'PY'
