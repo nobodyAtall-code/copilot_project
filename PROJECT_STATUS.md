@@ -1567,3 +1567,12 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 - Added `config/mist-dlkm/system_dlkm_file_contexts` [62d9433] and `config/mist-dlkm/vendor_dlkm_file_contexts` [724676c] in `copilot_project` to apply these platform-backed labels to the standalone partition image gate.
 - Updated `.github/workflows/mist-production-dlkm-images.yml` [cae767f] to generate EROFS images with `--all-root`, `--mount-point` and `--file-contexts` flags; [307f4c2] added a mounted-image `security.selinux` xattr assertion (requires `attr` installed), and [b554380] corrected NUL stripping.
 - **New image workflow results are not yet inspected.** These changes affect only the GitHub Actions research image generation, not production device/vendor/kernels. Passing it still will not prove LineageOS full-build SELinux integration or boot. Do not flash these standalone images.
+
+
+### 2026-11-14 — SELinux-labeled standalone DLKM EROFS gate PASSED (run 43590690101)
+
+- [GitHub Actions run 43590690101 / job 132434566648](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43590690101/job/132434566648) verified via actual job steps and logs: **all steps success**. Production trees cloned, all existing install rules staged, system_dlkm and vendor_dlkm EROFS images generated, both SHA256 checks passed, and images mounted for SELinux xattr inspection.
+- Mounted-image `security.selinux` result for **/system_dlkm/lib**: `u:object_r:system_dlkm_file:s0`. Mounted-image result for **/vendor_dlkm/lib**: `u:object_r:vendor_file:s0`. These are directory checks; per-module labeling and full LineageOS sepolicy compilation remain unverified.
+- Artifact [mist-production-dlkm-erofs-images / ID 14112211828](https://github.com/nobodyAtall-code/copilot_project/actions/runs/43590690101/artifacts/14112211828), uploaded 29,941,601 bytes ZIP, includes both standalone EROFS images, SHA256 checksums, staging manifest and image metadata. Retention configured for 14 days.
+- **Do not flash** research-only image artifacts. No full Soong/Kati image build, OTA safety, runtime module load, stock vendor_boot `mi_ext` fstab AVB resolution or device boot established.
+- Next priority: resolve real boot-chain and vendor/HAL production gaps, not repeat completed DLKM staging/SELinux directory-label checks.
