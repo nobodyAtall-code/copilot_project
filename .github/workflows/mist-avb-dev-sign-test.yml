@@ -52,7 +52,7 @@ jobs:
             --avbtool work/avb/avbtool.py \
             --candidate work/candidate/MIST-VENDOR-BOOT-RESEARCH-DO-NOT-FLASH.img \
             --developer-rsa2048-key "$RUNNER_TEMP/mist-throwaway-key.pem" \
-            --output work/DEVELOPER-TEST-DO-NOT-FLASH.img \
+            --output work/dev-sign-verification/vendor_boot.img \
             --report reports/mist-dev-sign-audit.json
           python3 - <<'PY'
           import json
@@ -61,7 +61,7 @@ jobs:
           assert r["flash_permitted"] is False
           assert r["stock_top_level_chain_accepts_output"] is False
           PY
-          rm -f "$RUNNER_TEMP/mist-throwaway-key.pem" work/DEVELOPER-TEST-DO-NOT-FLASH.img
+          rm -f "$RUNNER_TEMP/mist-throwaway-key.pem" work/dev-sign-verification/vendor_boot.img
       - name: Upload JSON proof only, never binary or key
         if: always()
         uses: actions/upload-artifact@v4
