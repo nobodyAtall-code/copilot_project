@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Real Android policy compile and neverallow validation; run in Lineage checkout.
-set -Eeuo pipefail
+set -Eeo pipefail
+# Android envsetup.sh/lunch reference optional unset variables (e.g. TOP).
+# Do not use nounset (-u) when sourcing Android's build shell functions.
 ROOT="$HOME/android/lineage"
 if [ -n "${1:-}" ]; then ROOT="$1"; fi
 OUT="$ROOT/mist-selinux-compile-report.txt"
