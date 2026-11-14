@@ -443,3 +443,21 @@ Z. NON-FLASHABLE CLEAN VENDOR RAMDISK PATCHER IMPLEMENTED
 - See device research/MIST_CUSTOM_VENDOR_RAMDISK_REVIEW_2026-11-14.md
   commit 42002fd for exact local commands. Script not yet executed against
   user's local stock image; no real result/boot/flash proof.
+
+
+AA. VENDOR VINTF SERVICES ACTUALLY INTEGRATED — 2026-11-14
+- Original Mist firmware inventory confirmed stock vendor manifest_parrot.xml
+  has Gatekeeper AIDL IGatekeeper/default, while curated vendor tree had
+  only its binary+init RC. Production vendor source now has minimal stock-
+  backed gatekeeper XML, a Soong prebuilt_etc, and active PRODUCT_PACKAGES.
+  Commits 3148de5 (XML), a856f47 (Android.bp), 0800c23 (mist-vendor.mk).
+- Original stock android.hardware.radio.config.xml declares AIDL v3
+  IRadioConfig/default, absent from curated vendor manifests. Added minimal
+  source-backed XML + Soong module + product selection, commits d29c300,
+  d44bb8a, b1e8cb4. Original qcrilNrd executable/init remain unchanged.
+- No full original vendor platform manifest copied; avoids duplicate HAL
+  collisions. Stock ODM DSDS/SSSS radio slot-specific manifest selection
+  still unresolved; DO NOT hardcode slot1/slot2 before model verification.
+- Recheck source in vendor/xiaomi/mist and commit status. No local m nothing
+  after these VINTF module additions, no full build or boot proof.
+- Latest copilot_project/PROJECT_STATUS.md commit f242e8c.
