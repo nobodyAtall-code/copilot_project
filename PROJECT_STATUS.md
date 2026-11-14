@@ -1,6 +1,6 @@
 # MIST / LINEAGEOS 23.2 — LIVE PROJECT STATUS AND NEXT-CHAT HANDOVER
 
-**Last reviewed: 13 November 2026 (Malaysia time).**  
+**Last reviewed: 14 November 2026 (Malaysia time).**  
 **Start every new chat here:** `copilot_project/PROJECT_STATUS.md`. **Workflow execution rule: trigger, provide run link, and do not monitor unless user requests investigation.** Check GitHub Actions for later runs and update this file with **verified** changes before ending a development session. This is a living Markdown status file. For an explicit **HANDOVER**, also generate a proper, updated PDF; do not merely reuse an older PDF.
 
 ## 1. Goal and strict rules
@@ -1036,3 +1036,36 @@ This file is the durable canonical continuation record. **Update after meaningfu
 - Exact modpost unresolved symbols, all in `kernel/sched/walt/sched-walt.ko`: `oem_update_num_sched_clusters`, `mi_task_fork`, `pkg_enable`, `update_pkg_load`. Examined owned `kernel/sched/walt/walt.c`; these declarations and calls are gated by `CONFIG_MI_SCHED_WALT`, still enabled in stock `mist_perf.config`, while the diagnostic runner removes its proprietary provider module `drivers/mihw/mi_sched/mi_schedule.ko`.
 - Commit https://github.com/nobodyAtall-code/copilot_project/commit/8e763b287365ea7572095b9363afba8e2b4b253d adds exactly `CONFIG_MI_SCHED_WALT=y` to the fail-closed diagnostic-only set omitted from the throwaway Mist perf config before Kconfig. It preserves the main Qualcomm WALT scheduler, does not disable modpost or ignore unresolved symbols, and does not modify any production kernel, device, vendor, or stock prebuilt repo.
 - The workflow self-path push trigger should start a new attempt. **No run ID or outcome checked after push; per user instruction, do not monitor.** A compile success would still be an experimental non-flashable kernel pending module ABI, vendor userspace, and hardware boot compatibility checks.
+
+
+### 14 November 2026 — local targeted HAL report and thermal header diagnostic (next-chat handover)
+
+**Evidence:** user-supplied local files \`mist-hal-full-report(1).txt\` and \`mist-thermal-header-diagnostic.txt\`, plus subsequent terminal output. These are **local** observations, not GitHub Actions results. Do not conflate this with the separate \`mist_perf\` MIHW/WALT diagnostic kernel workflow.
+
+**Local HAL smoke test:**
+- \`01-radio-stock\` (\`mist_stock_radio\`, \`mist_stock_radio_script\`, \`mist_stock_radio_rc\`): **PASS**. Build reported success after 17:43; \`ninja: no work to do\` at conclusion. This establishes target selection/build completion, not new linker or runtime proof.
+- \`02-audio-platform\` (\`audiohalservice.qti\`): **PASS**, reported 28 seconds and \`ninja: no work to do\`.
+- \`03-thermal-platform\` (\`android.hardware.thermal-service.qti\`): **FAIL**, now after kernel UAPI header generation progressed. The reported C/C++ error is duplicate \`struct sched_param\` definitions from Bionic \`bionic/libc/include/sched.h\` and generated kernel \`.../generated_kernel_includes/gen/usr/include/linux/sched/types.h\`.
+- Display and camera stages: **NOT RUN** because the test script is fail-fast; no compile/boot validation claimed.
+- Kernel source is present and readable at \`~/android/lineage/kernel/xiaomi/mist\`; local Git HEAD \`fe8024a4c\` (initial MiCode \`mist-w-oss\` source import). The local diagnostic found \`kernel/xiaomi/mist/include/uapi/linux/sched/types.h\` and generated \`linux/sched/types.h\` both contain \`struct sched_param { int sched_priority; };\`, as does Bionic \`sched.h\`. **Compiler include ancestry is not yet proven**. A grep in \`hardware/qcom-caf/thermal\` produced no direct references to the scheduling headers.
+- \`BoardConfig.mk\` local confirmed values: \`TARGET_KERNEL_VERSION := 6.6\`, \`TARGET_KERNEL_SOURCE := kernel/xiaomi/mist\`, \`TARGET_KERNEL_CONFIG := gki_defconfig\`, \`TARGET_FORCE_PREBUILT_KERNEL := true\`, \`TARGET_PREBUILT_KERNEL := device/xiaomi/mist-kernel/kernel\`; stock \`vendor_boot.img\` and \`dtbo.img\` prebuilts are also referenced. \`gki_defconfig\` here is only a header-smoke-test baseline. **The boot kernel is still the verified stock prebuilt**; source-built bootable kernel, full ROM and device boot are **NOT verified**. Lineage build warns that source/generated headers with a forced prebuilt kernel may not match its ABI.
+- Kernel \`headers_install\` output was generated; the source kernel \`Makefile\` emitted duplicate \`dtbs\`, \`dtbs_install\`, \`scripts_dtc\`, and \`dt_binding_check\` target recipe warnings. They are recorded for later examination, not identified as the thermal compilation stopper.
+- Later attempted diagnostic \`rg -n '#include ... linux/sched/types.h' ...\` and \`rg -n 'generated_kernel_includes|...' ...\` **DID NOT RUN**: user's Debian shell replied \`bash: rg: command not found\` twice. Do not interpret empty search output as absence of callers.
+
+**NEXT priority, low-cost and evidence-driven:**
+1. Repeat the two failed searches with available \`grep -RInE\` (or install \`ripgrep\`); inspect the exact failing thermal compilation command's \`-I\` include order and trace which transitive header includes \`linux/sched/types.h\`. Inspect the full thermal log / \`out/soong\` Ninja command as needed. Avoid assuming \`hardware/qcom-caf/thermal\` directly includes it.
+2. Determine a **scoped, technically correct** integration fix before touching kernel UAPI or Bionic. Do NOT delete or redefine \`struct sched_param\` as an unverified workaround; do NOT hide compile failures.
+3. Re-run **only** \`m -j2 android.hardware.thermal-service.qti\` after a reviewed fix; proceed to display and camera targeted tests only if thermal passes. Do not perform a full ROM build yet.
+4. After any verified source/configuration changes, update this file and, if warranted, publish evidence-reviewed fixes to existing production \`main\` trees using Git identity \`nobodyAtall-code <hashyofficial@gmail.com>\`. No new branches/PRs/workflows in production trees.
+
+**Reproducible searches without \`rg\`:**
+\`\`\`bash
+cd ~/android/lineage
+grep -RInE --include='*.h' --include='*.hpp' --include='*.c' --include='*.cc' --include='*.cpp' \
+  '#[[:space:]]*include[[:space:]]*[<"]linux/sched/types[.]h[>"]' \
+  hardware/qcom-caf vendor/qcom device/xiaomi/mist 2>/dev/null | head -100
+grep -RInE 'generated_kernel_includes|generated_kernel_headers|TARGET_KERNEL_HEADERS' \
+  vendor/lineage/build/soong device/xiaomi/mist 2>/dev/null | head -100
+\`\`\`
+
+**Hard constraints for next chat:** read the newest tail of this \`PROJECT_STATUS.md\`, distinguish local HAL tests from GitHub Actions kernel workflow, preserve all working trees, do not claim a bootable source kernel, and follow user's explicit policy: when a workflow is triggered, stop monitoring; the user will send its link/log when completed. For explicit HANDOVER generate an updated PDF as well.
