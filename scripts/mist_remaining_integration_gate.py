@@ -35,7 +35,7 @@ def main():
     group=[]
     lines=board.splitlines()
     for idx,line in enumerate(lines):
-        if re.match(r"^BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST\\s*:=",line):
+        if re.match(r"^BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST\s*:=",line):
             j=idx
             while j<len(lines):
                 line=lines[j].split("#",1)[0]
