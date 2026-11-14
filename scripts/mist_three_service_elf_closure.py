@@ -73,7 +73,7 @@ def check_fingerprint(staged):
         r"^\s*interface\s+aidl\s+android\.hardware\.biometrics\.fingerprint\.(\S+)",
         rc, re.M
     ))
-    expected = {f"android.hardware.biometrics.fingerprint.{n}" for n in names}
+    expected = set(names)
     return {
         "declared_rc_interfaces": sorted(rc_interfaces),
         "declared_vintf_instances": sorted(names),
