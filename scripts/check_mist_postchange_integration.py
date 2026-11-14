@@ -42,8 +42,16 @@ for p in [device / "BoardConfig.mk", device / "device.mk", device / "lineage_mis
     required_file(p)
 
 lineage = read(device / "lineage_mist.mk") or ""
-record("required vendor inheritance", "PASS" if "$(call inherit-product, vendor/xiaomi/mist/mist-vendor.mk)" in lineage else "FAIL",
-       "required dependency enabled" if "$(call inherit-product, vendor/xiaomi/mist/mist-vendor.mk)" in lineage else "dependency not found")
+required_vendor = "$(call inherit-product, vendor/xiaomi/mist/mist-vendor.mk)"
+optional_vendor = "$(call inherit-product-if-exists, vendor/xiaomi/mist/mist-vendor.mk)"
+if required_vendor in lineage:
+    inheritance_status, inheritance_note = "PASS", "required dependency enabled"
+elif optional_vendor in lineage:
+    inheritance_status, inheritance_note = "FAIL", "local checkout still uses optional vendor inheritance; sync device tree main"
+else:
+    inheritance_status, inheritance_note = "FAIL", "required vendor inheritance line not found"
+record("required vendor inheritance", inheritance_status, inheritance_note)
+details.append("Local vendor inheritance lines: " + repr([line.strip() for line in lineage.splitlines() if "mist-vendor.mk" in line]))
 board = read(device / "BoardConfig.mk") or ""
 record("stock kernel fallback", "PASS" if re.search(r"(?m)^TARGET_FORCE_PREBUILT_KERNEL\s*:=\s*true\s*$", board) else "WARN",
        "stock prebuilt retained" if "TARGET_FORCE_PREBUILT_KERNEL := true" in board else "not confirmed")
@@ -75,6 +83,10 @@ record("full ROM and flash readiness", "UNVERIFIED", "not attempted by this scri
 
 for repo in [device, vendor, root / "kernel/xiaomi/mist"]:
     if (repo / ".git").exists() or (repo / ".git").is_file():
+        head_rc, head = run(["git", "rev-parse", "--short=12", "HEAD"], cwd=repo)
+        branch_rc, branch = run(["git", "branch", "--show-current"], cwd=repo)
+        details.append("git revision " + str(repo) + ": branch=" + (branch if branch_rc == 0 else "unknown")
+                       + " HEAD=" + (head if head_rc == 0 else "unknown"))
         rc, output = run(["git", "status", "--short"], cwd=repo)
         details.append("git status " + str(repo) + " (exit=" + str(rc) + "):\n" + (output or "(clean)"))
     else:
