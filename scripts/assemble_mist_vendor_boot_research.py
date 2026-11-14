@@ -98,7 +98,7 @@ def main():
     # Replace compressed content within the original page-aligned region;
     # clear only this region's padding, never any following OEM data.
     candidate_array[old_ramdisk_start:old_ramdisk_page_end] = (
-        fragment + b"\\x00" * (old_ramdisk_page_end - old_ramdisk_start - len(fragment))
+        fragment + b"\x00" * (old_ramdisk_page_end - old_ramdisk_start - len(fragment))
     )
     candidate = bytes(candidate_array)
     need(len(candidate) == len(original), "Original image length changed")
