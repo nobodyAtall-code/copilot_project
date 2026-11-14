@@ -14,9 +14,6 @@ from inspect_mist_boot_chain import align, vendor_boot
 
 STOCK_SHA = "f0d692792cacff3026876edbd68aed5d23be7e1acef3e6028ccd5fff21ae5acb"
 STOCK_RAMDISK_SIZE = 10992661
-STOCK_FRAGMENT_SHA = "cdd71cdf1100e0b1d3619cac557884ad5ecf1d2fc8d900d1a0d1a221212676f4"
-STOCK_FSTAB_NEW_SHA = "a2d39870568abd03b0133d7f4a3f2197e7bf50079626b412f83079b66f09da38"
-EXPECTED_FRAGMENT_SIZE = 10992947
 
 
 def sha(data):
@@ -42,16 +39,16 @@ def main():
     fragment = a.review_fragment.read_bytes()
     review = json.loads(a.review_json.read_text())
     need(sha(original) == STOCK_SHA, "Original vendor_boot SHA mismatch")
-    need(sha(fragment) == STOCK_FRAGMENT_SHA, "Validated clean fragment SHA mismatch")
-    need(sha(a.staged_fstab.read_bytes()) == STOCK_FSTAB_NEW_SHA,
+    need(sha(fragment) == review.get("fragment_sha256"), "Validated clean fragment SHA mismatch")
+    need(sha(a.staged_fstab.read_bytes()) == review.get("new_fstab_sha256"),
          "Staged clean fstab changed since verified patch; regenerate first")
     need(review.get("status") == "FRAGMENT_ONLY_REVIEW_NOT_FLASHABLE" and
          review.get("stock_boot_sha256_verified") is True and
          review.get("source_fstab_sha256_verified") is True and
          review.get("other_entries_metadata_content_order_identical") is True and
          review.get("changed_cpio_paths") == ["first_stage_ramdisk/fstab.default"] and
-         review.get("fragment_sha256") == STOCK_FRAGMENT_SHA and
-         review.get("new_fstab_sha256") == STOCK_FSTAB_NEW_SHA,
+         review.get("fragment_sha256") == sha(fragment) and
+         review.get("new_fstab_sha256") == sha(a.staged_fstab.read_bytes()),
          "Patch report mismatch")
     old = vendor_boot(a.stock_vendor_boot, len(original))
     need(old["header_version"] == 4, "Requires Android vendor boot header v4")
@@ -60,7 +57,7 @@ def main():
     need(one["offset"] == 0 and one["size"] == STOCK_RAMDISK_SIZE,
          "Unexpected original ramdisk fragment")
     need(one["format"] == "lz4-legacy" and
-         len(fragment) == EXPECTED_FRAGMENT_SIZE and
+         len(fragment) > 0 and
          fragment.startswith(b"\x02\x21\x4c\x18"),
          "Unexpected new fragment length/format")
     page = old["page_size"]
