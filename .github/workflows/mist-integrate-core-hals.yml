@@ -1,0 +1,154 @@
+name: Mist integrate stock core hardware HAL batch
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-integrate-core-hals.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-core-hals-production
+  cancel-in-progress: false
+
+jobs:
+  integrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Download SHA256-verified stock source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd
+          mkdir -p input/source output
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input/source
+          (cd input/source && sha256sum -c stock-vendor-source.sha256)
+      - name: Extract known stock core HAL binaries init and manifests
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import tarfile,subprocess
+          from pathlib import Path
+          # Each tuple: module, executable under vendor/, stock init RC, stock VINTF fragment (if verified).
+          entries=[
+           ('camera','bin/hw/vendor.qti.camera.provider-service_64','etc/init/vendor.qti.camera.provider-service_64.rc','etc/vintf/manifest/vendor.qti.camera.provider.xml'),
+           ('sensors','bin/hw/android.hardware.sensors-service.multihal','etc/init/android.hardware.sensors-service-multihal.rc','etc/vintf/manifest/android.hardware.sensors-multihal.xml'),
+           ('composer','bin/hw/vendor.qti.hardware.display.composer-service','etc/init/vendor.qti.hardware.display.composer-service.rc',None),
+           ('lights','bin/hw/vendor.qti.hardware.lights.service','etc/init/vendor.qti.hardware.lights.service.rc','etc/vintf/manifest/vendor.qti.hardware.lights.service.xml'),
+           ('vibrator','bin/hw/vendor.qti.hardware.vibrator.service','etc/init/vendor.qti.hardware.vibrator.service.rc','etc/vintf/manifest/vendor.qti.hardware.vibrator.service.xml'),
+          ]
+          names={x for entry in entries for x in entry[1:] if x}
+          wanted={'vendor_a/'+name for name in names}
+          found=set()
+          src=Path('input/source/stock-vendor-source.tar.zst')
+          proc=subprocess.Popen(['zstd','-dc','--',str(src)],stdout=subprocess.PIPE)
+          try:
+           with tarfile.open(fileobj=proc.stdout,mode='r|') as t:
+            for m in t:
+             n=m.name.removeprefix('./')
+             if n not in wanted: continue
+             if n in found or not m.isfile() or not 0<m.size<=50_000_000:
+              raise SystemExit('unsafe, repeated, or oversized stock file: '+n)
+             f=t.extractfile(m)
+             if f is None: raise SystemExit('unreadable source '+n)
+             data=f.read(m.size+1)
+             if len(data)!=m.size: raise SystemExit('truncated source '+n)
+             out=Path('output/selected/proprietary/vendor')/n.removeprefix('vendor_a/')
+             out.parent.mkdir(parents=True,exist_ok=True)
+             out.write_bytes(data)
+             found.add(n)
+          finally:
+           if proc.stdout: proc.stdout.close()
+           rc=proc.wait()
+          if rc or found!=wanted:
+           raise SystemExit('stock archive extraction failed; missing: '+str(sorted(wanted-found)))
+          print('Verified exact stock files:',len(found))
+          # Generate Soong definitions from a fixed, stock-proven map. No unverified filenames.
+          bp=['// MIST_CORE_HAL_BATCH_5: exact SHA256-audited OS3.0.304.0 stock payloads.',
+              '// Runtime linker deps, framework compatibility, VINTF and sepolicy still require validation.']
+          mk=['# MIST_CORE_HAL_BATCH_5: original stock camera, sensors, display, lights, vibrator HALs.',
+              '# Do not confuse source inclusion with validated device runtime.',
+              'PRODUCT_PACKAGES += \\']
+          modules=[]
+          for tag,binary,rc,xml in entries:
+           module='mist_stock_core_'+tag
+           modules.append(module)
+           name=binary.split('/')[-1]
+           bp.extend(['cc_prebuilt_binary {',
+             '    name: "'+module+'",',
+             '    srcs: ["proprietary/vendor/'+binary+'"],',
+             '    stem: "'+name+'",',
+             '    vendor: true,',
+             '    relative_install_path: "hw",',
+             '    compile_multilib: "64",',
+             '    strip: { none: true },',
+             '    check_elf_files: false,',
+             '}', ''])
+           rmodule=module+'_rc'
+           modules.append(rmodule)
+           bp.extend(['prebuilt_etc {',
+             '    name: "'+rmodule+'",',
+             '    src: "proprietary/vendor/'+rc+'",',
+             '    filename: "'+rc.split('/')[-1]+'",',
+             '    vendor: true,',
+             '    sub_dir: "init",',
+             '}', ''])
+           if xml:
+            xmodule=module+'_vintf'
+            modules.append(xmodule)
+            bp.extend(['prebuilt_etc {',
+              '    name: "'+xmodule+'",',
+              '    src: "proprietary/vendor/'+xml+'",',
+              '    filename: "'+xml.split('/')[-1]+'",',
+              '    vendor: true,',
+              '    sub_dir: "vintf/manifest",',
+              '}', ''])
+          mk.extend(['    '+n+(' \\' if i<len(modules)-1 else '') for i,n in enumerate(modules)])
+          Path('output/selected/batch.bp').write_text('\n'.join(bp)+'\n')
+          Path('output/selected/batch.mk').write_text('\n'.join(mk)+'\n')
+          print('Generated modules:',len(modules))
+          PY
+      - name: Publish complete service group to production vendor tree
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo 'GH_PAT missing'; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/proprietary_vendor_xiaomi_mist output/production -- --quiet
+          cd output/production
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          test -s Android.bp && test -s mist-vendor.mk
+          ! grep -q 'MIST_CORE_HAL_BATCH_5' Android.bp
+          ! grep -q 'MIST_CORE_HAL_BATCH_5' mist-vendor.mk
+          # Check every destination is new to avoid silently overwriting stock payloads.
+          while IFS= read -r path; do
+            relative="${path#../selected/proprietary/vendor/}"
+            test ! -e "proprietary/vendor/$relative" || {
+              echo "Destination already exists: $relative"; exit 1;
+            }
+          done < <(find ../selected/proprietary/vendor -type f)
+          cp -a ../selected/proprietary/vendor/. proprietary/vendor/
+          cat ../selected/batch.bp >> Android.bp
+          cat ../selected/batch.mk >> mist-vendor.mk
+          git add Android.bp mist-vendor.mk proprietary/vendor/
+          git diff --cached --check
+          git commit -m "mist: integrate stock camera sensors composer lights and vibrator service group"
+          git push origin HEAD:main
+          grep -q 'mist_stock_core_camera' mist-vendor.mk
+          grep -q 'mist_stock_core_sensors' mist-vendor.mk
+          grep -q 'mist_stock_core_composer' mist-vendor.mk
+          echo 'CORE HARDWARE HAL GROUP COMMITTED; ROM BOOT AND LINKER ABI UNVERIFIED'
