@@ -5,9 +5,9 @@ set -Eeo pipefail
 # Do not use nounset (-u) when sourcing Android's build shell functions.
 ROOT="$HOME/android/lineage"
 if [ -n "${1:-}" ]; then ROOT="$1"; fi
-OUT="$ROOT/mist-selinux-compile-report.txt"
+MIST_SEPOLICY_REPORT="$ROOT/mist-selinux-compile-report.txt"
 mkdir -p "$ROOT"
-exec > >(tee "$OUT") 2>&1
+exec > >(tee "$MIST_SEPOLICY_REPORT") 2>&1
 echo "===== MIST SELINUX COMPILE ====="
 cd "$ROOT"
 test -f build/envsetup.sh || { echo "ERROR: not LineageOS source"; exit 1; }
@@ -23,7 +23,7 @@ status=$?
 set -e
 echo "===== COMPILE EXIT STATUS: $status ====="
 if [ "$status" -ne 0 ]; then
-  grep -nEi -C 4 'error:|neverallow|unknown type|unknown class|duplicate declaration|invalid.*context|failed' "$OUT" | tail -n 160 || :
+  grep -nEi -C 4 'error:|neverallow|unknown type|unknown class|duplicate declaration|invalid.*context|failed' "$MIST_SEPOLICY_REPORT" | tail -n 160 || :
 fi
-echo "===== REPORT PATH: $OUT ====="
+echo "===== REPORT PATH: $MIST_SEPOLICY_REPORT ====="
 exit "$status"
