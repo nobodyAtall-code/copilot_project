@@ -81,9 +81,10 @@ def main():
         verified_chained_hashes=sorted(set(re.findall(
             r"(?m)^([A-Za-z0-9_]+): Successfully verified sha256 hash of .* for image of [0-9]+ bytes",
             out)))
-        missing_partition_images=sorted(set(re.findall(
-            r"FileNotFoundError: .*?No such file or directory: ['\\\"]([^'\\\"]+\\.img)['\\\"]",
-            out)))
+        missing_partition_images=sorted(set(
+            line.rsplit("'",2)[1] for line in out.splitlines()
+            if line.startswith("FileNotFoundError:") and ".img'" in line
+        ))
         if exitcode==0:
             state="ALL_AVAILABLE_DESCRIPTORS_VERIFIED"
         elif signed and (missing_chain or missing_image):
