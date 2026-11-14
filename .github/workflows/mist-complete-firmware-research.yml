@@ -109,6 +109,21 @@ jobs:
           set -euo pipefail
           git clone --depth 1 --branch main https://github.com/nobodyAtall-code/android_device_xiaomi_mist.git "$RUNNER_TEMP/mist-device"
           python3 scripts/audit_mist_stock_ramdisks.py --images-dir reports/boot-images --device-dir "$RUNNER_TEMP/mist-device" --output reports/full-stock-ramdisks.json
+      - name: Reconcile stock SELinux labels for Camera KeyMint QSEE and binder services
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch main https://github.com/nobodyAtall-code/proprietary_vendor_xiaomi_mist.git "$RUNNER_TEMP/mist-vendor"
+          python3 scripts/mist_full_firmware_selinux.py \
+            --evidence research/generated/mist-keymint-selinux-stock-evidence.json \
+            --mounts work/mounts \
+            --vendor-tree "$RUNNER_TEMP/mist-vendor" \
+            --output reports/full-stock-selinux-integration.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('reports/full-stock-selinux-integration.json'))
+          for name,record in d['service_file_labels'].items():
+              print(name,record['status'])
+          PY
       - name: Research status summary
         if: always()
         run: |
@@ -142,5 +157,6 @@ jobs:
             reports/full-firmware-elf-ko-inventory.json
             reports/full-firmware-elf-ko-inventory.md
             reports/full-stock-ramdisks.json
+            reports/full-stock-selinux-integration.json
           if-no-files-found: warn
           retention-days: 14
