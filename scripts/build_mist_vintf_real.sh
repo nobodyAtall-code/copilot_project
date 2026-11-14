@@ -6,7 +6,7 @@ set -Eeo pipefail
 # Android build/envsetup.sh references optional TOP before assigning it.
 # IMPORTANT: Android lunch also overwrites OUT. Never name report variable OUT.
 set +u
-GATE_VERSION="mist-vintf-path-isolation-v4-20261115"
+GATE_VERSION="mist-vintf-live-output-v5-20261115"
 ROOT="${1:-$HOME/android/lineage}"
 ROOT="$(cd "$ROOT" && pwd)"
 MIST_VINTF_REPORT_PATH="$ROOT/mist-vintf-build-report.txt"
@@ -68,10 +68,10 @@ else
   record BLOCKED "$LUNCH_NAME" lunch
   exit 2
 fi
-echo "===== BUILD TARGET: check-vintf-all =====" | tee -a "$MIST_VINTF_REPORT_PATH"
+echo "===== BUILD TARGET: check-vintf-all (live output, not full ROM) =====" | tee -a "$MIST_VINTF_REPORT_PATH"
 set +e
-m -j2 check-vintf-all > "$MIST_VINTF_BUILD_TRACE_PATH" 2>&1
-RC=$?
+m -j2 check-vintf-all 2>&1 | tee "$MIST_VINTF_BUILD_TRACE_PATH"
+RC=${PIPESTATUS[0]}
 set -e
 cat "$MIST_VINTF_BUILD_TRACE_PATH" >> "$MIST_VINTF_REPORT_PATH"
 printf '\ncheck-vintf-all exit: %s\n' "$RC" | tee -a "$MIST_VINTF_REPORT_PATH"
