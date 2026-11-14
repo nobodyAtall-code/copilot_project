@@ -1667,3 +1667,10 @@ Next implementation target: determine stock active radio SKU/slot and bring over
 - Added `scripts/build_mist_vintf_real.sh` [6277e2c](https://github.com/nobodyAtall-code/copilot_project/commit/6277e2c9c3799174b34b86d682ddea210480fb8d) to run the genuine LineageOS product `m -j2 check_vintf_all` target, capture errors and emit `mist-vintf-build-report.txt` using the user's existing Android tree. AOSP build/Makefile defines this target for image VINTF metadata, separate from the host `checkvintf` executable. No full ROM build or image flash.
 - Added `scripts/capture_mist_stock_odm_sku.sh` [6f21dbb](https://github.com/nobodyAtall-code/copilot_project/commit/6f21dbbac81c74635a48c6954ea1a1dfab33cafb) for authorized **booted stock device only**; captures non-identifying SKU/radio properties and available ODM VINTF filenames, no IMEI or serial, to support correct subsequent source-backed ODM variant selection.
 - No real VINTF target result or stock live SKU evidence has been supplied yet. Do not claim VINTF compatibility, active modified vendor_boot, valid custom AVB chain, OTA compatibility or boot. Next: fix actual `check_vintf_all` errors, select stock ODM SKU using evidence, then design signed development boot-chain with rollback/slot safeguards.
+
+
+### 2026-11-14 — VINTF command correction after actual local build log
+
+- User supplied `mist-vintf-build-report.txt` for actual LineageOS 23.2 mist checkout (device HEAD `d566b5b`, vendor HEAD `2482ace`). Actual build stopped at Ninja command dispatch: `FAILED: ninja: unknown target 'check_vintf_all', did you mean 'check-vintf-all'?` (exit 1). **This is NOT a VINTF incompatibility or manifest compiler error**; the target itself never ran.
+- Corrected `scripts/build_mist_vintf_real.sh` to use `m -j2 check-vintf-all` instead of underscore variant, [commit a94ddac](https://github.com/nobodyAtall-code/copilot_project/commit/a94ddacf10507d881d0480585aac8cede4ff8bc5). No VINTF source or boot images changed, no flash.
+- Actual VINTF checks are still PENDING an execution of the corrected target. Do not claim success until the new output is inspected.
