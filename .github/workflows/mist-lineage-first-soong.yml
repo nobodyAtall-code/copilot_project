@@ -84,8 +84,8 @@ jobs:
           test -f device/xiaomi/mist/BoardConfig.mk
           test -f vendor/xiaomi/mist/Android.bp
           # Exact minimum landed-production commits; avoid stale cached trees.
-          git -C vendor/xiaomi/mist merge-base --is-ancestor 2d2f1be HEAD
-          git -C device/xiaomi/mist merge-base --is-ancestor adc7a1a HEAD
+          test "$(git -C vendor/xiaomi/mist rev-parse HEAD)" = "2d2f1be43a411583e84d653d9d8c1e3901346aef"
+          test "$(git -C device/xiaomi/mist rev-parse HEAD)" = "7757834cb76e2eb4aec6c7b102aad64d068c483e"
           for module in mist_hal_keymint_service_qti mist_hal_qseecomd mist_stock_core_camera mist_stock_core_sensors mist_stock_core_composer mist_stock_core_lights mist_stock_core_vibrator; do
             grep -q "$module" vendor/xiaomi/mist/mist-vendor.mk || { echo "Missing new HAL module: $module"; exit 1; }
           done
