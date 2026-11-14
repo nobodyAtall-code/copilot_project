@@ -47,7 +47,13 @@ def main():
         if n and s:
             declarations[n.group(1)]=s.group(1)
     sources=sorted({declarations[n] for n in selected if n in declarations and "/vintf/" in declarations[n] and declarations[n].endswith(".xml")})
+    # Exactly one original ODM manifest is loaded at runtime based on
+    # ro.boot.product.hardware.sku. Comparing all six alternatives together
+    # fabricates duplicates in radio and NFC declarations.
     entries=defaultdict(list)
+    sku_prefix="proprietary/odm/etc/vintf/manifest_"
+    sku_sources=sorted(src for src in sources if src.startswith(sku_prefix))
+    shared_sources=sorted(set(sources)-set(sku_sources))
     errors=[]
     def git_head(directory):
         run=subprocess.run(["git","-C",str(directory),"rev-parse","HEAD"],capture_output=True,text=True)
@@ -61,19 +67,33 @@ def main():
     }
     missing_selected=sorted(required_selected-selected)
     for name in missing_selected:
-        errors.append("Missing required VINTF PRODUCT_PACKAGES entry: "+name+"; synchronize vendor tree before treating absent HALs as a platform bug.")
+        errors.append("Missing required VINTF PRODUCT_PACKAGES entry: "+name)
     missing_declared=sorted(name for name in selected if name not in declarations)
     if missing_declared:
         errors.append("Selected modules missing parsed source declaration: "+", ".join(missing_declared))
-    for src in sources:
-        file=vendor/src
-        try:
-            for ident in hal_instances(file):
-                entries["|".join(ident)].append(src)
-        except (ET.ParseError,OSError,ValueError) as e:
-            errors.append(f"{src}: {e}")
-    duplicates={key:files for key,files in entries.items() if len(files)>1}
-    radio=[{"instance":k,"sources":v} for k,v in entries.items() if "radio" in k.lower()]
+    variants={}
+    for sku_path in sku_sources:
+        sku=Path(sku_path).stem.removeprefix("manifest_")
+        per_variant=defaultdict(list)
+        for src in shared_sources+[sku_path]:
+            try:
+                for ident in hal_instances(vendor/src):
+                    per_variant["|".join(ident)].append(src)
+            except (ET.ParseError,OSError,ValueError) as e:
+                errors.append(f"{src}: {e}")
+        duplicates={key:paths for key,paths in per_variant.items() if len(paths)>1}
+        variants[sku]={"source":sku_path,
+                       "hal_instance_count":len(per_variant),
+                       "duplicate_instances":duplicates}
+        for name,paths in per_variant.items():
+            for src in paths:
+                if src not in entries[name]:entries[name].append(src)
+    if not sku_sources:
+        errors.append("No ODM SKU VINTF manifest variants selected")
+    duplicates={f"{sku}: {k}":v for sku,rec in variants.items()
+                for k,v in rec["duplicate_instances"].items()}
+    radio=[{"instance":k,"sources":v} for k,v in entries.items()
+           if "radio" in k.lower()]
     # Capture local framework matrices as evidence of availability, not as a
     # fabricated full compatibility claim (merged device VINTF is not built).
     matrix_paths=sorted(str(p.relative_to(root)) for base in ("hardware/interfaces","device/xiaomi/mist","vendor/xiaomi/mist") if (root/base).exists() for p in (root/base).rglob("*compatibility_matrix*.xml") if p.is_file())
@@ -87,6 +107,8 @@ def main():
       "selected_vintf_fragment_count":len(sources),
       "hal_instances":dict(entries),
       "duplicate_instances_within_selected_vendor_fragments":duplicates,
+      "odm_sku_variants_checked_independently":variants,
+      "sku_runtime_selection_verified":False,
       "radio_instances":radio,
       "odm_sku_variant_selected":any("/odm/" in src and "/manifest" in src for src in sources),
       "framework_matrix_candidates":matrix_paths[:60],
