@@ -259,3 +259,21 @@ O. EXACT FIRMWARE SOURCE FORENSICS (2026-11-14)
   firmware hashes and avoid publishing policy contents or binary blobs.
 - Only after original firmware evidence should production proprietary paths
   or policy additions be reviewed and committed.
+
+
+P. CAMERA SCRIPT EXACT STOCK SOURCE RECOVERY
+- Verified original stock vendor archive from run 43174896778 contains
+  vendor_a/bin/init.qti.cam.perfopt.sh (mode 0755, 1145 bytes), SHA256
+  afbff16da5cbeaffbd6c53ded9f0b6bfed4cfc11e8da822cddb0ce357dce6399.
+- This missing curated helper is referenced in stock Camera provider init RC.
+  Device proprietary-files.txt was updated at commit e917cad5.
+- copilot_project/.github/workflows/mist-stage-camera-helper.yml is configured
+  to extract exactly that verified script from existing firmware, update vendor
+  Android.bp and mist-vendor.mk and push a single vendor commit with GH_PAT.
+  This workflow's completion and output must be confirmed before depending on
+  those files after Linux reinstall. Do not stage a made-up replacement.
+- KeyMint original VINTF XML actually exists in SHA256 verified stock archive,
+  disproving the older bounded membership report's path-absent verdict.
+- Stock vendor/ODM SELinux contexts/CIL are evidence sources, not directly
+  installable replacement policy for Lineage; compile policy from reviewed
+  source and verify neverallows / init labels separately.
