@@ -1,0 +1,115 @@
+name: Mist integrate verified stock vendor_boot into production device
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-integrate-stock-vendor-boot.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-integrate-stock-vendor-boot-main
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout copilot_project main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Download exact SHA256 verified Xiaomi boot images
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/stock
+          gh run download 43174896778 --repo "${{ github.repository }}" \
+            --name mist-global-OS3.0.304.0-boot-images --dir input/stock
+          test -s input/stock/boot-images.sha256
+          (cd input/stock/boot-images && sha256sum -c ../boot-images.sha256)
+          test -s input/stock/boot-images/vendor_boot.img
+          python3 -m py_compile scripts/inspect_mist_boot_chain.py
+          python3 - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, "scripts")
+          from inspect_mist_boot_chain import vendor_boot
+          p=Path("input/stock/boot-images/vendor_boot.img")
+          h=vendor_boot(p,p.stat().st_size)
+          assert h["header_version"]==4, h
+          assert len(h["ramdisk_table_entries"])==1, h["ramdisk_table_entries"]
+          assert h["ramdisk_table_entries"][0]["name"]=="", h["ramdisk_table_entries"]
+          print("Stock vendor_boot v4 verified, bytes",p.stat().st_size)
+          print("Original ramdisk fragment present, DTB bytes",h["dtb_size"])
+          PY
+      - name: Publish unchanged stock vendor_boot to existing kernel prebuilt main
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo 'GH_PAT is missing'; exit 1; }
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist-kernel output/kernel -- --quiet
+          cd output/kernel
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          test ! -e vendor_boot.img || { echo 'vendor_boot already published; refusing overwrite'; exit 1; }
+          cp ../../input/stock/boot-images/vendor_boot.img vendor_boot.img
+          test "$(stat -c %s vendor_boot.img)" -le 104857600 || {
+            echo 'Stock image exceeds GitHub blob size limit'; exit 1;
+          }
+          sha256sum vendor_boot.img > vendor_boot.img.sha256
+          (cd ../../input/stock/boot-images && sha256sum -c ../boot-images.sha256)
+          git add vendor_boot.img vendor_boot.img.sha256
+          git diff --cached --check
+          git commit -m "mist: publish exact SHA256-verified stock vendor_boot image for initial bring-up"
+          git push origin HEAD:main
+      - name: Wire real production BoardConfig and product makefile
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist output/device -- --quiet
+          cd output/device
+          git checkout main
+          git config user.name "nobodyAtall-code"
+          git config user.email "hashyofficial@gmail.com"
+          test -s BoardConfig.mk && test -s device.mk
+          ! grep -q '^BOARD_PREBUILT_VENDOR_BOOTIMAGE' BoardConfig.mk
+          ! grep -q '^PRODUCT_BUILD_VENDOR_BOOT_IMAGE' device.mk
+          cat >> BoardConfig.mk <<'EOF'
+
+          # Exact SHA256-verified stock OS3.0.304.0.WPUMIXM vendor_boot image.
+          # Use untouched stock DTBs, 291 embedded modules, fstab and init rc
+          # instead of creating a nonfunctional empty custom vendor ramdisk.
+          # This is an initial bring-up baseline, not validated custom boot.
+          BOARD_PREBUILT_VENDOR_BOOTIMAGE := device/xiaomi/mist-kernel/vendor_boot.img
+          EOF
+          cat >> device.mk <<'EOF'
+
+          # Preserve verified stock vendor_boot during initial bring-up.
+          # Do not rebuild an incomplete vendor ramdisk from staged snapshots.
+          PRODUCT_BUILD_VENDOR_BOOT_IMAGE := false
+          EOF
+          git add BoardConfig.mk device.mk
+          git diff --cached --check
+          git diff --cached
+          git commit -m "mist: use exact stock vendor_boot prebuilt in LineageOS product configuration"
+          git push origin HEAD:main
+      - name: Confirm production references and source digest
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          git -C output/device grep -n 'BOARD_PREBUILT_VENDOR_BOOTIMAGE' -- BoardConfig.mk
+          git -C output/device grep -n 'PRODUCT_BUILD_VENDOR_BOOT_IMAGE' -- device.mk
+          (cd output/kernel && sha256sum -c vendor_boot.img.sha256)
+          echo 'STOCK VENDOR_BOOT PUBLISHED AND WIRED; ROM BOOTABILITY NOT VALIDATED'
