@@ -413,3 +413,20 @@ X. STAGED CLEAN FSTAB AUXILIARY MOUNTS (2026-11-14)
   Original fstab.default has 24 mi_ext refs including overlays. Real
   vendor_boot selection, init, module loader, AVB, SELinux and OTA checks
   must be solved before swapping/flash.
+
+
+Y. TARGETED STOCK VENDOR_BOOT BOOTCONFIG INSPECTION
+- New read-only copilot script scripts/inspect_mist_vendor_boot_bootconfig.py
+  (171e381) reads the 204-byte v4 bootconfig from exact stock vendor_boot
+  SHA256 f0d692792cacff3026876edbd68aed5d23be7e1acef3e6028ccd5fff21ae5acb.
+- Original fragment: single legacy-LZ4 ramdisk, 10992661 bytes; bootconfig
+  offset 15392768. No bootconfig text is in the previous artifact, so
+  runtime fstab suffix is still NOT confirmed.
+- Run locally, after sync, on the existing binary:
+    python3 scripts/inspect_mist_vendor_boot_bootconfig.py --vendor-boot \
+      ~/android/lineage/device/xiaomi/mist-kernel/vendor_boot.img \
+      --output /tmp/mist-vendor-boot-bootconfig.json
+  The script imports inspect_mist_boot_chain.py from the same directory.
+- Inference: fstab.emmc EXT4-only cannot mount original all-EROFS seven
+  system partitions; default is the plausible stock boot selection.
+  Inference is not full bootconfig/init proof. Do not flash untested images.
