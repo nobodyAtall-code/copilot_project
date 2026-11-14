@@ -75,30 +75,49 @@ def main():
     old_bootconfig_end = old_bootconfig_start + old["bootconfig_bytes"]
     need(old_table_end <= old_bootconfig_start and old_bootconfig_end <= len(original),
          "Malformed old image sections")
-    # Refuse nonzero opaque tail, because we must not silently discard it.
-    need(not any(original[old_bootconfig_end:]),
-         "Nonzero bytes after original bootconfig; unsupported opaque trailer")
-    need(old["ramdisk_table_bytes"] >= 108,
-         "Insufficient ramdisk table")
-    new_header = bytearray(original[:boot_ramdisk_offset])
-    struct.pack_into("<I", new_header, 24, len(fragment))
-    new_table = bytearray(original[old_table_start:old_table_end])
-    struct.pack_into("<I", new_table, 0, len(fragment))
+    # Original source may have an AVB footer/vbmeta block or opaque OEM data
+    # after bootconfig. NEVER discard or shift these bytes. This output is
+    # explicitly NOT flashable: all original signatures become stale.
+    need(old["ramdisk_table_bytes"] >= 108, "Insufficient ramdisk table")
+    need(align(len(fragment), page) == align(one["size"], page),
+         "New ramdisk crosses a page boundary; cannot preserve OEM tail safely")
+    old_ramdisk_start = old["vendor_ramdisk_offset"] + one["offset"]
+    old_ramdisk_page_end = old["vendor_ramdisk_offset"] + align(one["size"], page)
+    need(old_ramdisk_page_end == old_dtb_start,
+         "Unexpected original ramdisk/DTB separation")
+    need(old_table_start >= old_dtb_end and
+         old_bootconfig_start >= old_table_end,
+         "Original section boundaries overlap")
     dtb = original[old_dtb_start:old_dtb_end]
     original_bootconfig = original[old_bootconfig_start:old_bootconfig_end]
-    parts = [
-        bytes(new_header),
-        fragment,
-        b"\x00" * (align(len(fragment), page) - len(fragment)),
-        dtb,
-        original[old_dtb_end:old_table_start],  # original DTB padding
-        bytes(new_table),
-        original[old_table_end:old_bootconfig_start],  # original table padding
-        original_bootconfig,
+    opaque_tail = original[old_bootconfig_end:]
+    candidate_array = bytearray(original)
+    # Patch the two known little-endian sizes in place.
+    struct.pack_into("<I", candidate_array, 24, len(fragment))
+    struct.pack_into("<I", candidate_array, old_table_start, len(fragment))
+    # Replace compressed content within the original page-aligned region;
+    # clear only this region's padding, never any following OEM data.
+    candidate_array[old_ramdisk_start:old_ramdisk_page_end] = (
+        fragment + b"\\x00" * (old_ramdisk_page_end - old_ramdisk_start - len(fragment))
+    )
+    candidate = bytes(candidate_array)
+    need(len(candidate) == len(original), "Original image length changed")
+    # Check every byte outside the three explicit edit regions is identical.
+    allowed = [
+        (24, 28),
+        (old_table_start, old_table_start + 4),
+        (old_ramdisk_start, old_ramdisk_page_end),
     ]
-    candidate = b"".join(parts)
-    need(len(candidate) <= len(original), "Candidate exceeds stock partition")
-    candidate += b"\x00" * (len(original) - len(candidate))
+    needs_order = sorted(allowed)
+    need(all(needs_order[i][1] <= needs_order[i + 1][0]
+             for i in range(len(needs_order) - 1)), "Patch regions overlap")
+    cursor = 0
+    for start, finish in needs_order:
+        need(candidate[cursor:start] == original[cursor:start],
+             "Unexpected change outside approved regions")
+        cursor = finish
+    need(candidate[cursor:] == original[cursor:],
+         "Original image trailer or OEM data changed")
     # Structural parser works on a path, so write to private research output
     # only after preflight checks. It is explicitly NOT an installer artifact.
     a.output_dir.mkdir(parents=True, exist_ok=True)
@@ -115,6 +134,9 @@ def main():
         "bootconfig_exact": candidate[new["bootconfig_offset"]:new["bootconfig_offset"] + new["bootconfig_bytes"]] == original_bootconfig,
         "ramdisk_exact": candidate[new["vendor_ramdisk_offset"]:new["vendor_ramdisk_offset"] + len(fragment)] == fragment,
         "image_length": len(candidate) == len(original),
+        "original_opaque_tail_exact": candidate[old_bootconfig_end:] == opaque_tail,
+        "original_dtb_offset": new["dtb_offset"] == old["dtb_offset"],
+        "original_bootconfig_offset": new["bootconfig_offset"] == old["bootconfig_offset"],
         "bootconfig_table_size": new["bootconfig_bytes"] == old["bootconfig_bytes"] and new["ramdisk_table_bytes"] == old["ramdisk_table_bytes"],
         "ramdisk_table_metadata": new["ramdisk_table_entries"][0]["name"] == one["name"] and new["ramdisk_table_entries"][0]["type"] == one["type"],
     }
@@ -124,6 +146,11 @@ def main():
         "source_sha256": STOCK_SHA,
         "candidate_sha256": sha(candidate),
         "candidate_bytes": len(candidate),
+        "opaque_tail_bytes_preserved": len(opaque_tail),
+        "opaque_tail_nonzero_bytes": sum(bool(x) for x in opaque_tail),
+        "original_avb_footer_magic_present": original[-64:-60] == b"AVBf",
+        "original_tail_sha256": sha(opaque_tail),
+        "signature_warning": "Original AVB/vbmeta or other tail bytes are preserved for research only; their integrity/authentication is STALE after any content change.",
         "checks": checks,
         "fragment_sha256": sha(fragment),
         "source_DTB_sha256": sha(dtb),
