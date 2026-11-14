@@ -1,0 +1,157 @@
+{
+  "camera_basename_matches": [
+    "vendor_a/bin/init.qti.cam.perfopt.sh",
+    "vendor_dlkm_a/lib/modules/camera.ko"
+  ],
+  "camera_rc_references": [
+    "exec u:r:vendor_qti_init_shell:s0 -- /vendor/bin/init.qti.cam.perfopt.sh"
+  ],
+  "firmware": "OS3.0.304.0.WPUMIXM",
+  "notes": [
+    "Exact archive membership, not final Lineage install selection",
+    "Missing archive path may still be provided by platform/system",
+    "No proprietary file bytes, policy contents, or personal data exported"
+  ],
+  "records": [
+    {
+      "group": "camera_helper",
+      "mode": "0o755",
+      "path": "vendor_a/bin/init.qti.cam.perfopt.sh",
+      "sha256": "afbff16da5cbeaffbd6c53ded9f0b6bfed4cfc11e8da822cddb0ce357dce6399",
+      "size": 1145,
+      "type": "file"
+    },
+    {
+      "group": "camera_helper",
+      "path": "vendor_a/etc/init.qti.cam.perfopt.sh",
+      "status": "ABSENT_FROM_VERIFIED_ARCHIVE"
+    },
+    {
+      "group": "camera_helper",
+      "path": "odm_a/bin/init.qti.cam.perfopt.sh",
+      "status": "ABSENT_FROM_VERIFIED_ARCHIVE"
+    },
+    {
+      "group": "camera_rc",
+      "mode": "0o644",
+      "path": "vendor_a/etc/init/vendor.qti.camera.provider-service_64.rc",
+      "sha256": "da13461fcd56cdb483ab426903041e7d5a9dc212680a2e5e6a98eb0b3e7d5aa5",
+      "size": 1207,
+      "type": "file"
+    },
+    {
+      "group": "camera_vintf",
+      "mode": "0o644",
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.camera.provider.xml",
+      "sha256": "b2ea3cfac60a71742d4bcceb99d9f15822173aabfd7557df116b86027b73607e",
+      "size": 324,
+      "type": "file"
+    },
+    {
+      "group": "camera_vintf",
+      "mode": "0o644",
+      "path": "vendor_a/etc/vintf/manifest/vendor.qti.camera.postproc-impl.xml",
+      "sha256": "daaaad11889b5f538d8c2ed8514c20d027fc2a33755da920959061d8a05179b6",
+      "size": 334,
+      "type": "file"
+    },
+    {
+      "group": "keymint_vintf",
+      "mode": "0o644",
+      "path": "vendor_a/etc/vintf/manifest/android.hardware.security.keymint-service-qti.xml",
+      "sha256": "229835b6b669a1c69e4ccc6e7761065189e04d3f4607fcf3178197055746056f",
+      "size": 810,
+      "type": "file"
+    },
+    {
+      "group": "keymint_rc",
+      "mode": "0o644",
+      "path": "vendor_a/etc/init/android.hardware.security.keymint-service-qti.rc",
+      "sha256": "4f2aea385713f86aa193a1cb3a24fc141b63fc54dec330f25a4f5a722d87c456",
+      "size": 456,
+      "type": "file"
+    },
+    {
+      "group": "selinux",
+      "mode": "0o644",
+      "path": "vendor_a/etc/selinux/vendor_file_contexts",
+      "sha256": "f42262160ae2d8fa606230872a923f3c6ceb8c191c18d3fee63bce1aaad337cf",
+      "size": 131138,
+      "type": "file"
+    },
+    {
+      "group": "selinux",
+      "mode": "0o644",
+      "path": "vendor_a/etc/selinux/vendor_service_contexts",
+      "sha256": "a75884a7e351223e365a3e5cb1cb16e6bcd4f74fcdc8a5f0c6333c40ce9aba5a",
+      "size": 17687,
+      "type": "file"
+    },
+    {
+      "group": "selinux",
+      "mode": "0o644",
+      "path": "vendor_a/etc/selinux/vendor_hwservice_contexts",
+      "sha256": "e0ac85ebdbb113e9908d0afdb57a9b77ec280a4cef5386f121e9656cac444440",
+      "size": 8306,
+      "type": "file"
+    },
+    {
+      "group": "selinux",
+      "mode": "0o644",
+      "path": "vendor_a/etc/selinux/vendor_sepolicy.cil",
+      "sha256": "959ef76be5aa958fed812cdb925fae48cde882551f4de4701445e8ec888ee46b",
+      "size": 1403650,
+      "type": "file"
+    },
+    {
+      "group": "selinux",
+      "path": "vendor_a/etc/selinux/precompiled_sepolicy",
+      "status": "ABSENT_FROM_VERIFIED_ARCHIVE"
+    },
+    {
+      "group": "selinux",
+      "mode": "0o644",
+      "path": "odm_a/etc/selinux/odm_file_contexts",
+      "sha256": "83cf304165f2f4e77f4400333df35ae005a4f564e633a5275048bad24e6231eb",
+      "size": 91,
+      "type": "file"
+    },
+    {
+      "group": "selinux",
+      "mode": "0o644",
+      "path": "odm_a/etc/selinux/odm_sepolicy.cil",
+      "sha256": "51fb464b7e6668ab90d7c1506edf12e1e98a9d3ece3b1c499e182e4013f87cdc",
+      "size": 93848,
+      "type": "file"
+    },
+    {
+      "group": "camera_module",
+      "mode": "0o644",
+      "path": "vendor_dlkm_a/lib/modules/camera.ko",
+      "sha256": "0ade7e601c4387d1405115d9eafe61831e061e1bda4eae71a881ceedc617fb91",
+      "size": 7150376,
+      "type": "file"
+    },
+    {
+      "camera_dep_line": [
+        "/vendor/lib/modules/camera.ko: /vendor/lib/modules/leds-qpnp-flash-v2.ko /vendor/lib/modules/qcom-spmi-wled.ko /vendor/lib/modules/qti_battery_charger.ko /vendor/lib/modules/qcom_va_minidump.ko /vendor/lib/modules/fsa4480-i2c.ko /vendor/lib/modules/ucsi_qti_glink.ko /vendor/lib/modules/qti_pmic_glink.ko /vendor/lib/modules/pdr_interface.ko /vendor/lib/modules/qmi_helpers.ko /vendor/lib/modules/rproc_qcom_common.ko /vendor/lib/modules/qcom_smd.ko /vendor/lib/modules/qcom_glink_smem.ko /vendor/lib/modules/qcom_glink.ko"
+      ],
+      "group": "camera_module",
+      "mode": "0o644",
+      "path": "vendor_dlkm_a/lib/modules/modules.dep",
+      "sha256": "7ee6bfcbbc45cef37f6b28427faf977486df56c3c8b2a5fc2375c42cdbe50006",
+      "size": 37992,
+      "type": "file"
+    },
+    {
+      "camera_ko_in_load": true,
+      "group": "camera_module",
+      "mode": "0o644",
+      "path": "vendor_dlkm_a/lib/modules/modules.load",
+      "sha256": "1b41cd3d73bcfbe8aee52a76b6f241d586718d3f5a1888a3a2d3a7ab6193a928",
+      "size": 5733,
+      "type": "file"
+    }
+  ],
+  "sha256_verification": "PASS"
+}
