@@ -1,0 +1,57 @@
+name: Mist consolidated RIL audio fingerprint ELF dependency closure
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-three-service-elf-closure.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  analyze:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Retrieve verified original mist stock archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends zstd python3-pyelftools
+          python3 -c 'import elftools'
+          mkdir -p input
+          gh run download 43174896778 --repo nobodyAtall-code/copilot_project \
+            --name mist-global-OS3.0.304.0-vendor-source --dir input
+          (cd input && sha256sum -c stock-vendor-source.sha256)
+      - name: Stage and confirm nine original service files
+        run: |
+          set -euo pipefail
+          python3 scripts/stage_mist_radio_audio_fingerprint.py \
+            --archive input/stock-vendor-source.tar.zst --output output/staged
+          test "$(find output/staged/proprietary/vendor -type f | wc -l)" -eq 9
+      - name: Parse every stock ELF and traverse all three service graphs in one pass
+        run: |
+          set -euo pipefail
+          python3 scripts/inspect_stock_elf_metadata.py \
+            --archive input/stock-vendor-source.tar.zst \
+            --output output/mist-all-three-elf-graph.json \
+            --seed vendor_a/bin/hw/audiohalservice.qti \
+            --seed vendor_a/bin/hw/android.hardware.biometrics.fingerprint-service.odm
+          python3 scripts/mist_three_service_elf_closure.py \
+            --graph output/mist-all-three-elf-graph.json \
+            --staged output/staged --out output/mist-three-elf-closure.json
+      - name: Save complete dependency evidence without publishing incomplete vendor HALs
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-three-service-full-elf-closure
+          path: |
+            output/mist-all-three-elf-graph.json
+            output/mist-three-elf-closure.json
+            output/staged/checksums.json
+          retention-days: 14
+          if-no-files-found: error
