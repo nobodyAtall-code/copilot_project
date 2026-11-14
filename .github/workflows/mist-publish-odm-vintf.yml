@@ -1,0 +1,91 @@
+name: Mist publish exact stock ODM SKU VINTF variants
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mist-publish-odm-vintf.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mist-publish-odm-vintf
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout orchestrator
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download already verified stock ODM config, not firmware image
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p input/staged reports
+          gh run download 43178657329 --repo nobodyAtall-code/copilot_project \
+            --name mist-staged-archive-audit --dir input/staged
+          test -s input/staged/audit.json
+          test -d input/staged/selected-stock-config/odm_a/etc/vintf
+          python3 -m py_compile scripts/publish_mist_stock_odm_vintf.py
+          python3 - <<'PY'
+          import json
+          d=json.load(open('input/staged/audit.json'))
+          assert d['members']>1000 and d['selected_config_count']>50
+          assert d['source_sha256']==json.load(open('research/generated/mist-stock-config.json'))['source_archive_sha256']
+          print('Verified original stock configuration archive provenance')
+          PY
+
+      - name: Stage exact six ODM SKU manifests into production trees
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN"
+          gh auth setup-git
+          gh repo clone nobodyAtall-code/android_device_xiaomi_mist work/device -- --quiet
+          gh repo clone nobodyAtall-code/proprietary_vendor_xiaomi_mist work/vendor -- --quiet
+          for d in work/device work/vendor; do
+            git -C "$d" checkout main
+            git -C "$d" config user.name "nobodyAtall-code"
+            git -C "$d" config user.email "hashyofficial@gmail.com"
+          done
+          python3 scripts/publish_mist_stock_odm_vintf.py \
+            --stock-config input/staged/selected-stock-config \
+            --inventory research/generated/mist-stock-config.json \
+            --device work/device --vendor work/vendor | tee reports/odm-sku-publish.json
+          git -C work/device add proprietary-files.txt
+          git -C work/vendor add Android.bp mist-vendor.mk proprietary/odm/etc/vintf
+          git -C work/device diff --cached --check
+          git -C work/vendor diff --cached --check
+          test "$(git -C work/vendor diff --cached --name-only | grep -c '^proprietary/odm/etc/vintf/manifest_')" -eq 6
+          test "$(git -C work/device diff --cached --name-only | wc -l)" -eq 1
+          test "$(git -C work/vendor diff --cached --name-only | wc -l)" -eq 8
+
+      - name: Commit stock ODM SKU manifests to device and vendor main
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          set -euo pipefail
+          git -C work/vendor commit -m "mist: integrate exact stock ODM VINTF SKU manifest variants"
+          git -C work/device commit -m "mist: track six original ODM VINTF SKU extraction paths"
+          git -C work/vendor push origin HEAD:main
+          git -C work/device push origin HEAD:main
+          echo "Original XMLs installed to ODM only, without forcing any runtime SKU" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload provenance metadata only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mist-stock-odm-sku-provenance
+          path: reports/odm-sku-publish.json
+          if-no-files-found: warn
+          retention-days: 14
