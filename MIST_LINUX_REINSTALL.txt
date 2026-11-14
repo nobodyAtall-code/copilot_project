@@ -380,3 +380,23 @@ V. ACTIVE CLEAN SEVEN-PARTITION BOARD CONFIG
   stock vendor_boot still has mi_ext nofail/bind/overlay fstab references.
   Must validate custom first-stage init, AVB, OTA target metadata and real
   snapshot/slot semantics before attempting flashing.
+
+
+W. CLEAN LINEAGE BOOT CONTRACT — STOCK RAMDISK RECONCILIATION
+- Completed source-level analysis of full firmware artifact 14107138565:
+  original vendor_boot first_stage_ramdisk/fstab.default has 54 parsed mount
+  entries, 24 mi_ext-related lines, 22 overlay entries. fstab.emmc has
+  23 parsed mounts and no mi_ext/overlay references. Which runtime fstab
+  is selected remains UNVERIFIED. Do NOT infer fstab.emmc is selected.
+- The clean rootdir/etc/fstab.mist staged in device tree includes seven
+  Lineage dynamic mounts, no mi_ext; it is NOT installed into stock
+  vendor_boot. Product continues PRODUCT_BUILD_VENDOR_BOOT_IMAGE := false
+  and BOARD_PREBUILT_VENDOR_BOOTIMAGE points to the real stock image.
+- New copilot_project/scripts/check_mist_first_stage_mount_contract.py
+  (commit 6754625) is a read-only verifier against full-stock-ramdisks.json.
+  No CI run or local execution of this new checker has yet been claimed.
+- Device research/MIST_FIRST_STAGE_MI_EXT_BOOT_CONTRACT_2026-11-14.md
+  (commit 973dd00) documents original inputs, mount references and gates.
+- Next: actual bootconfig fstab selection, preserve vendor_boot's 291
+  modules, first stage init, encryption and firmware mounts; then build
+  validated custom vendor_boot and test AVB/SELinux before flash.
