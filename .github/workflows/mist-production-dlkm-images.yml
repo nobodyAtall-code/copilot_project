@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends erofs-utils
+          sudo apt-get install -y --no-install-recommends erofs-utils attr
           python3 -m py_compile scripts/stage_production_dlkm_images.py
           command -v mkfs.erofs
           command -v dump.erofs
@@ -68,6 +68,23 @@ jobs:
           print("PASS: standalone EROFS images built with all published DLKM source mappings")
           PY
           (cd reports/images && sha256sum -c ../images.sha256)
+      - name: Verify SELinux xattrs from mounted images
+        run: |
+          set -euo pipefail
+          mkdir -p work/image-mounts
+          for partition in system_dlkm vendor_dlkm; do
+            mkdir -p "work/image-mounts/${partition}"
+            sudo mount -t erofs -o ro,loop "reports/images/${partition}.img" "work/image-mounts/${partition}"
+            if [[ "${partition}" == "system_dlkm" ]]; then
+              expected="u:object_r:system_dlkm_file:s0"
+            else
+              expected="u:object_r:vendor_file:s0"
+            fi
+            actual="$(sudo getfattr --only-values -n security.selinux "work/image-mounts/${partition}/lib" 2>/dev/null | tr -d '\\000')"
+            test "$actual" = "$expected" || { echo "SELinux mismatch in ${partition}: '$actual' != '$expected'"; exit 1; }
+            sudo umount "work/image-mounts/${partition}"
+            echo "PASS: ${partition} /lib SELinux label $actual"
+          done
       - name: Upload generated research-only partition images and manifest
         uses: actions/upload-artifact@v4
         with:
