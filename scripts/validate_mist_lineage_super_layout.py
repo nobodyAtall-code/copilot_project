@@ -1,78 +1,73 @@
 #!/usr/bin/env python3
-"""Check Mist source-generated super layout against verified ORIGINAL stock liblp.
+"""Offline check of Mist BoardConfig against SHA-checked original super geometry.
 
-No firmware download, build, flashing, partition image generation or mutation.
+Only source/geometry checks: does not prove OTA, AVB, COW, ramdisk or boot.
 """
 import argparse
 import json
 import pathlib
 import re
 
-EXPECTED = ("odm", "product", "system", "system_dlkm",
-            "system_ext", "vendor", "vendor_dlkm")
+EXPECTED = {"odm", "product", "system", "system_dlkm",
+            "system_ext", "vendor", "vendor_dlkm"}
 
 
 def variable(data, key):
-    pattern = r"(?m)^" + re.escape(key) + r"\\s*:?=\\s*(.*)$"
-    match = re.search(pattern, data)
-    if not match:
-        raise ValueError("Missing " + key)
-    return match.group(1).strip()
-
-
-def make_logical_lines(text):
-    return re.sub(r"\\\\\\n", " ", text)
+    pattern = r"(?m)^" + re.escape(key) + r"\s*:?=\s*(.*)$"
+    found = re.search(pattern, data)
+    if found is None:
+        raise ValueError("Missing variable: " + key)
+    return found.group(1).strip()
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--device-tree", type=pathlib.Path, required=True)
-    ap.add_argument("--stock-super-report", type=pathlib.Path, required=True)
-    ap.add_argument("--out", type=pathlib.Path)
-    args = ap.parse_args()
-    board = (args.device_tree / "BoardConfig.mk").read_text()
-    config = make_logical_lines(board)
+    a = argparse.ArgumentParser()
+    a.add_argument("--device-tree", type=pathlib.Path, required=True)
+    a.add_argument("--stock-super-report", type=pathlib.Path, required=True)
+    a.add_argument("--out", type=pathlib.Path)
+    args = a.parse_args()
+    config = (args.device_tree / "BoardConfig.mk").read_text()
+    # Convert actual Make backslash-newline continuations to spaces.
+    logical = re.sub(r"\\\r?\n[ \t]*", " ", config)
     stock = json.loads(args.stock_super_report.read_text())
-    assert stock["integrity_checks_passed"], "stock metadata lacks integrity verification"
-    first = stock["slots"][0]["primary"]["data"]
-    groups = {x["name"]: x for x in first["groups"]}
+    assert stock["integrity_checks_passed"], "Original metadata validation failed"
+    data = stock["slots"][0]["primary"]["data"]
+    groups = {g["name"]: g for g in data["groups"]}
     group = groups["qti_dynamic_partitions_a"]
-    phys = next(x["size"] for x in first["block_devices"] if x["name"] == "super")
-    group_name = variable(config, "BOARD_SUPER_PARTITION_GROUPS")
-    size_name = "BOARD_QTI_DYNAMIC_PARTITIONS_SIZE"
-    list_name = "BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST"
-    names = variable(config, list_name).split()
-    actual = {
-        "stock_geometry_integrity": True,
-        "stock_super_size": phys,
-        "stock_active_group_maximum": group["maximum_size"],
-        "stock_active_group_members": group["partitions"],
-        "board_super_size": int(variable(config, "BOARD_SUPER_PARTITION_SIZE")),
-        "board_group_name": group_name,
-        "board_group_size": int(variable(config, size_name)),
-        "board_partition_list": names,
-        "mi_ext_generated": "mi_ext" in names,
+    physical = next(d["size"] for d in data["block_devices"] if d["name"] == "super")
+    partitions = variable(logical, "BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST").split()
+    reported = {
+        "stock_super_size": physical,
+        "stock_group_size": group["maximum_size"],
+        "board_super_size": int(variable(logical, "BOARD_SUPER_PARTITION_SIZE")),
+        "board_group_size": int(variable(logical, "BOARD_QTI_DYNAMIC_PARTITIONS_SIZE")),
+        "board_group_name": variable(logical, "BOARD_SUPER_PARTITION_GROUPS"),
+        "board_partitions": partitions,
+        "stock_metadata_valid": True,
     }
-    assert actual["board_super_size"] == phys, actual
-    assert group_name == "qti_dynamic_partitions", actual
-    assert actual["board_group_size"] == group["maximum_size"], actual
-    assert len(names) == len(EXPECTED) and set(names) == set(EXPECTED), actual
-    assert "mi_ext" not in config.split("BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST :=", 1)[1].split("\n", 1)[0]
-    fstab = args.device_tree / "boot/stock_snapshot/first_stage_ramdisk/fstab.default"
-    original = fstab.read_text()
-    mi_lines = [line for line in original.splitlines()
-                if "mi_ext" in line and not line.startswith("#")]
-    assert mi_lines, "Expected stock mi_ext references missing; review provenance"
-    actual["stock_first_stage_mi_ext_fstab_references"] = len(mi_lines)
-    actual["note"] = (
-        "Source BoardConfig geometry passes; this does NOT validate generated "
-        "target-slot OTA metadata, kernel/AVB bootchain, stock vendor_boot "
-        "fstab behavior, COW snapshot, or runtime compatibility."
-    )
+    assert reported["board_super_size"] == physical, reported
+    assert reported["board_group_size"] == group["maximum_size"], reported
+    assert reported["board_group_name"] == "qti_dynamic_partitions", reported
+    assert len(partitions) == 7 and set(partitions) == EXPECTED, reported
+    assert "mi_ext" not in partitions, reported
+    stock_fstab = (args.device_tree /
+                   "boot/stock_snapshot/first_stage_ramdisk/fstab.default").read_text()
+    mi_ext_lines = [line for line in stock_fstab.splitlines()
+                    if line.strip() and not line.lstrip().startswith("#") and
+                    "mi_ext" in line]
+    assert mi_ext_lines, "Unexpected missing stock mi_ext fstab reference"
+    reported["original_stock_vendor_boot_mi_ext_lines"] = len(mi_ext_lines)
+    reported["status"] = "BOARD_LAYOUT_SOURCE_MATCH_ONLY"
+    reported["remaining"] = [
+        "Lineage target-slot metadata and full OTA payload validation",
+        "Stock vendor_boot mi_ext overlay and init dependencies",
+        "AVB signing and first-stage mount",
+        "VAB snapshot/COW and real boot",
+    ]
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
-        args.out.write_text(json.dumps(actual, indent=2, sort_keys=True) + "\n")
-    print(json.dumps(actual, indent=2, sort_keys=True))
+        args.out.write_text(json.dumps(reported, indent=2, sort_keys=True) + "\n")
+    print(json.dumps(reported, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
